@@ -10,6 +10,7 @@ const AuthToggleTabs = ({ isRegister, setIsRegister }: AuthToggleProps) => {
   return (
     <div className="flex">
       <button
+        type="button"
         className={clsx(
           btnCommonStyle,
           isRegister ? "bg-gray-700" : "bg-blue-500"
@@ -19,6 +20,7 @@ const AuthToggleTabs = ({ isRegister, setIsRegister }: AuthToggleProps) => {
         Login
       </button>
       <button
+        type="button"
         className={clsx(
           btnCommonStyle,
           isRegister ? "bg-blue-500" : "bg-gray-700"
