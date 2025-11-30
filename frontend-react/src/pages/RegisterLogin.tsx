@@ -1,7 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import { useState } from "react";
-import type { ErrorResponse } from "react-router";
 import AuthToggleTabs from "../components/AuthToggleTabs";
 import InputForm from "../components/InputForm";
 import {
@@ -11,10 +10,13 @@ import {
   signUp,
   type SignUpRequest,
 } from "../services/userService";
-import type { GeneralResponse } from "../types/ApiResponse";
+import { type GeneralResponse, type ErrorResponse } from "../types/ApiResponse";
 import { type SignInForm, type SignUpForm } from "../types/AuthForms";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router";
 
 const RegisterLogin = () => {
+  const navigate = useNavigate();
   const [isRegister, setIsRegister] = useState<boolean>(false);
 
   const [signInFormData, setSignInFormData] = useState<SignInForm>({
@@ -34,13 +36,16 @@ const RegisterLogin = () => {
     SignUpRequest
   >({
     mutationFn: signUp,
-    onSuccess: (data) => {
-      alert("Sign up successful");
-      console.log(data);
+    onSuccess: () => {
+      toast.success("Sign up successful. Please log in.");
     },
-    onError: (error) => {
-      alert("Sign up failed");
-      console.log(error);
+    onError: (error: AxiosError<ErrorResponse>) => {
+      if (error.response) {
+        toast.error(error.response.data.message);
+        console.log(error);
+      } else {
+        toast.error(`Sign up failed: ${error.message}`);
+      }
     },
   });
 
@@ -50,13 +55,19 @@ const RegisterLogin = () => {
     SignInRequest
   >({
     mutationFn: signIn,
-    onSuccess: (data) => {
-      alert("Sign in successful");
-      console.log(data);
+    onSuccess: () => {
+      toast.success("Sign in successful");
+      navigate("/", { replace: true });
     },
-    onError: (error) => {
-      alert("Sign in failed");
-      console.log(error);
+    onError: (error: AxiosError<ErrorResponse>) => {
+      if (error.response) {
+        const errorMessage: string = error.response.data.message;
+        toast.error(errorMessage);
+      } else {
+        toast.error(
+          `Sign in failed: ${error.message}. Something went wrong, please try again.`
+        );
+      }
     },
   });
 
@@ -113,7 +124,7 @@ const RegisterLogin = () => {
         <p className="text-gray-400 mb-5">
           Track your progress, achieve your goals
         </p>
-        <div className="w-1/2">
+        <div className="w-1/2 max-w-xl">
           <AuthToggleTabs
             isRegister={isRegister}
             setIsRegister={setIsRegister}
