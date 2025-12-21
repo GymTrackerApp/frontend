@@ -14,7 +14,7 @@ const MainPage = () => {
         <div className="w-full px-2 pt-3 bg-gray-700 mt-5 pb-8">
           <div className="flex justify-between">
             <h1 className="text-2xl font-semibold">My Plans</h1>
-            <Link to="/plans">
+            <Link to="/plan-manager">
               <button className="px-2 py-1 border-2 text-blue-500 border-blue-500 rounded-xl cursor-pointer hover:border-blue-400 hover:text-blue-400 transition-colors">
                 View All
               </button>

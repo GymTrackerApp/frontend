@@ -55,8 +55,9 @@ const RegisterLogin = () => {
     SignInRequest
   >({
     mutationFn: signIn,
-    onSuccess: () => {
+    onSuccess: (response) => {
       toast.success("Sign in successful");
+      localStorage.setItem("accessToken", response.token);
       navigate("/", { replace: true });
     },
     onError: (error: AxiosError<ErrorResponse>) => {
