@@ -38,7 +38,7 @@ const CreateNewExerciseForm = ({ onClose }: CreateNewExerciseProps) => {
       toast.success(`Exercise ${response.name} created successfully.`);
     },
     onError: (error) => {
-      if (error.status == 401) {
+      if (error.status === 401) {
         navigate("/register-login", { replace: true });
         toast.error("Please log in to create a new exercise.");
         return;
@@ -73,7 +73,7 @@ const CreateNewExerciseForm = ({ onClose }: CreateNewExerciseProps) => {
 
   return (
     <>
-      <div className="absolute flex justify-center items-center min-h-dvh min-w-dvw top-0 left-0 righ-0 bottom-0 bg-black/25">
+      <div className="absolute flex justify-center items-center min-h-dvh min-w-dvw top-0 left-0 right-0 bottom-0 bg-black/25">
         <form className="w-1/2 bg-gray-600 p-3 rounded-md">
           <h1 className="text-2xl font-bold mb-2">Create New Exercise</h1>
           <InputForm
