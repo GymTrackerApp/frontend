@@ -1,14 +1,20 @@
+import clsx from "clsx";
 import React from "react";
 
 interface InputFormProps extends React.InputHTMLAttributes<HTMLInputElement> {
   id: string;
   label: string;
+  structure?: "vertical" | "horizontal";
 }
 
-const InputForm = ({ id, label, ...props }: InputFormProps) => {
+const InputForm = ({ id, label, structure, ...props }: InputFormProps) => {
+  const isVertical = structure === "vertical";
   return (
     <>
-      <label className="mx-2 mt-2 font-semibold" htmlFor={id}>
+      <label
+        className={clsx("mx-2 mt-2 font-semibold", { block: isVertical })}
+        htmlFor={id}
+      >
         {label}
       </label>
       <input
