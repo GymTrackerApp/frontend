@@ -65,7 +65,7 @@ const CreateNewExerciseForm = ({ onClose }: CreateNewExerciseProps) => {
 
     const newExerciseRequest: NewExerciseRequest = {
       name: formData.exerciseName,
-      category: formData.category,
+      category: formData.category || "UNCATEGORIZED",
     };
 
     newExerciseMutation.mutate(newExerciseRequest);
@@ -73,7 +73,7 @@ const CreateNewExerciseForm = ({ onClose }: CreateNewExerciseProps) => {
 
   return (
     <>
-      <div className="absolute flex justify-center items-center min-h-dvh min-w-dvw top-0 left-0 right-0 bottom-0 bg-black/25">
+      <div className="absolute flex justify-center items-center top-0 left-0 right-0 bottom-0 bg-black/25">
         <form className="w-1/2 bg-gray-600 p-3 rounded-md">
           <h1 className="text-2xl font-bold mb-2">Create New Exercise</h1>
           <InputForm
