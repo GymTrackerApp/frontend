@@ -36,6 +36,7 @@ const CreateNewExerciseForm = ({ onClose }: CreateNewExerciseProps) => {
     mutationFn: createNewExercise,
     onSuccess: (response) => {
       toast.success(`Exercise ${response.name} created successfully.`);
+      onClose();
     },
     onError: (error) => {
       if (error.status === 401) {
