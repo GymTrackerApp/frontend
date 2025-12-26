@@ -1,4 +1,4 @@
-import axios from "axios";
+import { privateApi, publicApi } from "../clients";
 
 export interface NewExerciseRequest {
   name: string;
@@ -7,24 +7,25 @@ export interface NewExerciseRequest {
 
 export interface ExerciseResponse {
   exerciseId: number;
+  category: string;
   name: string;
 }
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
 export const createNewExercise = async (
   newExerciseRequest: NewExerciseRequest
 ): Promise<ExerciseResponse> => {
-  const token = localStorage.getItem("accessToken");
-  const response = await axios.post<ExerciseResponse>(
-    `${API_URL}/exercises`,
-    newExerciseRequest,
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const response = await privateApi.post("/exercises", newExerciseRequest);
+  return response.data;
+};
+
+export const getUserExercises = async (): Promise<Array<ExerciseResponse>> => {
+  const response = await privateApi.get("/exercises/user");
+  return response.data;
+};
+
+export const getPredefinedExercises = async (): Promise<
+  Array<ExerciseResponse>
+> => {
+  const response = await publicApi.get("/exercises");
   return response.data;
 };
