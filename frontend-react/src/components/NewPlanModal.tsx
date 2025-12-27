@@ -162,7 +162,7 @@ const NewPlanModal = ({ exercises, onClose }: NewPlanProps) => {
               />
               <span className="text-gray-400 text-sm my-auto mx-2">sets</span>
               <button
-                className="text-red-400"
+                className="text-red-400 cursor-pointer hover:opacity-80"
                 type="button"
                 onClick={() =>
                   setNewPlanForm({
