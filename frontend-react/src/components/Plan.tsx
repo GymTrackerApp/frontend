@@ -20,7 +20,6 @@ const Plan = ({ plan, updatable, removable: removeable }: PlanProps) => {
     <>
       <p
         className="bg-gray-700 px-3 py-2 rounded-xl my-3 cursor-pointer hover:bg-gray-600 transition-colors"
-        key={plan.id}
         onClick={() => setIsPlanExpanded(!isPlanExpanded)}
       >
         <span className="flex justify-between">

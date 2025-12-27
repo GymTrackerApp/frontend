@@ -1,8 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import {
-  FaTrashAlt
-} from "react-icons/fa";
+import { FaTrashAlt } from "react-icons/fa";
 import FetchHandler from "../components/FetchHandler";
 import Header from "../components/Header";
 import NewExerciseModal from "../components/NewExerciseModal";
@@ -31,7 +29,7 @@ const PlanManager = () => {
   const [isMyPlansEnabled, setIsMyPlansEnabled] = useState<boolean>(true);
   const [isPredefinedPlansEnabled, setIsPredefinedPlansEnabled] =
     useState<boolean>(false);
-  const [isMyExercisesEnabled, setisMyExercisesEnabled] =
+  const [isMyExercisesEnabled, setIsMyExercisesEnabled] =
     useState<boolean>(false);
 
   const {
@@ -86,8 +84,8 @@ const PlanManager = () => {
             isPredefinedPlansEnabled={isPredefinedPlansEnabled}
             isMyExercisesEnabled={isMyExercisesEnabled}
             setIsMyPlansEnabled={setIsMyPlansEnabled}
-            setisPredefinedPlansEnabled={setIsPredefinedPlansEnabled}
-            setisMyExercisesEnabled={setisMyExercisesEnabled}
+            setIsPredefinedPlansEnabled={setIsPredefinedPlansEnabled}
+            setIsMyExercisesEnabled={setIsMyExercisesEnabled}
           />
 
           {/* My Plans */}
@@ -117,7 +115,12 @@ const PlanManager = () => {
           >
             {(data: Array<PlanResponse>) =>
               data.map((plan) => (
-                <Plan plan={plan} updatable={true} removable={true} />
+                <Plan
+                  key={plan.id}
+                  plan={plan}
+                  updatable={true}
+                  removable={true}
+                />
               ))
             }
           </FetchHandler>
@@ -177,7 +180,12 @@ const PlanManager = () => {
           >
             {(data: Array<PlanResponse>) =>
               data.map((plan: PlanResponse) => (
-                <Plan plan={plan} updatable={false} removable={false} />
+                <Plan
+                  key={plan.id}
+                  plan={plan}
+                  updatable={false}
+                  removable={false}
+                />
               ))
             }
           </FetchHandler>

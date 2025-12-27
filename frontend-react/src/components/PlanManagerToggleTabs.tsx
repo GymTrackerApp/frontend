@@ -5,8 +5,8 @@ interface PlanManagerToggleProps {
   isPredefinedPlansEnabled: boolean;
   isMyExercisesEnabled: boolean;
   setIsMyPlansEnabled: (arg: boolean) => void;
-  setisPredefinedPlansEnabled: (arg: boolean) => void;
-  setisMyExercisesEnabled: (arg: boolean) => void;
+  setIsPredefinedPlansEnabled: (arg: boolean) => void;
+  setIsMyExercisesEnabled: (arg: boolean) => void;
 }
 
 const PlanManagerToggleTabs = ({
@@ -14,8 +14,8 @@ const PlanManagerToggleTabs = ({
   isPredefinedPlansEnabled,
   isMyExercisesEnabled,
   setIsMyPlansEnabled,
-  setisPredefinedPlansEnabled,
-  setisMyExercisesEnabled,
+  setIsPredefinedPlansEnabled,
+  setIsMyExercisesEnabled,
 }: PlanManagerToggleProps) => {
   const toggleButtonsCommonStyle = "px-3 rounded-md cursor-pointer";
   const enabledButtonColor = "bg-blue-500";
@@ -23,8 +23,8 @@ const PlanManagerToggleTabs = ({
 
   const disableAllButtons = () => {
     setIsMyPlansEnabled(false);
-    setisPredefinedPlansEnabled(false);
-    setisMyExercisesEnabled(false);
+    setIsPredefinedPlansEnabled(false);
+    setIsMyExercisesEnabled(false);
   };
 
   return (
@@ -48,7 +48,7 @@ const PlanManagerToggleTabs = ({
         )}
         onClick={() => {
           disableAllButtons();
-          setisPredefinedPlansEnabled(true);
+          setIsPredefinedPlansEnabled(true);
         }}
       >
         Predefined Plans
@@ -60,7 +60,7 @@ const PlanManagerToggleTabs = ({
         )}
         onClick={() => {
           disableAllButtons();
-          setisMyExercisesEnabled(true);
+          setIsMyExercisesEnabled(true);
         }}
       >
         My Exercises

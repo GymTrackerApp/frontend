@@ -24,10 +24,7 @@ const SelectOptionWindow = <T,>({
           <FaTimes onClick={onClose} className="cursor-pointer" />
         </span>
       </header>
-      <div
-        className="max-h-[30vh] overflow-y-auto w-full scrollbar-thin scrollbar-track-gray-600 scrollbar-thumb-gray-500"
-        defaultValue="default"
-      >
+      <div className="max-h-[30vh] overflow-y-auto w-full scrollbar-thin scrollbar-track-gray-600 scrollbar-thumb-gray-500">
         {data.map((item, index) => (
           <div
             key={index}
