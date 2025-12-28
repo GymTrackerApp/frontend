@@ -169,7 +169,7 @@ const NewPlanModal = ({ exercises, onClose }: NewPlanProps) => {
                     planName: newPlanForm.planName,
                     planItems: [
                       ...newPlanForm.planItems.filter(
-                        (item) => item.exerciseId != planItem.exerciseId
+                        (item) => item.exerciseId !== planItem.exerciseId
                       ),
                     ],
                   })
