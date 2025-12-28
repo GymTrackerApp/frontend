@@ -1,1 +1,7 @@
 @import "tailwindcss";
+@plugin "tailwind-scrollbar";
+
+@theme {
+  --color-components-main: var(--color-gray-700);
+  --color-approve-button-main: var(--color-blue-500);
+}
