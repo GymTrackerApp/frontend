@@ -139,25 +139,31 @@ const NewPlanModal = ({ exercises, onClose }: NewPlanProps) => {
           </button>
         </div>
 
-        <ul className="my-5">
+        <div className="my-5">
           {newPlanForm.planItems.map((planItem) => (
-            <li key={planItem.exerciseId} className="flex px-2">
+            <div key={planItem.exerciseId} className="flex px-2">
               <span className="w-full">{planItem.exerciseName}</span>
               <input
                 className="w-full text-center bg-gray-700 text-white border border-gray-500 rounded-xl"
                 type="number"
                 min={1}
-                value={planItem.defaultSets.toString()}
+                value={
+                  planItem.defaultSets === 0 ? "" : String(planItem.defaultSets)
+                }
                 onChange={(e) => {
-                  const updatedNewPlanForm: NewPlanForm = {
-                    planName: newPlanForm.planName,
-                    planItems: newPlanForm.planItems.map((item) =>
-                      item.exerciseId === planItem.exerciseId
-                        ? { ...item, defaultSets: Number(e.target.value) }
-                        : item
-                    ),
-                  };
-                  setNewPlanForm(updatedNewPlanForm);
+                  const val = e.target.value;
+                  const numericValue = val === "" ? 0 : parseInt(val, 10);
+
+                  setNewPlanForm((prev) => {
+                    return {
+                      ...prev,
+                      planItems: prev.planItems.map((item) =>
+                        item.exerciseId === planItem.exerciseId
+                          ? { ...item, defaultSets: numericValue }
+                          : item
+                      ),
+                    };
+                  });
                 }}
               />
               <span className="text-gray-400 text-sm my-auto mx-2">sets</span>
@@ -177,9 +183,9 @@ const NewPlanModal = ({ exercises, onClose }: NewPlanProps) => {
               >
                 <FaTimes />
               </button>
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
 
         {addExerciseEnabled && (
           <SelectOptionWindow

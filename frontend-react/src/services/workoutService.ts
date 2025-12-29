@@ -1,4 +1,4 @@
-import { privateApi, publicApi } from "../clients";
+import { privateApi } from "../clients";
 import type { GeneralResponse } from "../types/ApiResponse";
 
 export interface ExerciseSet {

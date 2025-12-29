@@ -37,7 +37,8 @@ const QuickStart = ({ data, isLoading }: QuickStartProps) => {
         <SelectOptionWindow
           title={"Select a Plan"}
           onClose={() => setSelectWorkoutEnabled(false)}
-          data={data}
+          data={isLoading ? [] : data}
+          emptyDataMessage="Loading plans..."
           onSelect={(item) => handleWorkoutStart(item)}
           renderItem={(plan) => (
             <p className="flex flex-col">
