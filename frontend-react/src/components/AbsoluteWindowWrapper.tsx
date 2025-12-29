@@ -12,13 +12,12 @@ const AbsoluteWindowWrapper = ({
   onClose,
 }: AbsoluteWindowWrapperProps) => {
   useEffect(() => {
-    const originalOverflow = document.body.style.overflow;
     if (isOpen) {
       document.body.style.overflow = "hidden";
     }
 
     return () => {
-      document.body.style.overflow = originalOverflow;
+      document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
@@ -26,7 +25,7 @@ const AbsoluteWindowWrapper = ({
 
   return (
     <div
-      className="fixed flex justify-center items-center top-0 left-0 right-0 bottom-0 bg-black/50"
+      className="fixed flex justify-center items-center top-0 left-0 right-0 bottom-0 bg-black/25"
       onClick={onClose}
     >
       <div

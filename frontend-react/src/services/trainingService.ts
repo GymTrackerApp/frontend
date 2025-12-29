@@ -1,7 +1,7 @@
 import { privateApi, publicApi } from "../clients";
 import type { GeneralResponse } from "../types/ApiResponse";
 
-interface PlanItemResponse {
+export interface PlanItemResponse {
   exerciseId: number;
   exerciseName: string;
   defaultSets: number;
@@ -10,6 +10,7 @@ interface PlanItemResponse {
 export interface PlanResponse {
   id: number;
   name: string;
+  isCustom: boolean;
   planItems: Array<PlanItemResponse>;
 }
 
@@ -30,6 +31,13 @@ export const getPredefinedPlans = async (): Promise<Array<PlanResponse>> => {
 
 export const getUserPlans = async (): Promise<Array<PlanResponse>> => {
   const response = await privateApi.get("/plans/user");
+  return response.data;
+};
+
+export const getTrainingPlanById = async (
+  trainingPlanId: string
+): Promise<PlanResponse> => {
+  const response = await privateApi.get(`/plans/${trainingPlanId}`);
   return response.data;
 };
 

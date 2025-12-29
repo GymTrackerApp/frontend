@@ -1,21 +1,55 @@
-import { FaPlay, FaRegCalendar } from "react-icons/fa";
+import { useState } from "react";
+import { FaPlay } from "react-icons/fa";
+import { type PlanResponse } from "../services/trainingService";
+import SelectOptionWindow from "./SelectOptionWindow";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router";
 
-const QuickStart = () => {
+interface QuickStartProps {
+  data: Array<PlanResponse>;
+  isLoading: boolean;
+}
+
+const QuickStart = ({ data, isLoading }: QuickStartProps) => {
+  const [selectWorkoutEnabled, setSelectWorkoutEnabled] =
+    useState<boolean>(false);
+
+  const navigate = useNavigate();
+
+  const handleWorkoutStart = (trainingPlan: PlanResponse) => {
+    toast.success(`Starting workout: ${trainingPlan.name}`);
+    navigate("/workout?trainingPlanId=" + trainingPlan.id);
+  };
+
   return (
     <div className="w-full bg-gray-700 px-2 py-2 pb-10 mt-3">
       <h1 className="text-2xl font-semibold">Quick Start</h1>
-      <button className="bg-blue-500 w-1/3 flex justify-center py-2 rounded-xl mx-auto cursor-pointer hover:bg-blue-400 transition-colors">
+      <button
+        className="bg-approve-button-main hover:bg-hover-approve-button-main w-1/3 flex justify-center py-2 rounded-xl mx-auto cursor-pointer transition-colors"
+        onClick={() => setSelectWorkoutEnabled(true)}
+      >
         <span aria-hidden="true" className="flex items-center mr-2">
           <FaPlay />
         </span>
-        <span>Start Ad Hoc Workout</span>
+        <span>Start Your Workout</span>
       </button>
-      <button className="bg-gray-500 w-1/3 flex justify-center py-2 rounded-xl mx-auto mt-5 cursor-pointer hover:bg-gray-400 transition-colors">
-        <span aria-hidden="true" className="flex items-center mr-2">
-          <FaRegCalendar />
-        </span>
-        <span>Start Planned Workout</span>
-      </button>
+      {selectWorkoutEnabled && (
+        <SelectOptionWindow
+          title={"Select a Plan"}
+          onClose={() => setSelectWorkoutEnabled(false)}
+          data={data}
+          onSelect={(item) => handleWorkoutStart(item)}
+          renderItem={(plan) => (
+            <p className="flex flex-col">
+              <span className="">{plan.name}</span>
+              <span className="text-gray-400">
+                {plan.planItems.length}{" "}
+                {plan.planItems.length === 1 ? "exercise" : "exercises"}
+              </span>
+            </p>
+          )}
+        />
+      )}
     </div>
   );
 };

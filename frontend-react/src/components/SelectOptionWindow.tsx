@@ -3,6 +3,7 @@ import AbsoluteWindowWrapper from "./AbsoluteWindowWrapper";
 
 interface SelectOptionWindowProps<T> {
   title: string;
+  emptyDataMessage?: string;
   onClose: () => void;
   data: T[];
   onSelect: (item: T) => void;
@@ -11,6 +12,7 @@ interface SelectOptionWindowProps<T> {
 
 const SelectOptionWindow = <T,>({
   title,
+  emptyDataMessage,
   onClose,
   data,
   onSelect,
@@ -25,15 +27,21 @@ const SelectOptionWindow = <T,>({
         </span>
       </header>
       <div className="max-h-[30vh] overflow-y-auto w-full scrollbar-thin scrollbar-track-gray-600 scrollbar-thumb-gray-500">
-        {data.map((item, index) => (
-          <div
-            key={index}
-            onClick={() => onSelect(item)}
-            className="bg-gray-700 cursor-pointer hover:opacity-80 my-1 px-2 py-1 rounded-md"
-          >
-            {renderItem(item)}
+        {data.length == 0 ? (
+          <div className="bg-gray-700 my-1 px-2 py-1 rounded-md">
+            {emptyDataMessage || "No options available"}
           </div>
-        ))}
+        ) : (
+          data.map((item, index) => (
+            <div
+              key={index}
+              onClick={() => onSelect(item)}
+              className="bg-gray-700 cursor-pointer hover:opacity-80 my-1 px-2 py-1 rounded-md"
+            >
+              {renderItem(item)}
+            </div>
+          ))
+        )}
       </div>
     </AbsoluteWindowWrapper>
   );

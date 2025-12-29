@@ -9,6 +9,7 @@ import ErrorPage from "./pages/ErrorPage.tsx";
 import MainPage from "./pages/MainPage.tsx";
 import RegisterLogin from "./pages/RegisterLogin.tsx";
 import PlanManager from "./pages/PlanManager.tsx";
+import Workout from "./pages/Workout.tsx";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/" element={<MainPage />} />
           <Route path="/register-login" element={<RegisterLogin />} />
           <Route path="/plan-manager" element={<PlanManager />} />
+          <Route path="/workout" element={<Workout />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </BrowserRouter>
