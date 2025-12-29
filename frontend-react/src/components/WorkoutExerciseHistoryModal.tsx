@@ -62,8 +62,11 @@ const WorkoutExerciseHistoryModal = ({
                     {displayDate(workoutSessionSnapshot.workoutDate)}
                   </p>
                   <div className="flex gap-2">
-                    {workoutSessionSnapshot.sets.map((set) => (
-                      <p className="bg-gray-500 px-1 rounded-sm text-sm">
+                    {workoutSessionSnapshot.sets.map((set, setIndex) => (
+                      <p
+                        key={setIndex}
+                        className="bg-gray-500 px-1 rounded-sm text-sm"
+                      >
                         {set.weight}kg <FaTimes className="inline" size={10} />{" "}
                         {set.reps}
                       </p>

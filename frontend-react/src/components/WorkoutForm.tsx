@@ -144,10 +144,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
   };
 
   return (
-    <div
-      className="bg-gray-800 text-white min-h-dvh"
-      onSubmit={handleFormSubmit}
-    >
+    <div className="bg-gray-800 text-white min-h-dvh">
       {isFinishedWorkoutWindowOpen && (
         <AbsoluteWindowWrapper
           isOpen={true}
@@ -339,15 +336,14 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
             <FaPlus />
             <span>Add Set</span>
           </button>
-
-          {exerciseHistory && (
-            <WorkoutExerciseHistoryModal
-              planItem={exerciseHistory}
-              onClose={() => setExerciseHistory(null)}
-            />
-          )}
         </div>
       ))}
+      {exerciseHistory && (
+        <WorkoutExerciseHistoryModal
+          planItem={exerciseHistory}
+          onClose={() => setExerciseHistory(null)}
+        />
+      )}
     </div>
   );
 };

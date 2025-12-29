@@ -27,7 +27,7 @@ const SelectOptionWindow = <T,>({
         </span>
       </header>
       <div className="max-h-[30vh] overflow-y-auto w-full scrollbar-thin scrollbar-track-gray-600 scrollbar-thumb-gray-500">
-        {data.length == 0 ? (
+        {data.length === 0 ? (
           <div className="bg-gray-700 my-1 px-2 py-1 rounded-md">
             {emptyDataMessage || "No options available"}
           </div>

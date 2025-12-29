@@ -144,15 +144,13 @@ const NewPlanModal = ({ exercises, onClose }: NewPlanProps) => {
             <div key={planItem.exerciseId} className="flex px-2">
               <span className="w-full">{planItem.exerciseName}</span>
               <input
-                className="w-full text-center bg-gray-700 text-white border border-gray-500 rounded-xl"
+                className="w-full text-center bg-gray-700 text-white border border-gray-500 rounded-xl no-spinner focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors"
                 type="number"
                 min={1}
-                value={
-                  planItem.defaultSets === 0 ? "" : String(planItem.defaultSets)
-                }
+                value={String(planItem.defaultSets)}
                 onChange={(e) => {
                   const val = e.target.value;
-                  const numericValue = val === "" ? 0 : parseInt(val, 10);
+                  const numericValue = val === "" ? 1 : parseInt(val, 10);
 
                   setNewPlanForm((prev) => {
                     return {
