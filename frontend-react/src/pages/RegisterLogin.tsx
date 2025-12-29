@@ -38,6 +38,7 @@ const RegisterLogin = () => {
     mutationFn: signUp,
     onSuccess: () => {
       toast.success("Sign up successful. Please log in.");
+      setIsRegister(false);
     },
     onError: (error: AxiosError<ErrorResponse>) => {
       if (error.response) {
