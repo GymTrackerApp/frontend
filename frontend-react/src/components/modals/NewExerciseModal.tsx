@@ -1,16 +1,16 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import InputForm from "./InputForm";
+import InputForm from "../InputForm";
 import type { AxiosError } from "axios";
 import {
   createNewExercise,
   type ExerciseResponse,
   type NewExerciseRequest,
-} from "../services/exerciseService";
+} from "../../services/exerciseService";
 import toast from "react-hot-toast";
-import type { ErrorResponse } from "../types/ApiResponse";
+import type { ErrorResponse } from "../../types/ApiResponse";
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import AbsoluteWindowWrapper from "./AbsoluteWindowWrapper";
+import AbsoluteWindowWrapper from "../ui/AbsoluteWindowWrapper";
 
 interface CreateNewExerciseProps {
   onClose: () => void;

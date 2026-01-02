@@ -13,16 +13,16 @@ import { useNavigate } from "react-router";
 import type {
   PlanItemResponse,
   PlanResponse,
-} from "../services/trainingService";
+} from "../../services/trainingService";
 import {
   createWorkout,
   getWorkoutExerciseHistory,
   type ExerciseSet,
   type WorkoutCreationRequest,
-} from "../services/workoutService";
-import type { ErrorResponse, GeneralResponse } from "../types/ApiResponse";
-import AbsoluteWindowWrapper from "./AbsoluteWindowWrapper";
-import AutoWorkoutTimer from "./AutoWorkoutTimer";
+} from "../../services/workoutService";
+import type { ErrorResponse, GeneralResponse } from "../../types/ApiResponse";
+import AbsoluteWindowWrapper from "../ui/AbsoluteWindowWrapper";
+import AutoWorkoutTimer from "../AutoWorkoutTimer";
 import WorkoutExerciseHistoryModal from "./WorkoutExerciseHistoryModal";
 
 interface WorkoutFormProps {
@@ -66,6 +66,9 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
     mutationFn: createWorkout,
     onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: ["lastSession"] });
+      queryClient.invalidateQueries({ queryKey: ["workoutsThisWeek"] });
+      queryClient.invalidateQueries({ queryKey: ["lastWorkout"] });
+      queryClient.invalidateQueries({ queryKey: ["recentWorkouts"] });
 
       toast.success(response.message);
       navigate("/");

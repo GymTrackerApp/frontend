@@ -3,6 +3,10 @@
 
 @theme {
   --color-components-main: var(--color-gray-700);
+  --color-subcomponents-main: var(--color-gray-600);
+  --color-subcomponents-main-hover: var(--color-gray-500);
+  --color-subcomponents-text-main: var(--color-gray-400);
+  --color-background-main: var(--color-gray-800);
   --color-approve-button-main: var(--color-blue-500);
   --color-hover-approve-button-main: var(--color-blue-400);
 }
@@ -14,7 +18,7 @@
     margin: 0;
   }
 
-  &{
+  & {
     -moz-appearance: textfield;
   }
 }

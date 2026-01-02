@@ -4,6 +4,8 @@ import Header from "../components/Header";
 import PlanBlock from "../components/PlanBlock";
 import QuickStart from "../components/QuickStart";
 import { useAvailablePlans } from "../hooks/useWorkoutFlow";
+import QuickStats from "../components/QuickStats";
+import RecentWorkouts from "../components/RecentWorkouts";
 
 const MainPage = () => {
   const {
@@ -16,10 +18,12 @@ const MainPage = () => {
   return (
     <>
       <Header />
-      <div className="bg-gray-800 text-white flex flex-col items-center min-h-dvh pt-3">
+      <div className="bg-background-main text-white flex flex-col items-center min-h-dvh pt-3">
         <h1 className="text-3xl font-bold">Welcome back, John!</h1>
         <p className="text-gray-400">Ready to crush your workout?</p>
         <QuickStart data={plans} isLoading={plansLoading} />
+        <QuickStats />
+        <RecentWorkouts />
         <div className="w-full px-2 pt-3 bg-gray-700 mt-5 pb-8">
           <div className="flex justify-between">
             <h1 className="text-2xl font-semibold">My Plans</h1>

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router";
 import Header from "../components/Header";
-import WorkoutForm from "../components/WorkoutForm";
+import WorkoutForm from "../components/modals/WorkoutForm";
 import {
   getTrainingPlanById,
   type PlanResponse,
@@ -17,7 +17,7 @@ const Workout = () => {
     isLoading,
     isError,
   } = useQuery<PlanResponse, ErrorResponse>({
-    queryFn: () => getTrainingPlanById(trainingPlanId!),
+    queryFn: () => getTrainingPlanById(Number(trainingPlanId!)),
     queryKey: ["trainingPlan", trainingPlanId],
     enabled: !!trainingPlanId,
   });

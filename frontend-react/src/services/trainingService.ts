@@ -35,7 +35,7 @@ export const getUserPlans = async (): Promise<Array<PlanResponse>> => {
 };
 
 export const getTrainingPlanById = async (
-  trainingPlanId: string
+  trainingPlanId: number
 ): Promise<PlanResponse> => {
   const response = await privateApi.get(`/plans/${trainingPlanId}`);
   return response.data;
