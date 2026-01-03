@@ -43,7 +43,7 @@ const DATE_RANGE_OPTIONS: DateRangeOption[] = [
   { label: "Last 30 days", value: "30d" },
   { label: "Last 60 days", value: "60d" },
   { label: "Last 90 days", value: "90d" },
-  { label: "Last 6 month", value: "6m" },
+  { label: "Last 6 months", value: "6m" },
 ];
 
 type WindowType = "metric" | "range" | "exercise" | "training" | null;
@@ -95,7 +95,10 @@ const Progress = () => {
         date: format(snapshot.workoutDate, "yyyy-MM-dd"),
         value:
           snapshot.sets.reduce((prev, curr) => prev + curr.weight, 0) /
-          snapshot.sets.length,
+            snapshot.sets.length ===
+          0
+            ? 1
+            : snapshot.sets.length,
       }));
     }
 
@@ -156,10 +159,10 @@ const Progress = () => {
     <>
       <Header />
       <div className="bg-background-main text-white min-h-dvh">
-        <h1>Progress & Metrics</h1>
-        <p>Track your training progress over time</p>
+        <h1 className="text-3xl font-bold">Progress & Metrics</h1>
+        <p className="text-gray-500">Track your training progress over time</p>
         <div>
-          <p>Metric Type</p>
+          <p className="text-gray-400">Metric Type</p>
           <button
             className="cursor-pointer w-full text-left flex justify-between items-center px-2 py-1 bg-components-main hover:bg-gray-600 transition-colors"
             onClick={() => setActiveWindow("metric")}
@@ -188,7 +191,7 @@ const Progress = () => {
 
           {selectedMetricType === "exercise" && (
             <>
-              <p>Exercise</p>
+              <p className="text-gray-400">Exercise</p>
               <button
                 className="cursor-pointer w-full text-left flex justify-between items-center px-2 py-1 bg-components-main hover:bg-gray-600 transition-colors"
                 onClick={() => setActiveWindow("exercise")}
@@ -220,7 +223,7 @@ const Progress = () => {
 
           {selectedMetricType === "training" && (
             <>
-              <p>Training</p>
+              <p className="text-gray-400">Training</p>
               <button
                 className="cursor-pointer w-full text-left flex justify-between items-center px-2 py-1 bg-components-main hover:bg-gray-600 transition-colors"
                 onClick={() => setActiveWindow("training")}
@@ -252,7 +255,7 @@ const Progress = () => {
             </>
           )}
 
-          <p>Date Range</p>
+          <p className="text-gray-400">Date Range</p>
           <button
             className="cursor-pointer w-full text-left flex justify-between items-center px-2 py-1 bg-components-main hover:bg-gray-600 transition-colors"
             onClick={() => setActiveWindow("range")}

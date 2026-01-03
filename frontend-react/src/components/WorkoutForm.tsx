@@ -7,38 +7,54 @@ import {
   FaPlus,
   FaRegClock,
   FaStopwatch,
+  FaSync,
   FaTimes,
 } from "react-icons/fa";
 import { useNavigate } from "react-router";
+import { useAvailableExercises } from "../hooks/useWorkoutFlow";
+import type { ExerciseResponse } from "../services/exerciseService";
 import type {
   PlanItemResponse,
   PlanResponse,
-} from "../../services/trainingService";
+} from "../services/trainingService";
 import {
   createWorkout,
   getWorkoutExerciseHistory,
   type ExerciseSet,
   type WorkoutCreationRequest,
-} from "../../services/workoutService";
-import type { ErrorResponse, GeneralResponse } from "../../types/ApiResponse";
-import AbsoluteWindowWrapper from "../ui/AbsoluteWindowWrapper";
-import AutoWorkoutTimer from "../AutoWorkoutTimer";
-import WorkoutExerciseHistoryModal from "./WorkoutExerciseHistoryModal";
+} from "../services/workoutService";
+import type { ErrorResponse, GeneralResponse } from "../types/ApiResponse";
+import AutoWorkoutTimer from "./AutoWorkoutTimer";
+import WorkoutExerciseHistoryModal from "./modals/WorkoutExerciseHistoryModal";
+import AbsoluteWindowWrapper from "./ui/AbsoluteWindowWrapper";
+import SelectOptionWindow from "./ui/SelectOptionWindow";
 
 interface WorkoutFormProps {
   plan: PlanResponse;
 }
 
 const WorkoutForm = ({ plan }: WorkoutFormProps) => {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
   const [exerciseHistory, setExerciseHistory] =
     useState<PlanItemResponse | null>(null);
   const [isFinishedWorkoutWindowOpen, setIsFinishedWorkoutWindowOpen] =
     useState<boolean>(false);
+  const [replacingExerciseId, setReplacingExerciseId] = useState<number | null>(
+    null
+  );
+
+  const [workoutItems, setWorkoutItems] = useState<Array<PlanItemResponse>>(
+    plan.planItems
+  );
+
+  const { exercises, isLoading: isExercisesLoading } = useAvailableExercises();
 
   const [workoutCreationRequest, setWorkoutCreationRequest] =
     useState<WorkoutCreationRequest>({
-      trainingId: plan?.id,
-      workoutItems: plan?.planItems.map((item) => ({
+      trainingId: plan.id,
+      workoutItems: workoutItems.map((item) => ({
         exerciseId: item.exerciseId,
         type: "REPS",
         sets: Array.from({ length: item.defaultSets }, () => ({
@@ -49,14 +65,11 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
     });
 
   const lastSessionResults = useQueries({
-    queries: plan.planItems.map((item) => ({
+    queries: workoutItems.map((item) => ({
       queryKey: ["lastSession", item.exerciseId],
       queryFn: () => getWorkoutExerciseHistory(item.exerciseId, 1),
     })),
   });
-
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
 
   const workoutMutation = useMutation<
     GeneralResponse,
@@ -140,6 +153,27 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
     });
   };
 
+  const replaceExercise = (newExercise: ExerciseResponse) => {
+    if (
+      workoutItems.some((item) => item.exerciseId === newExercise.exerciseId)
+    ) {
+      toast.error("Exercise already exists in the plan");
+      return;
+    }
+
+    const updatedItems = workoutItems.map((item) =>
+      item.exerciseId === replacingExerciseId
+        ? {
+            ...item,
+            exerciseId: newExercise.exerciseId,
+            exerciseName: newExercise.name,
+          }
+        : { ...item }
+    );
+
+    setWorkoutItems(updatedItems);
+  };
+
   const handleFormSubmit = () => {
     if (workoutMutation.isPending) return;
 
@@ -208,20 +242,42 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
         <span>Start Rest Timer</span>
       </button>
 
-      {plan.planItems.map((planItem, exerciseIndex) => (
+      {workoutItems.map((planItem, exerciseIndex) => (
         <div
           key={exerciseIndex}
           className="bg-gray-700 p-2 border-b border-b-gray-700"
         >
-          <div className="flex items-center mb-4 gap-2">
-            <p key={planItem.exerciseId} className="text-xl">
-              {planItem.exerciseName}
-            </p>
-            <FaHistory
-              className="cursor-pointer text-gray-400"
-              onClick={() => setExerciseHistory(planItem)}
+          <div className="flex justify-between items-center mb-4 pe-3">
+            <div className="flex items-center gap-2">
+              <p key={planItem.exerciseId} className="text-xl">
+                {planItem.exerciseName}
+              </p>
+              <FaHistory
+                className="cursor-pointer text-gray-400"
+                onClick={() => setExerciseHistory(planItem)}
+              />
+            </div>
+            <FaSync
+              className="text-gray-400 cursor-pointer"
+              onClick={() => setReplacingExerciseId(planItem.exerciseId)}
             />
           </div>
+
+          {replacingExerciseId && (
+            <SelectOptionWindow
+              title={"Replace Exercise"}
+              onClose={() => setReplacingExerciseId(null)}
+              data={exercises}
+              onSelect={(exercise) => {
+                replaceExercise(exercise);
+                setReplacingExerciseId(null);
+              }}
+              renderItem={(exercise) => (
+                <p key={exercise.exerciseId}>{exercise.name}</p>
+              )}
+              isDataLoading={isExercisesLoading}
+            />
+          )}
 
           <div className="grid grid-cols-[30px_1fr_1fr_30px] gap-2 text-gray-400 text-center mb-2 px-1">
             <span className="text-xs font-bold text-gray-500 uppercase">

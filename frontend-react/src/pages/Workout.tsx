@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router";
 import Header from "../components/Header";
-import WorkoutForm from "../components/modals/WorkoutForm";
+import WorkoutForm from "../components/WorkoutForm";
 import {
   getTrainingPlanById,
   type PlanResponse,
@@ -29,6 +29,8 @@ const Workout = () => {
         <p>Failed to fetch training plan.</p>
       ) : isLoading ? (
         <p>Loading training plan...</p>
+      ) : !plan ? (
+        <p>Failed to fetch training plan.</p>
       ) : (
         <WorkoutForm plan={plan!} />
       )}
