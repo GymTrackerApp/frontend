@@ -6,6 +6,7 @@ interface SelectOptionWindowProps<T> {
   emptyDataMessage?: string;
   onClose: () => void;
   data: T[];
+  isDataLoading?: boolean;
   onSelect: (item: T) => void;
   renderItem: (data: T) => React.ReactNode;
 }
@@ -15,19 +16,25 @@ const SelectOptionWindow = <T,>({
   emptyDataMessage,
   onClose,
   data,
+  isDataLoading,
   onSelect,
   renderItem,
 }: SelectOptionWindowProps<T>) => {
   return (
     <AbsoluteWindowWrapper isOpen={true} onClose={onClose}>
-      <header className="flex justify-between items-center px-1 w-full">
+      <header className="flex justify-between items-center px-1 w-full mb-1">
         <p className="text-xl font-bold">{title}</p>
-        <span>
-          <FaTimes onClick={onClose} className="cursor-pointer" />
-        </span>
+        <FaTimes
+          onClick={onClose}
+          className="cursor-pointer hover:opacity-80"
+        />
       </header>
-      <div className="max-h-[30vh] overflow-y-auto w-full scrollbar-thin scrollbar-track-gray-600 scrollbar-thumb-gray-500">
-        {data.length === 0 ? (
+      <div className="max-h-[30vh] overflow-y-auto w-full scrollbar-none">
+        {isDataLoading ? (
+          <div className="bg-components-main my-1 px-2 py-1 rounded-md">
+            <p>Loading data...</p>
+          </div>
+        ) : !data || data.length === 0 ? (
           <div className="bg-gray-700 my-1 px-2 py-1 rounded-md">
             {emptyDataMessage || "No options available"}
           </div>
@@ -36,7 +43,7 @@ const SelectOptionWindow = <T,>({
             <div
               key={index}
               onClick={() => onSelect(item)}
-              className="bg-gray-700 cursor-pointer hover:opacity-80 my-1 px-2 py-1 rounded-md"
+              className="bg-subcomponents-main cursor-pointer hover:bg-subcomponents-main-hover my-1 px-2 py-1 rounded-md"
             >
               {renderItem(item)}
             </div>

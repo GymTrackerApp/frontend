@@ -17,7 +17,7 @@ const Workout = () => {
     isLoading,
     isError,
   } = useQuery<PlanResponse, ErrorResponse>({
-    queryFn: () => getTrainingPlanById(trainingPlanId!),
+    queryFn: () => getTrainingPlanById(Number(trainingPlanId!)),
     queryKey: ["trainingPlan", trainingPlanId],
     enabled: !!trainingPlanId,
   });
@@ -29,6 +29,8 @@ const Workout = () => {
         <p>Failed to fetch training plan.</p>
       ) : isLoading ? (
         <p>Loading training plan...</p>
+      ) : !plan ? (
+        <p>Failed to fetch training plan.</p>
       ) : (
         <WorkoutForm plan={plan!} />
       )}

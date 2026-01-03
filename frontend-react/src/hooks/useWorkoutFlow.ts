@@ -5,6 +5,11 @@ import {
   type PlanResponse,
 } from "../services/trainingService";
 import type { ErrorResponse } from "../types/ApiResponse";
+import {
+  getPredefinedExercises,
+  getUserExercises,
+  type ExerciseResponse,
+} from "../services/exerciseService";
 
 export const useAvailablePlans = () => {
   const userPlans = useQuery<Array<PlanResponse>, ErrorResponse>({
@@ -24,5 +29,29 @@ export const useAvailablePlans = () => {
     isLoading: userPlans.isLoading || predefinedPlans.isLoading,
     isError: userPlans.isError || predefinedPlans.isError,
     userPlansOnly: userPlans.data,
+  };
+};
+
+export const useAvailableExercises = () => {
+  const userExercises = useQuery<Array<ExerciseResponse>, ErrorResponse>({
+    queryFn: getUserExercises,
+    queryKey: ["userExercises"],
+  });
+
+  const predefinedExercises = useQuery<Array<ExerciseResponse>, ErrorResponse>({
+    queryFn: getPredefinedExercises,
+    queryKey: ["predefinedExercises"],
+  });
+
+  const allExercises = [
+    ...(userExercises.data || []),
+    ...(predefinedExercises.data || []),
+  ];
+
+  return {
+    exercises: allExercises,
+    isLoading: userExercises.isLoading || predefinedExercises.isLoading,
+    isError: userExercises.isError || predefinedExercises.isError,
+    userExercisesOnly: userExercises.data,
   };
 };
