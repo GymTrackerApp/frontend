@@ -8,7 +8,7 @@ import WorkoutDetails from "./modals/WorkoutDetailsModal";
 
 const RecentWorkouts = () => {
   const { data, isLoading, isError } = useQuery({
-    queryFn: () => getWorkouts(null, null, 0, 3),
+    queryFn: () => getWorkouts(null, null, null, 0, 3),
     queryKey: ["recentWorkouts"],
     select: (data) =>
       data.map((workout) => {

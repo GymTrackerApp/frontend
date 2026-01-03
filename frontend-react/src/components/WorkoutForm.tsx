@@ -1,8 +1,14 @@
-import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import {
+  FaCheck,
   FaHistory,
   FaPlus,
   FaRegClock,
@@ -20,12 +26,15 @@ import type {
 import {
   createWorkout,
   getWorkoutExerciseHistory,
+  getWorkouts,
   type ExerciseSet,
   type WorkoutCreationRequest,
 } from "../services/workoutService";
 import type { ErrorResponse, GeneralResponse } from "../types/ApiResponse";
 import AutoWorkoutTimer from "./AutoWorkoutTimer";
+import WorkoutDetails from "./modals/WorkoutDetailsModal";
 import WorkoutExerciseHistoryModal from "./modals/WorkoutExerciseHistoryModal";
+import RestTimer from "./RestTimer";
 import AbsoluteWindowWrapper from "./ui/AbsoluteWindowWrapper";
 import SelectOptionWindow from "./ui/SelectOptionWindow";
 
@@ -44,10 +53,28 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
   const [replacingExerciseId, setReplacingExerciseId] = useState<number | null>(
     null
   );
+  const [lastWorkoutEnabled, setLastWorkoutEnabled] = useState<boolean>(false);
+  const [selectTimerEnabled, setSelectTimerEnabled] = useState<boolean>(false);
+  const [selectedTimerOption, setSelectedTimerOption] = useState<number | null>(
+    null
+  );
+  const [selectedCustomRestTime, setSelectedCustomRestTime] = useState<
+    number | null
+  >();
 
   const [workoutItems, setWorkoutItems] = useState<Array<PlanItemResponse>>(
     plan.planItems
   );
+
+  const TIMER_OPTIONS = [
+    { label: "30 seconds", value: 30 },
+    { label: "1 minute", value: 60 },
+    { label: "2 minutes", value: 120 },
+    { label: "3 minutes", value: 180 },
+    { label: "4 minutes", value: 240 },
+    { label: "5 minutes", value: 300 },
+    { label: "Custom Time (sec)", value: -1 },
+  ];
 
   const { exercises, isLoading: isExercisesLoading } = useAvailableExercises();
 
@@ -92,6 +119,25 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
       } else {
         toast.error(error.message);
       }
+    },
+  });
+
+  const {
+    data: lastWorkout,
+    isLoading: isLastWorkoutLoading,
+    isError: isLastWorkoutError,
+  } = useQuery({
+    queryFn: () => getWorkouts(null, null, plan.id, 0, 1),
+    queryKey: ["lastWorkout"],
+    select: (data) => {
+      return data.map((workout) => {
+        const createdAt = new Date(workout.createdAt);
+        createdAt.setHours(0, 0, 0, 0);
+        return {
+          ...workout,
+          createdAt: new Date(createdAt),
+        };
+      });
     },
   });
 
@@ -234,13 +280,96 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
           Finish Workout
         </button>
       </div>
+
       <button
-        className="mb-2 bg-approve-button-main px-2 py-1 w-full rounded-md flex justify-center items-center gap-2 text-white font-light cursor-pointer hover:bg-hover-approve-button-main transition-colors"
+        onClick={() => {
+          setSelectedTimerOption(null);
+          setSelectTimerEnabled(true);
+        }}
+        className="mb-2 bg-approve-button-main px-2 py-1 w-full rounded-md flex justify-center items-center gap-2 font-light cursor-pointer hover:bg-hover-approve-button-main transition-colors"
         type="button"
       >
         <FaStopwatch />
-        <span>Start Rest Timer</span>
+        <span>
+          {selectedTimerOption ? (
+            <RestTimer
+              time={selectedTimerOption}
+              disableTimer={() => setSelectedTimerOption(null)}
+            />
+          ) : (
+            "Start Rest Timer"
+          )}
+        </span>
       </button>
+
+      {selectTimerEnabled && (
+        <SelectOptionWindow
+          title={"Select Timer"}
+          onClose={() => setSelectTimerEnabled(false)}
+          data={TIMER_OPTIONS}
+          onSelect={(timerOption) => {
+            if (timerOption.value === -1) {
+              return;
+            }
+            setSelectedTimerOption(timerOption.value);
+            setSelectTimerEnabled(false);
+          }}
+          renderItem={(timerOption) =>
+            timerOption.value === -1 ? (
+              <div className="flex items-center">
+                <input
+                  className="w-full no-spinner outline-none"
+                  type="number"
+                  min={1}
+                  placeholder={timerOption.label}
+                  value={selectedCustomRestTime || ""}
+                  onChange={(e) => {
+                    setSelectedCustomRestTime(Number(e.target.value));
+                  }}
+                  onKeyDown={(e) => {
+                    const invalidChars = ["-", "+", "e", "E"];
+                    if (invalidChars.includes(e.key)) {
+                      e.preventDefault();
+                    }
+                  }}
+                />
+                <FaCheck
+                  size={20}
+                  className="cursor-pointer hover:opacity-80 transition-colors"
+                  onClick={() => {
+                    if (!selectedCustomRestTime) return;
+                    setSelectTimerEnabled(false);
+                    setSelectedTimerOption(selectedCustomRestTime);
+                    setSelectedCustomRestTime(null);
+                  }}
+                />
+              </div>
+            ) : (
+              <p key={timerOption.value}>{timerOption.label}</p>
+            )
+          }
+        />
+      )}
+
+      <button
+        className="bg-blue-950 px-2 py-1 rounded-md w-full border border-gray-700 mb-2 font-light cursor-pointer hover:bg-blue-900 transition-colors"
+        onClick={() => setLastWorkoutEnabled(true)}
+        disabled={
+          isLastWorkoutLoading ||
+          isLastWorkoutError ||
+          !lastWorkout ||
+          lastWorkout.length === 0
+        }
+      >
+        Last Workout
+      </button>
+
+      {lastWorkoutEnabled && (
+        <WorkoutDetails
+          workout={lastWorkout![0]}
+          onClose={() => setLastWorkoutEnabled(false)}
+        />
+      )}
 
       {workoutItems.map((planItem, exerciseIndex) => (
         <div

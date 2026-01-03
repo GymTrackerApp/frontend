@@ -20,7 +20,13 @@ const QuickStats = () => {
     isError: isWorkoutsThisWeekError,
   } = useQuery({
     queryFn: () =>
-      getWorkouts(startOfWeek(getCurrentDate()), getCurrentDate(), 0, 10_000),
+      getWorkouts(
+        startOfWeek(getCurrentDate()),
+        getCurrentDate(),
+        null,
+        0,
+        10_000
+      ),
     queryKey: [
       "workoutsThisWeek",
       weekStartDate.getTime(),
@@ -42,7 +48,7 @@ const QuickStats = () => {
     isLoading: isLastWorkoutLoading,
     isError: isLastWorkoutError,
   } = useQuery({
-    queryFn: () => getWorkouts(null, null, 0, 1),
+    queryFn: () => getWorkouts(null, null, null, 0, 1),
     queryKey: ["lastWorkout"],
     select: (data) =>
       data.map((workout) => {

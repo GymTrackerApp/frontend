@@ -99,6 +99,7 @@ export interface WorkoutResponse {
 export const getWorkouts = async (
   startDate: Date | null,
   endDate: Date | null,
+  trainingPlanId: number | null,
   page: number,
   size: number
 ): Promise<Array<WorkoutResponse>> => {
@@ -106,6 +107,7 @@ export const getWorkouts = async (
     params: {
       startDate: startDate ? format(startDate, "yyyy-MM-dd") : null,
       endDate: endDate ? format(endDate, "yyyy-MM-dd") : null,
+      trainingPlanId: trainingPlanId,
       page: page,
       size: size,
       sort: "createdAt,desc",
