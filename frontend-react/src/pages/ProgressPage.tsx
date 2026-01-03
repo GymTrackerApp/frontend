@@ -17,6 +17,7 @@ import {
 } from "../hooks/useWorkoutFlow";
 import Header from "../components/Header";
 import type { PlanResponse } from "../services/trainingService";
+import { getCurrentDate } from "../utils/dateUtils";
 
 type MetricType = "training" | "exercise";
 
@@ -56,6 +57,8 @@ const Progress = () => {
     useState<DateRangeType>("7d");
   const [activeWindow, setActiveWindow] = useState<WindowType>(null);
 
+  const currentDate = getCurrentDate();
+
   const getStartDate = (range: DateRangeType) => {
     const now = new Date();
     now.setHours(0, 0, 0, 0);
@@ -74,16 +77,10 @@ const Progress = () => {
     }
   };
 
-  const getCurrentDate = () => {
-    const now = new Date();
-    now.setHours(0, 0, 0, 0);
-    return now;
-  };
-
   const prepareChartData = (
     data: WorkoutExerciseHistoryResponse | WorkoutTrainingHistoryResponse
   ): Array<DataContent> | undefined => {
-    if (!data) return;
+    if (!data) return undefined;
 
     if ("trainingId" in data) {
       return data.history.map((snapshot) => ({
@@ -101,6 +98,8 @@ const Progress = () => {
           snapshot.sets.length,
       }));
     }
+
+    return undefined;
   };
 
   const {
@@ -112,13 +111,13 @@ const Progress = () => {
       getWorkoutExerciseHistoryByWorkoutInPeriod(
         selectedExercise!.exerciseId,
         getStartDate(selectedDateRange),
-        getCurrentDate()
+        currentDate
       ),
     queryKey: [
       "exerciseHistory",
       selectedExercise?.exerciseId,
       getStartDate(selectedDateRange),
-      getCurrentDate(),
+      currentDate,
     ],
     enabled:
       !!selectedExercise &&
@@ -135,13 +134,13 @@ const Progress = () => {
       getWorkoutTrainingHistoryByWorkoutInPeriod(
         selectedTraining!.id,
         getStartDate(selectedDateRange),
-        getCurrentDate()
+        currentDate
       ),
     queryKey: [
       "trainingHistory",
       selectedTraining?.id,
       getStartDate(selectedDateRange),
-      getCurrentDate(),
+      currentDate,
     ],
     enabled:
       !!selectedTraining &&
@@ -293,9 +292,11 @@ const Progress = () => {
               <p>Error when fetching exercise history</p>
             ) : isExerciseHistoryLoading ? (
               <p>Loading exercise history...</p>
+            ) : !exerciseHistoryData ? (
+              <p>No data available</p>
             ) : (
               <ProgressChart
-                historyData={prepareChartData(exerciseHistoryData!)!}
+                historyData={prepareChartData(exerciseHistoryData) || []}
                 yAxisTitle="Weight (kg)"
               />
             )
@@ -304,9 +305,11 @@ const Progress = () => {
               <p>Error when fetching training history</p>
             ) : isTrainingHistoryLoading ? (
               <p>Loading training history...</p>
+            ) : !trainingHistoryData ? (
+              <p>No data available</p>
             ) : (
               <ProgressChart
-                historyData={prepareChartData(trainingHistoryData!)!}
+                historyData={prepareChartData(trainingHistoryData) || []}
                 yAxisTitle="Volume (kg)"
               />
             )

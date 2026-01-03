@@ -13,3 +13,9 @@ export const displayLongFormattedDate = (date: Date) => {
     weekday: "short",
   });
 };
+
+export const getCurrentDate = () => {
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+  return now;
+};

@@ -14,7 +14,7 @@ const WorkoutDetails = ({ workout, onClose }: WorkoutDetailsProps) => {
     <AbsoluteWindowWrapper isOpen={true} onClose={onClose} windowSize="large">
       <header className="flex justify-between items-center">
         <p className="text-2xl font-bold">Workout Details</p>
-        <FaTimes />
+        <FaTimes className="cursor-pointer hover:opacity-80" onClick={onClose}/>
       </header>
       <section>
         <p className="text-lg font-bold mt-3">{workout.trainingPlan.name}</p>

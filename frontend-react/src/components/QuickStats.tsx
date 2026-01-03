@@ -11,6 +11,9 @@ const QuickStats = () => {
     return now;
   };
 
+  const currentDate = getCurrentDate();
+  const weekStartDate = startOfWeek(currentDate);
+
   const {
     data: workoutsThisWeek,
     isLoading: isWorkoutsThisWeekLoading,
@@ -20,8 +23,8 @@ const QuickStats = () => {
       getWorkouts(startOfWeek(getCurrentDate()), getCurrentDate(), 0, 10_000),
     queryKey: [
       "workoutsThisWeek",
-      startOfWeek(getCurrentDate()),
-      getCurrentDate(),
+      weekStartDate.getTime(),
+      currentDate.getTime(),
     ],
     select: (data) =>
       data.map((workout) => {
@@ -57,7 +60,7 @@ const QuickStats = () => {
     now.setHours(0, 0, 0, 0);
 
     const diffInMs = now.getTime() - date.getTime();
-    const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
 
     if (diffInDays === 0) {
       return "Today";
@@ -86,20 +89,22 @@ const QuickStats = () => {
           </p>
           <p>workouts</p>
         </section>
-        <section className="w-full bg-subcomponents-main text-subcomponents-text-main p-2">
-          <p>Last Workout</p>
-          <p className="text-white">
-            {isLastWorkoutError
-              ? "Cannot fetch..."
-              : isLastWorkoutLoading
-              ? "Loading..."
-              : `${displayShortFormattedDate(lastWorkout![0].createdAt)}`}
-          </p>
-          <p>
-            {isLastWorkoutError || isLastWorkoutLoading
-              ? "--"
-              : getDaysDifference(lastWorkout![0].createdAt)}
-          </p>
+        <section className="w-full bg-subcomponents-main text-white p-2">
+          <p className="text-subcomponents-text-main">Last Workout</p>
+          {isLastWorkoutError ? (
+            <p>Cannot fetch...</p>
+          ) : isLastWorkoutLoading ? (
+            <p>Loading...</p>
+          ) : !lastWorkout || lastWorkout.length === 0 ? (
+            <p>No workouts yet</p>
+          ) : (
+            <>
+              <p>{displayShortFormattedDate(lastWorkout[0].createdAt)}</p>
+              <p className="text-subcomponents-text-main">
+                {getDaysDifference(lastWorkout[0].createdAt)}
+              </p>
+            </>
+          )}
         </section>
       </div>
     </MainPagePanel>

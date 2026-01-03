@@ -8,6 +8,7 @@ import type { ErrorResponse } from "../types/ApiResponse";
 import {
   getPredefinedExercises,
   getUserExercises,
+  type ExerciseResponse,
 } from "../services/exerciseService";
 
 export const useAvailablePlans = () => {
@@ -32,12 +33,12 @@ export const useAvailablePlans = () => {
 };
 
 export const useAvailableExercises = () => {
-  const userExercises = useQuery({
+  const userExercises = useQuery<Array<ExerciseResponse>, ErrorResponse>({
     queryFn: getUserExercises,
     queryKey: ["userExercises"],
   });
 
-  const predefinedExercises = useQuery({
+  const predefinedExercises = useQuery<Array<ExerciseResponse>, ErrorResponse>({
     queryFn: getPredefinedExercises,
     queryKey: ["predefinedExercises"],
   });

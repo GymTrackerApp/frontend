@@ -102,7 +102,7 @@ export const getWorkouts = async (
   page: number,
   size: number
 ): Promise<Array<WorkoutResponse>> => {
-  const response = await privateApi.get(`/workouts`, {
+  const response = await privateApi.get<Array<WorkoutResponse>>(`/workouts`, {
     params: {
       startDate: startDate ? format(startDate, "yyyy-MM-dd") : null,
       endDate: endDate ? format(endDate, "yyyy-MM-dd") : null,

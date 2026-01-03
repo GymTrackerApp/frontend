@@ -1,6 +1,8 @@
 import type { WorkoutResponse } from "../services/workoutService";
 
 export const calculateWorkoutVolume = (workout: WorkoutResponse) => {
+  if (!workout.workoutItems) return 0;
+
   return workout.workoutItems.reduce(
     (prev, curr) =>
       prev +
