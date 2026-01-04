@@ -84,7 +84,7 @@ export const getWorkoutTrainingHistoryByWorkoutInPeriod = async (
   return response.data;
 };
 
-interface WorkoutRepetitionItemResponse {
+export interface WorkoutRepetitionItemResponse {
   exercise: ExerciseResponse;
   sets: Array<ExerciseSet>;
 }

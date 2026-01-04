@@ -95,10 +95,7 @@ const Progress = () => {
         date: format(snapshot.workoutDate, "yyyy-MM-dd"),
         value:
           snapshot.sets.reduce((prev, curr) => prev + curr.weight, 0) /
-            snapshot.sets.length ===
-          0
-            ? 1
-            : snapshot.sets.length,
+          (snapshot.sets.length === 0 ? 1 : snapshot.sets.length),
       }));
     }
 

@@ -21,8 +21,8 @@ const QuickStats = () => {
   } = useQuery({
     queryFn: () =>
       getWorkouts(
-        startOfWeek(getCurrentDate()),
-        getCurrentDate(),
+        weekStartDate,
+        currentDate,
         null,
         0,
         10_000
@@ -93,7 +93,11 @@ const QuickStats = () => {
               ? "Loading..."
               : workoutsThisWeek?.length}
           </p>
-          <p>workouts</p>
+          <p>
+            {workoutsThisWeek && workoutsThisWeek.length === 1
+              ? "workout"
+              : "workouts"}
+          </p>
         </section>
         <section className="w-full bg-subcomponents-main text-white p-2">
           <p className="text-subcomponents-text-main">Last Workout</p>

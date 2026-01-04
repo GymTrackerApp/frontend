@@ -128,7 +128,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
     isError: isLastWorkoutError,
   } = useQuery({
     queryFn: () => getWorkouts(null, null, plan.id, 0, 1),
-    queryKey: ["lastWorkout"],
+    queryKey: ["lastWorkout", "plan", plan.id],
     select: (data) => {
       return data.map((workout) => {
         const createdAt = new Date(workout.createdAt);
@@ -218,6 +218,18 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
     );
 
     setWorkoutItems(updatedItems);
+
+    setWorkoutCreationRequest((prev) => ({
+      ...prev,
+      workoutItems: prev.workoutItems.map((workoutItem) =>
+        workoutItem.exerciseId === replacingExerciseId
+          ? {
+              ...workoutItem,
+              exerciseId: newExercise.exerciseId,
+            }
+          : workoutItem
+      ),
+    }));
   };
 
   const handleFormSubmit = () => {
@@ -392,22 +404,6 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
             />
           </div>
 
-          {replacingExerciseId && (
-            <SelectOptionWindow
-              title={"Replace Exercise"}
-              onClose={() => setReplacingExerciseId(null)}
-              data={exercises}
-              onSelect={(exercise) => {
-                replaceExercise(exercise);
-                setReplacingExerciseId(null);
-              }}
-              renderItem={(exercise) => (
-                <p key={exercise.exerciseId}>{exercise.name}</p>
-              )}
-              isDataLoading={isExercisesLoading}
-            />
-          )}
-
           <div className="grid grid-cols-[30px_1fr_1fr_30px] gap-2 text-gray-400 text-center mb-2 px-1">
             <span className="text-xs font-bold text-gray-500 uppercase">
               Set
@@ -526,6 +522,23 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
           </button>
         </div>
       ))}
+
+      {replacingExerciseId && (
+        <SelectOptionWindow
+          title={"Replace Exercise"}
+          onClose={() => setReplacingExerciseId(null)}
+          data={exercises}
+          onSelect={(exercise) => {
+            replaceExercise(exercise);
+            setReplacingExerciseId(null);
+          }}
+          renderItem={(exercise) => (
+            <p key={exercise.exerciseId}>{exercise.name}</p>
+          )}
+          isDataLoading={isExercisesLoading}
+        />
+      )}
+
       {exerciseHistory && (
         <WorkoutExerciseHistoryModal
           planItem={exerciseHistory}
