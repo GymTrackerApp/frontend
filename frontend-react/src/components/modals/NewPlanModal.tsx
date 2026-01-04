@@ -3,17 +3,17 @@ import type { AxiosError } from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { FaTimes } from "react-icons/fa";
-import type { ExerciseResponse } from "../services/exerciseService";
+import type { ExerciseResponse } from "../../services/exerciseService";
 import {
   createUserPlan,
   type PlanItemRequest,
   type PlanRequest,
-} from "../services/trainingService";
-import type { ErrorResponse, GeneralResponse } from "../types/ApiResponse";
-import ExitApproveActionButtons from "./ExitApproveActionButtons";
-import InputForm from "./InputForm";
-import SelectOptionWindow from "./SelectOptionWindow";
-import AbsoluteWindowWrapper from "./AbsoluteWindowWrapper";
+} from "../../services/trainingService";
+import type { ErrorResponse, GeneralResponse } from "../../types/ApiResponse";
+import ExitApproveActionButtons from "../ExitApproveActionButtons";
+import InputForm from "../InputForm";
+import SelectOptionWindow from "../ui/SelectOptionWindow";
+import AbsoluteWindowWrapper from "../ui/AbsoluteWindowWrapper";
 
 interface NewPlanProps {
   exercises: Array<ExerciseResponse>;

@@ -1,15 +1,24 @@
-import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import {
+  FaCheck,
   FaHistory,
   FaPlus,
   FaRegClock,
   FaStopwatch,
+  FaSync,
   FaTimes,
 } from "react-icons/fa";
 import { useNavigate } from "react-router";
+import { useAvailableExercises } from "../hooks/useWorkoutFlow";
+import type { ExerciseResponse } from "../services/exerciseService";
 import type {
   PlanItemResponse,
   PlanResponse,
@@ -17,28 +26,62 @@ import type {
 import {
   createWorkout,
   getWorkoutExerciseHistory,
+  getWorkouts,
   type ExerciseSet,
   type WorkoutCreationRequest,
 } from "../services/workoutService";
 import type { ErrorResponse, GeneralResponse } from "../types/ApiResponse";
-import AbsoluteWindowWrapper from "./AbsoluteWindowWrapper";
 import AutoWorkoutTimer from "./AutoWorkoutTimer";
-import WorkoutExerciseHistoryModal from "./WorkoutExerciseHistoryModal";
+import WorkoutDetails from "./modals/WorkoutDetailsModal";
+import WorkoutExerciseHistoryModal from "./modals/WorkoutExerciseHistoryModal";
+import RestTimer from "./RestTimer";
+import AbsoluteWindowWrapper from "./ui/AbsoluteWindowWrapper";
+import SelectOptionWindow from "./ui/SelectOptionWindow";
 
 interface WorkoutFormProps {
   plan: PlanResponse;
 }
 
 const WorkoutForm = ({ plan }: WorkoutFormProps) => {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
   const [exerciseHistory, setExerciseHistory] =
     useState<PlanItemResponse | null>(null);
   const [isFinishedWorkoutWindowOpen, setIsFinishedWorkoutWindowOpen] =
     useState<boolean>(false);
+  const [replacingExerciseId, setReplacingExerciseId] = useState<number | null>(
+    null
+  );
+  const [lastWorkoutEnabled, setLastWorkoutEnabled] = useState<boolean>(false);
+  const [selectTimerEnabled, setSelectTimerEnabled] = useState<boolean>(false);
+  const [selectedTimerOption, setSelectedTimerOption] = useState<number | null>(
+    null
+  );
+  const [selectedCustomRestTime, setSelectedCustomRestTime] = useState<
+    number | null
+  >(null);
+
+  const [workoutItems, setWorkoutItems] = useState<Array<PlanItemResponse>>(
+    plan.planItems
+  );
+
+  const TIMER_OPTIONS = [
+    { label: "30 seconds", value: 30 },
+    { label: "1 minute", value: 60 },
+    { label: "2 minutes", value: 120 },
+    { label: "3 minutes", value: 180 },
+    { label: "4 minutes", value: 240 },
+    { label: "5 minutes", value: 300 },
+    { label: "Custom Time (sec)", value: -1 },
+  ];
+
+  const { exercises, isLoading: isExercisesLoading } = useAvailableExercises();
 
   const [workoutCreationRequest, setWorkoutCreationRequest] =
     useState<WorkoutCreationRequest>({
-      trainingId: plan?.id,
-      workoutItems: plan?.planItems.map((item) => ({
+      trainingId: plan.id,
+      workoutItems: workoutItems.map((item) => ({
         exerciseId: item.exerciseId,
         type: "REPS",
         sets: Array.from({ length: item.defaultSets }, () => ({
@@ -49,14 +92,11 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
     });
 
   const lastSessionResults = useQueries({
-    queries: plan.planItems.map((item) => ({
+    queries: workoutItems.map((item) => ({
       queryKey: ["lastSession", item.exerciseId],
       queryFn: () => getWorkoutExerciseHistory(item.exerciseId, 1),
     })),
   });
-
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
 
   const workoutMutation = useMutation<
     GeneralResponse,
@@ -66,6 +106,9 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
     mutationFn: createWorkout,
     onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: ["lastSession"] });
+      queryClient.invalidateQueries({ queryKey: ["workoutsThisWeek"] });
+      queryClient.invalidateQueries({ queryKey: ["lastWorkout"] });
+      queryClient.invalidateQueries({ queryKey: ["recentWorkouts"] });
 
       toast.success(response.message);
       navigate("/");
@@ -76,6 +119,25 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
       } else {
         toast.error(error.message);
       }
+    },
+  });
+
+  const {
+    data: lastWorkout,
+    isLoading: isLastWorkoutLoading,
+    isError: isLastWorkoutError,
+  } = useQuery({
+    queryFn: () => getWorkouts(null, null, plan.id, 0, 1),
+    queryKey: ["lastWorkout", "plan", plan.id],
+    select: (data) => {
+      return data.map((workout) => {
+        const createdAt = new Date(workout.createdAt);
+        createdAt.setHours(0, 0, 0, 0);
+        return {
+          ...workout,
+          createdAt: new Date(createdAt),
+        };
+      });
     },
   });
 
@@ -135,6 +197,40 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
         workoutItems: updatedItems,
       };
     });
+  };
+
+  const replaceExercise = (newExercise: ExerciseResponse) => {
+    if (
+      workoutItems.some((item) => item.exerciseId === newExercise.exerciseId)
+    ) {
+      toast.error("Exercise already exists in the plan");
+      return;
+    }
+
+    const updatedItems = workoutItems.map((item) =>
+      item.exerciseId === replacingExerciseId
+        ? {
+            ...item,
+            exerciseId: newExercise.exerciseId,
+            exerciseName: newExercise.name,
+          }
+        : { ...item }
+    );
+
+    setWorkoutItems(updatedItems);
+
+    setWorkoutCreationRequest((prev) => ({
+      ...prev,
+      workoutItems: prev.workoutItems.map((workoutItem) =>
+        workoutItem.exerciseId === replacingExerciseId
+          ? {
+              ...workoutItem,
+              exerciseId: newExercise.exerciseId,
+              sets: workoutItem.sets.map(() => ({ reps: 0, weight: 0 })),
+            }
+          : workoutItem
+      ),
+    }));
   };
 
   const handleFormSubmit = () => {
@@ -197,26 +293,119 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
           Finish Workout
         </button>
       </div>
+
       <button
-        className="mb-2 bg-approve-button-main px-2 py-1 w-full rounded-md flex justify-center items-center gap-2 text-white font-light cursor-pointer hover:bg-hover-approve-button-main transition-colors"
+        onClick={() => {
+          setSelectedTimerOption(null);
+          setSelectTimerEnabled(true);
+        }}
+        className="mb-2 bg-approve-button-main px-2 py-1 w-full rounded-md flex justify-center items-center gap-2 font-light cursor-pointer hover:bg-hover-approve-button-main transition-colors"
         type="button"
       >
         <FaStopwatch />
-        <span>Start Rest Timer</span>
+        <span>
+          {selectedTimerOption ? (
+            <RestTimer
+              time={selectedTimerOption}
+              disableTimer={() => setSelectedTimerOption(null)}
+            />
+          ) : (
+            "Start Rest Timer"
+          )}
+        </span>
       </button>
 
-      {plan.planItems.map((planItem, exerciseIndex) => (
+      {selectTimerEnabled && (
+        <SelectOptionWindow
+          title={"Select Timer"}
+          onClose={() => setSelectTimerEnabled(false)}
+          data={TIMER_OPTIONS}
+          onSelect={(timerOption) => {
+            if (timerOption.value === -1) {
+              return;
+            }
+            setSelectedTimerOption(timerOption.value);
+            setSelectTimerEnabled(false);
+          }}
+          renderItem={(timerOption) =>
+            timerOption.value === -1 ? (
+              <div className="flex items-center">
+                <input
+                  className="w-full no-spinner outline-none"
+                  type="number"
+                  min={1}
+                  placeholder={timerOption.label}
+                  value={selectedCustomRestTime || ""}
+                  onChange={(e) => {
+                    setSelectedCustomRestTime(Number(e.target.value));
+                  }}
+                  onKeyDown={(e) => {
+                    const invalidChars = ["-", "+", "e", "E"];
+                    if (invalidChars.includes(e.key)) {
+                      e.preventDefault();
+                    }
+                  }}
+                />
+                <FaCheck
+                  size={20}
+                  className="cursor-pointer hover:opacity-80 transition-colors"
+                  onClick={() => {
+                    if (
+                      selectedCustomRestTime == null ||
+                      selectedCustomRestTime < 1
+                    )
+                      return;
+                    setSelectTimerEnabled(false);
+                    setSelectedTimerOption(selectedCustomRestTime);
+                    setSelectedCustomRestTime(null);
+                  }}
+                />
+              </div>
+            ) : (
+              <p key={timerOption.value}>{timerOption.label}</p>
+            )
+          }
+        />
+      )}
+
+      <button
+        className="bg-blue-950 px-2 py-1 rounded-md w-full border border-gray-700 mb-2 font-light cursor-pointer hover:bg-blue-900 transition-colors"
+        onClick={() => setLastWorkoutEnabled(true)}
+        disabled={
+          isLastWorkoutLoading ||
+          isLastWorkoutError ||
+          !lastWorkout ||
+          lastWorkout.length === 0
+        }
+      >
+        Last Workout
+      </button>
+
+      {lastWorkoutEnabled && lastWorkout && lastWorkout.length > 0 && (
+        <WorkoutDetails
+          workout={lastWorkout[0]}
+          onClose={() => setLastWorkoutEnabled(false)}
+        />
+      )}
+
+      {workoutItems.map((planItem, exerciseIndex) => (
         <div
           key={exerciseIndex}
           className="bg-gray-700 p-2 border-b border-b-gray-700"
         >
-          <div className="flex items-center mb-4 gap-2">
-            <p key={planItem.exerciseId} className="text-xl">
-              {planItem.exerciseName}
-            </p>
-            <FaHistory
-              className="cursor-pointer text-gray-400"
-              onClick={() => setExerciseHistory(planItem)}
+          <div className="flex justify-between items-center mb-4 pe-3">
+            <div className="flex items-center gap-2">
+              <p key={planItem.exerciseId} className="text-xl">
+                {planItem.exerciseName}
+              </p>
+              <FaHistory
+                className="cursor-pointer text-gray-400"
+                onClick={() => setExerciseHistory(planItem)}
+              />
+            </div>
+            <FaSync
+              className="text-gray-400 cursor-pointer"
+              onClick={() => setReplacingExerciseId(planItem.exerciseId)}
             />
           </div>
 
@@ -338,6 +527,23 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
           </button>
         </div>
       ))}
+
+      {replacingExerciseId && (
+        <SelectOptionWindow
+          title={"Replace Exercise"}
+          onClose={() => setReplacingExerciseId(null)}
+          data={exercises}
+          onSelect={(exercise) => {
+            replaceExercise(exercise);
+            setReplacingExerciseId(null);
+          }}
+          renderItem={(exercise) => (
+            <p key={exercise.exerciseId}>{exercise.name}</p>
+          )}
+          isDataLoading={isExercisesLoading}
+        />
+      )}
+
       {exerciseHistory && (
         <WorkoutExerciseHistoryModal
           planItem={exerciseHistory}

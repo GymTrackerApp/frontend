@@ -1,13 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { FaTimes } from "react-icons/fa";
-import type { PlanItemResponse } from "../services/trainingService";
+import type { PlanItemResponse } from "../../services/trainingService";
 import {
   getWorkoutExerciseHistory,
   type WorkoutExerciseHistoryResponse,
-} from "../services/workoutService";
-import type { ErrorResponse } from "../types/ApiResponse";
-import AbsoluteWindowWrapper from "./AbsoluteWindowWrapper";
-import FetchHandler from "./FetchHandler";
+} from "../../services/workoutService";
+import type { ErrorResponse } from "../../types/ApiResponse";
+import AbsoluteWindowWrapper from "../ui/AbsoluteWindowWrapper";
+import FetchHandler from "../FetchHandler";
 
 interface WorkoutExerciseHistoryModal {
   planItem: PlanItemResponse;

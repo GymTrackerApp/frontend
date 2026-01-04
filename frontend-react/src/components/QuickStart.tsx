@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FaPlay } from "react-icons/fa";
 import { type PlanResponse } from "../services/trainingService";
-import SelectOptionWindow from "./SelectOptionWindow";
+import SelectOptionWindow from "./ui/SelectOptionWindow";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
 
@@ -22,15 +22,13 @@ const QuickStart = ({ data, isLoading }: QuickStartProps) => {
   };
 
   return (
-    <div className="w-full bg-gray-700 px-2 py-2 pb-10 mt-3">
+    <div className="w-full bg-gray-700 px-2 py-2 pb-4 mt-3">
       <h1 className="text-2xl font-semibold">Quick Start</h1>
       <button
-        className="bg-approve-button-main hover:bg-hover-approve-button-main w-1/3 flex justify-center py-2 rounded-xl mx-auto cursor-pointer transition-colors"
+        className="bg-approve-button-main hover:bg-hover-approve-button-main min-w-1/3 flex justify-center items-center gap-3 py-2 px-2 rounded-xl mx-auto cursor-pointer transition-colors mt-2"
         onClick={() => setSelectWorkoutEnabled(true)}
       >
-        <span aria-hidden="true" className="flex items-center mr-2">
-          <FaPlay />
-        </span>
+        <FaPlay />
         <span>Start Your Workout</span>
       </button>
       {selectWorkoutEnabled && (
