@@ -381,9 +381,9 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
         Last Workout
       </button>
 
-      {lastWorkoutEnabled && (
+      {lastWorkoutEnabled && lastWorkout && lastWorkout.length > 0 && (
         <WorkoutDetails
-          workout={lastWorkout![0]}
+          workout={lastWorkout[0]}
           onClose={() => setLastWorkoutEnabled(false)}
         />
       )}

@@ -2,31 +2,18 @@ import { useQuery } from "@tanstack/react-query";
 import MainPagePanel from "./ui/MainPagePanel";
 import { getWorkouts } from "../services/workoutService";
 import { startOfWeek } from "date-fns";
-import { displayShortFormattedDate } from "../utils/dateUtils";
+import { displayShortFormattedDate, getCurrentDate } from "../utils/dateUtils";
 
 const QuickStats = () => {
-  const getCurrentDate = () => {
-    const now = new Date();
-    now.setHours(0, 0, 0, 0);
-    return now;
-  };
-
   const currentDate = getCurrentDate();
-  const weekStartDate = startOfWeek(currentDate);
+  const weekStartDate = startOfWeek(currentDate, { weekStartsOn: 1 });
 
   const {
     data: workoutsThisWeek,
     isLoading: isWorkoutsThisWeekLoading,
     isError: isWorkoutsThisWeekError,
   } = useQuery({
-    queryFn: () =>
-      getWorkouts(
-        weekStartDate,
-        currentDate,
-        null,
-        0,
-        10_000
-      ),
+    queryFn: () => getWorkouts(weekStartDate, currentDate, null, 0, 10_000),
     queryKey: [
       "workoutsThisWeek",
       weekStartDate.getTime(),
