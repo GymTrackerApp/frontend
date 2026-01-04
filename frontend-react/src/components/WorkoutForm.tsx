@@ -226,6 +226,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
           ? {
               ...workoutItem,
               exerciseId: newExercise.exerciseId,
+              sets: workoutItem.sets.map(() => ({ reps: 0, weight: 0 })),
             }
           : workoutItem
       ),
@@ -349,7 +350,11 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                   size={20}
                   className="cursor-pointer hover:opacity-80 transition-colors"
                   onClick={() => {
-                    if (!selectedCustomRestTime) return;
+                    if (
+                      selectedCustomRestTime == null ||
+                      selectedCustomRestTime < 1
+                    )
+                      return;
                     setSelectTimerEnabled(false);
                     setSelectedTimerOption(selectedCustomRestTime);
                     setSelectedCustomRestTime(null);

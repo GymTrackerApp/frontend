@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import {
   CartesianGrid,
   Line,
@@ -19,7 +20,25 @@ interface ProgressChartProps {
 }
 
 const ProgressChart = ({ historyData, yAxisTitle }: ProgressChartProps) => {
-  if (!historyData || historyData.length === 0) {
+  const processedData = useMemo(() => {
+    if (!historyData || historyData.length === 0) return [];
+
+    const bestEntries = historyData.reduce((acc, curr) => {
+      const existingValue = acc[curr.date]?.value ?? -Infinity;
+
+      if (curr.value > existingValue) {
+        acc[curr.date] = { ...curr };
+      }
+
+      return acc;
+    }, {} as Record<string, DataContent>);
+
+    return Object.values(bestEntries).sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
+  }, [historyData]);
+
+  if (processedData.length === 0) {
     return (
       <div className="text-gray-400 text-center mt-1">
         <span>No workout data for the selected period.</span>
@@ -36,7 +55,7 @@ const ProgressChart = ({ historyData, yAxisTitle }: ProgressChartProps) => {
         height="100%"
         className="focus:outline-none"
       >
-        <LineChart data={historyData}>
+        <LineChart data={processedData}>
           <CartesianGrid strokeDasharray="3 3" stroke="#444" />
 
           <XAxis dataKey="date" stroke="#ccc" fontSize={12} />

@@ -284,8 +284,12 @@ const Progress = () => {
         <div className="bg-components-main mt-5 p-2">
           <h1 className="text-xl font-bold">
             {selectedMetricType === "training"
-              ? `${selectedTraining ? selectedTraining.name : ""} Total Volume`
-              : `${selectedExercise ? selectedExercise.name : ""} Progress`}
+              ? selectedTraining
+                ? `${selectedTraining.name} Total Volume`
+                : "Select a training plan to view volume"
+              : selectedExercise
+              ? `${selectedExercise.name} Progress`
+              : "Select an exercise to view progress"}
           </h1>
           {selectedMetricType === "exercise" ? (
             isExerciseHistoryError ? (
