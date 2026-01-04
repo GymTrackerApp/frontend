@@ -60,7 +60,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
   );
   const [selectedCustomRestTime, setSelectedCustomRestTime] = useState<
     number | null
-  >();
+  >(null);
 
   const [workoutItems, setWorkoutItems] = useState<Array<PlanItemResponse>>(
     plan.planItems
