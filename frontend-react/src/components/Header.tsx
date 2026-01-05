@@ -10,7 +10,9 @@ const Header = () => {
       >
         <h1>Gym Tracker</h1>
       </Link>
-      <FaUserCircle className="text-2xl" />
+      <Link to="/profile" className="hover:opacity-80">
+        <FaUserCircle className="text-2xl" />
+      </Link>
     </div>
   );
 };

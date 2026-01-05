@@ -9,7 +9,7 @@ import {
   type SignInResponse,
   signUp,
   type SignUpRequest,
-} from "../services/userService";
+} from "../services/authService";
 import { type GeneralResponse, type ErrorResponse } from "../types/ApiResponse";
 import { type SignInForm, type SignUpForm } from "../types/AuthForms";
 import toast from "react-hot-toast";
