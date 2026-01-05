@@ -8,7 +8,8 @@ export interface SignInRequest {
 
 export interface SignInResponse {
   username: string;
-  token: string;
+  accessToken: string;
+  refreshToken: string;
 }
 
 export interface SignUpRequest {

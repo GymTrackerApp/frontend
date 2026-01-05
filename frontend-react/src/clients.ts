@@ -1,5 +1,4 @@
 import axios from "axios";
-import toast from "react-hot-toast";
 
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
@@ -20,15 +19,3 @@ privateApi.interceptors.request.use((config) => {
   }
   return config;
 });
-
-privateApi.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem("accessToken");
-      toast.error("Session expired. Please log in again.");
-    }
-
-    return Promise.reject(error);
-  }
-);
