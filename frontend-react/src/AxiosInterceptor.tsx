@@ -28,6 +28,13 @@ const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const handleLogoutCleanup = () => {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      toast.error("Session expired. Please log in again");
+      navigate("/register-login", { replace: true });
+    };
+
     const responseInterceptor = privateApi.interceptors.response.use(
       (response) => response,
       async (error) => {
@@ -43,8 +50,7 @@ const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
 
           if (originalRequest.url?.includes("/auth/refresh")) {
             isRefreshing = false;
-            toast.error("Session expired. Please log in again");
-            navigate("/register-login", { replace: true });
+            handleLogoutCleanup();
             return Promise.reject(error);
           }
 
@@ -83,10 +89,7 @@ const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
             return privateApi(originalRequest);
           } catch (refreshError) {
             processQueue(refreshError, null);
-            localStorage.removeItem("accessToken");
-            localStorage.removeItem("refreshToken");
-            toast.error("Session expired. Please log in again");
-            navigate("/register-login", { replace: true });
+            handleLogoutCleanup();
             return Promise.reject(refreshError);
           } finally {
             isRefreshing = false;
