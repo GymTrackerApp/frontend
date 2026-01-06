@@ -11,6 +11,8 @@ import RegisterLogin from "./pages/RegisterLogin.tsx";
 import PlanManager from "./pages/PlanManager.tsx";
 import Workout from "./pages/Workout.tsx";
 import ProgressPage from "./pages/ProgressPage.tsx";
+import AxiosInterceptor from "./AxiosInterceptor.tsx";
+import ProfileSettings from "./pages/ProfileSettings.tsx";
 
 const queryClient = new QueryClient();
 
@@ -18,14 +20,17 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/register-login" element={<RegisterLogin />} />
-          <Route path="/plan-manager" element={<PlanManager />} />
-          <Route path="/workout" element={<Workout />} />
-          <Route path="/progress" element={<ProgressPage />} />
-          <Route path="*" element={<ErrorPage />} />
-        </Routes>
+        <AxiosInterceptor>
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/register-login" element={<RegisterLogin />} />
+            <Route path="/plan-manager" element={<PlanManager />} />
+            <Route path="/workout" element={<Workout />} />
+            <Route path="/progress" element={<ProgressPage />} />
+            <Route path="/profile" element={<ProfileSettings />} />
+            <Route path="*" element={<ErrorPage />} />
+          </Routes>
+        </AxiosInterceptor>
       </BrowserRouter>
       <ReactQueryDevtools initialIsOpen={false} />
       <Toaster />

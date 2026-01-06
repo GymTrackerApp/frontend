@@ -9,7 +9,7 @@ import {
   type SignInResponse,
   signUp,
   type SignUpRequest,
-} from "../services/userService";
+} from "../services/authService";
 import { type GeneralResponse, type ErrorResponse } from "../types/ApiResponse";
 import { type SignInForm, type SignUpForm } from "../types/AuthForms";
 import toast from "react-hot-toast";
@@ -58,7 +58,8 @@ const RegisterLogin = () => {
     mutationFn: signIn,
     onSuccess: (response) => {
       toast.success("Sign in successful");
-      localStorage.setItem("accessToken", response.token);
+      localStorage.setItem("accessToken", response.accessToken);
+      localStorage.setItem("refreshToken", response.refreshToken);
       navigate("/", { replace: true });
     },
     onError: (error: AxiosError<ErrorResponse>) => {
