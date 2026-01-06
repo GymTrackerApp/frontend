@@ -2,11 +2,11 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import {
-    FaCalendar,
-    FaLock,
-    FaMailBulk,
-    FaPencilAlt,
-    FaUser
+  FaCalendar,
+  FaLock,
+  FaMailBulk,
+  FaPencilAlt,
+  FaUser,
 } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import Header from "../components/Header";
@@ -36,6 +36,8 @@ const ProfileSettings = () => {
     mutationFn: signOut,
     onSuccess: (response) => {
       toast.success(response.message);
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
       navigate("/register-login");
     },
     onError: (error) => {
@@ -63,8 +65,6 @@ const ProfileSettings = () => {
     };
 
     signOutMutation.mutate(data);
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
   };
 
   return (

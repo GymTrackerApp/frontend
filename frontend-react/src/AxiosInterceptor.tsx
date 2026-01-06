@@ -63,8 +63,12 @@ const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
           isRefreshing = true;
 
           try {
+            const storedRefreshToken = localStorage.getItem("refreshToken");
+            if (!storedRefreshToken) {
+              throw new Error("No refresh token available");
+            }
             const { data } = await refreshClient.post("/auth/refresh", {
-              refreshToken: localStorage.getItem("refreshToken"),
+              refreshToken: storedRefreshToken,
             });
             const newAccessToken = data.accessToken;
             const newRefreshToken = data.refreshToken;
@@ -79,6 +83,8 @@ const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
             return privateApi(originalRequest);
           } catch (refreshError) {
             processQueue(refreshError, null);
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
             toast.error("Session expired. Please log in again");
             navigate("/register-login", { replace: true });
             return Promise.reject(refreshError);
