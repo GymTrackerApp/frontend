@@ -1,16 +1,20 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { AxiosError } from "axios";
 import { useState } from "react";
-import { FaTrashAlt } from "react-icons/fa";
+import toast from "react-hot-toast";
+import { FaPlus, FaRegEdit, FaTrashAlt } from "react-icons/fa";
 import FetchHandler from "../components/FetchHandler";
 import Header from "../components/Header";
-import NewExerciseModal from "../components/modals/NewExerciseModal";
-import NewPlanModal from "../components/modals/NewPlanModal";
+import NewExerciseModal from "../components/modals/ExerciseCreationModal";
+import ExerciseUpdateModal from "../components/modals/ExerciseUpdateModal";
+import PlanCreationModal from "../components/modals/PlanCreationModal";
 import Plan from "../components/Plan";
-import PlanManagerSection from "../components/PlanManagerSection";
 import PlanManagerToggleTabs from "../components/PlanManagerToggleTabs";
+import Button from "../components/ui/Button";
 import {
   getPredefinedExercises,
   getUserExercises,
+  removeExercise,
   type ExerciseResponse,
 } from "../services/exerciseService";
 import {
@@ -18,19 +22,24 @@ import {
   getUserPlans,
   type PlanResponse,
 } from "../services/trainingService";
-import type { ErrorResponse } from "../types/ApiResponse";
+import type { ErrorResponse, GeneralResponse } from "../types/ApiResponse";
 
 const PlanManager = () => {
   const [newPlanModalEnabled, setNewPlanModalEnabled] =
     useState<boolean>(false);
   const [newExerciseModalEnabled, setNewExerciseModalEnabled] =
     useState<boolean>(false);
+  const [updateExercise, setUpdateExercise] = useState<ExerciseResponse | null>(
+    null
+  );
 
   const [isMyPlansEnabled, setIsMyPlansEnabled] = useState<boolean>(true);
   const [isPredefinedPlansEnabled, setIsPredefinedPlansEnabled] =
     useState<boolean>(false);
   const [isMyExercisesEnabled, setIsMyExercisesEnabled] =
     useState<boolean>(false);
+
+  const queryClient = useQueryClient();
 
   const {
     data: myExercises,
@@ -72,13 +81,40 @@ const PlanManager = () => {
     ...(myExercises || []),
   ];
 
+  const exerciseRemoveMutation = useMutation<
+    GeneralResponse,
+    AxiosError<ErrorResponse>,
+    number
+  >({
+    mutationFn: removeExercise,
+    onSuccess: (response) => {
+      toast.success(response.message);
+      queryClient.invalidateQueries({ queryKey: ["userExercises"] });
+    },
+    onError: (error) => {
+      if (error.response) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error(error.message);
+      }
+    },
+  });
+
+  const handleRemoveExercise = (exerciseId: number) => {
+    if (exerciseRemoveMutation.isPending) return;
+
+    exerciseRemoveMutation.mutate(exerciseId);
+  };
+
   return (
     <>
       <Header />
       <div className="bg-gray-800 text-white p-3 min-h-dvh">
         <h1 className="text-3xl font-bold">Plan Manager</h1>
-        <p className="text-gray-400">Create and manage your training plans</p>
-        <div className="">
+        <p className="text-gray-400 mb-3">
+          Create and manage your training plans
+        </p>
+        <div>
           <PlanManagerToggleTabs
             isMyPlansEnabled={isMyPlansEnabled}
             isPredefinedPlansEnabled={isPredefinedPlansEnabled}
@@ -90,17 +126,20 @@ const PlanManager = () => {
 
           {/* My Plans */}
 
-          <PlanManagerSection
-            isVisible={isMyPlansEnabled}
-            onClick={() => {
-              setNewPlanModalEnabled(true);
-            }}
-            isButton={true}
-            buttonText="Create New Plan"
-          />
+          {isMyPlansEnabled && (
+            <Button
+              btnStyle={"approve"}
+              size="small"
+              additionalStyle="rounded-md"
+              onClick={() => setNewPlanModalEnabled(true)}
+            >
+              <FaPlus />
+              <span>Create New Plan</span>
+            </Button>
+          )}
 
           {newPlanModalEnabled && (
-            <NewPlanModal
+            <PlanCreationModal
               exercises={allUserAvailableExercises}
               onClose={() => setNewPlanModalEnabled(false)}
             />
@@ -120,6 +159,7 @@ const PlanManager = () => {
                   plan={plan}
                   updatable={true}
                   removable={true}
+                  exercises={allUserAvailableExercises}
                 />
               ))
             }
@@ -127,14 +167,17 @@ const PlanManager = () => {
 
           {/* My Exercises */}
 
-          <PlanManagerSection
-            isVisible={isMyExercisesEnabled}
-            onClick={() => {
-              setNewExerciseModalEnabled(true);
-            }}
-            isButton={true}
-            buttonText="Create New Exercise"
-          />
+          {isMyExercisesEnabled && (
+            <Button
+              btnStyle={"approve"}
+              size={"small"}
+              additionalStyle="rounded-md"
+              onClick={() => setNewExerciseModalEnabled(true)}
+            >
+              <FaPlus />
+              <span>Create New Exercise</span>
+            </Button>
+          )}
 
           {newExerciseModalEnabled && (
             <NewExerciseModal
@@ -156,18 +199,33 @@ const PlanManager = () => {
                   className="flex flex-col bg-gray-700 rounded-xl my-3 px-3 py-1"
                 >
                   <span className="flex justify-between items-center">
-                    <span>{ex.name}</span>{" "}
-                    <FaTrashAlt
-                      color="red"
-                      size={15}
-                      className="cursor-pointer hover:opacity-80"
-                    />
+                    <span>{ex.name}</span>
+                    <span className="flex gap-3 items-center">
+                      <FaRegEdit
+                        size={15}
+                        className="cursor-pointer hover:opacity-80"
+                        onClick={() => setUpdateExercise(ex)}
+                      />
+                      <FaTrashAlt
+                        color="red"
+                        size={15}
+                        className="cursor-pointer hover:opacity-80"
+                        onClick={() => handleRemoveExercise(ex.exerciseId)}
+                      />
+                    </span>
                   </span>
                   <span className="text-gray-400 text-sm">{ex.category}</span>
                 </p>
               ))
             }
           </FetchHandler>
+
+          {updateExercise && (
+            <ExerciseUpdateModal
+              onClose={() => setUpdateExercise(null)}
+              exercise={updateExercise}
+            />
+          )}
 
           {/* Predefined Plans */}
 
@@ -185,6 +243,7 @@ const PlanManager = () => {
                   plan={plan}
                   updatable={false}
                   removable={false}
+                  exercises={[]}
                 />
               ))
             }

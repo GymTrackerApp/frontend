@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import { useState } from "react";
 import AuthToggleTabs from "../components/AuthToggleTabs";
-import InputForm from "../components/InputForm";
+import InputForm from "../components/ui/InputForm";
 import {
   signIn,
   type SignInRequest,
@@ -170,7 +170,7 @@ const RegisterLogin = () => {
 
             <button
               className="bg-blue-500 rounded-xl py-0.5 cursor-pointer"
-              type="submit"
+              customType="submit"
               disabled={signInMutation.isPending || signUpMutation.isPending}
             >
               {isRegister ? "Register" : "Login"}

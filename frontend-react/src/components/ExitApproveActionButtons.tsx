@@ -16,10 +16,14 @@ const ExitApproveActionButtons = ({
 
   return (
     <div className="flex justify-between gap-3">
-      <button className={cancelButtonStyle} onClick={onCancel} type="button">
+      <button
+        className={cancelButtonStyle}
+        onClick={onCancel}
+        customType="button"
+      >
         {cancelButtonText}
       </button>
-      <button className={approveButtonStyle} type="submit">
+      <button className={approveButtonStyle} customType="submit">
         {saveButtonText}
       </button>
     </div>

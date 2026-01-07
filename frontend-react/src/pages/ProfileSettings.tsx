@@ -15,6 +15,7 @@ import { signOut } from "../services/authService";
 import { getUserProfile } from "../services/userService";
 import type { ErrorResponse, GeneralResponse } from "../types/ApiResponse";
 import { displayLongFormattedDate } from "../utils/dateUtils";
+import Button from "../components/ui/Button";
 
 const ProfileSettings = () => {
   const navigate = useNavigate();
@@ -127,19 +128,20 @@ const ProfileSettings = () => {
                 <p className="text-sm">********</p>
               </div>
             </div>
-            <button
-              className="text-blue-400 border border-blue-400 px-2 rounded-lg cursor-pointer hover:opacity-80"
-              type="button"
+            <Button
+              btnStyle={"details"}
+              size={"medium"}
+              additionalStyle="rounded-xl"
             >
-              Change Password
-            </button>
+              <span>Change Password</span>
+            </Button>
           </div>
         </MainPagePanel>
         <MainPagePanel title={"Account Actions"}>
           <button
             className="text-red-400 px-2 rounded-lg border border-red-400 cursor-pointer hover:opacity-80 mt-3"
             onClick={handleLogout}
-            type="button"
+            customType="button"
           >
             Logout
           </button>

@@ -288,7 +288,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
         <button
           className="bg-red-400 px-2 py-1 rounded-xl cursor-pointer hover:opacity-80"
           onClick={() => setIsFinishedWorkoutWindowOpen(true)}
-          type="button"
+          customType="button"
         >
           Finish Workout
         </button>
@@ -300,7 +300,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
           setSelectTimerEnabled(true);
         }}
         className="mb-2 bg-approve-button-main px-2 py-1 w-full rounded-md flex justify-center items-center gap-2 font-light cursor-pointer hover:bg-hover-approve-button-main transition-colors"
-        type="button"
+        customType="button"
       >
         <FaStopwatch />
         <span>
@@ -519,7 +519,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
 
           <button
             className="w-full flex justify-center items-center border border-blue-500 rounded-xl text-blue-500 gap-2 mt-2 hover:border-blue-400 hover:text-blue-400 cursor-pointer"
-            type="button"
+            customType="button"
             onClick={() => addSetToExercise(exerciseIndex)}
           >
             <FaPlus />
