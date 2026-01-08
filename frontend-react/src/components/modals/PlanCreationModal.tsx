@@ -92,7 +92,7 @@ const PlanCreationModal = ({ exercises, onClose }: NewPlanProps) => {
         (element) => element.exerciseId === selectedExercise.exerciseId
       )
     ) {
-      toast.error("This element was already added");
+      toast.error("This exercise was already added");
       return;
     }
 
