@@ -160,7 +160,7 @@ const PlanCreationModal = ({ exercises, onClose }: NewPlanProps) => {
               </span>
               <button
                 className="text-red-400 cursor-pointer hover:opacity-80"
-                customType="button"
+                type="button"
                 onClick={() =>
                   setNewPlanForm({
                     planName: newPlanForm.planName,
