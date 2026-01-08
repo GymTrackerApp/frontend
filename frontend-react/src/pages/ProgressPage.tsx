@@ -1,22 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
 import { format, subDays, subMonths } from "date-fns";
 import { useState } from "react";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import Header from "../components/Header";
 import ProgressChart, { type DataContent } from "../components/ProgressChart";
-import SelectOptionWindow from "../components/ui/SelectOptionWindow";
-import type { ExerciseResponse } from "../services/exerciseService";
+import ProgressPagePanel from "../components/ProgressPagePanel";
+import {
+  useAvailableExercises,
+  useAvailablePlans,
+} from "../hooks/useWorkoutFlow";
+import { type ExerciseResponse } from "../services/exerciseService";
+import type { PlanResponse } from "../services/trainingService";
 import {
   getWorkoutExerciseHistoryByWorkoutInPeriod,
   getWorkoutTrainingHistoryByWorkoutInPeriod,
   type WorkoutExerciseHistoryResponse,
   type WorkoutTrainingHistoryResponse,
 } from "../services/workoutService";
-import {
-  useAvailableExercises,
-  useAvailablePlans,
-} from "../hooks/useWorkoutFlow";
-import Header from "../components/Header";
-import type { PlanResponse } from "../services/trainingService";
 import { getCurrentDate } from "../utils/dateUtils";
 
 type MetricType = "training" | "exercise";
@@ -155,133 +154,99 @@ const Progress = () => {
   return (
     <>
       <Header />
-      <div className="bg-background-main text-white min-h-dvh">
+      <div className="bg-background-main text-white min-h-dvh p-3">
         <h1 className="text-3xl font-bold">Progress & Metrics</h1>
-        <p className="text-gray-500">Track your training progress over time</p>
+        <p className="text-gray-400 mb-3">
+          Track your training progress over time
+        </p>
         <div>
-          <p className="text-gray-400">Metric Type</p>
-          <button
-            className="cursor-pointer w-full text-left flex justify-between items-center px-2 py-1 bg-components-main hover:bg-gray-600 transition-colors"
-            onClick={() => setActiveWindow("metric")}
-          >
-            <span>
-              {selectedMetricType
+          <ProgressPagePanel
+            isVisible={true}
+            title={"Metric Type"}
+            buttonText={
+              selectedMetricType
                 ? METRIC_OPTIONS.filter(
                     (metricOption) => metricOption.value === selectedMetricType
                   )[0].label
-                : "Select Metric Type"}
-            </span>
-            {activeWindow === "metric" ? <FaChevronUp /> : <FaChevronDown />}
-          </button>
-          {activeWindow === "metric" && (
-            <SelectOptionWindow
-              title={"Select Metric Type"}
-              onClose={() => setActiveWindow(null)}
-              data={METRIC_OPTIONS}
-              onSelect={(item) => {
-                setSelectedMetricType(item.value);
-                setActiveWindow(null);
-              }}
-              renderItem={(item) => <p>{item.label}</p>}
-            />
-          )}
+                : "Select Metric Type"
+            }
+            setActiveWindow={() => setActiveWindow("metric")}
+            disableActiveWindow={() => setActiveWindow(null)}
+            isActiveWindow={activeWindow === "metric"}
+            windowTitle="Select Metric Type"
+            windowData={METRIC_OPTIONS}
+            isWindowDataLoading={false}
+            onSelectData={(item) => {
+              setSelectedMetricType(item.value);
+              setActiveWindow(null);
+            }}
+            renderWindowItem={(item) => <p>{item.label}</p>}
+          />
 
-          {selectedMetricType === "exercise" && (
-            <>
-              <p className="text-gray-400">Exercise</p>
-              <button
-                className="cursor-pointer w-full text-left flex justify-between items-center px-2 py-1 bg-components-main hover:bg-gray-600 transition-colors"
-                onClick={() => setActiveWindow("exercise")}
-              >
-                <span>
-                  {selectedExercise ? selectedExercise.name : "Select Exercise"}
-                </span>
-                {activeWindow === "exercise" ? (
-                  <FaChevronUp />
-                ) : (
-                  <FaChevronDown />
-                )}
-              </button>
-              {activeWindow === "exercise" && (
-                <SelectOptionWindow
-                  title={"Select Exercise"}
-                  onClose={() => setActiveWindow(null)}
-                  data={exercises}
-                  isDataLoading={isExercisesLoading}
-                  onSelect={(exercise) => {
-                    setSelectedExercise(exercise);
-                    setActiveWindow(null);
-                  }}
-                  renderItem={(exercise) => <p>{exercise.name}</p>}
-                />
-              )}
-            </>
-          )}
+          <ProgressPagePanel
+            isVisible={selectedMetricType === "exercise"}
+            title={"Exercise"}
+            buttonText={
+              selectedExercise ? selectedExercise.name : "Select Exercise"
+            }
+            setActiveWindow={() => setActiveWindow("exercise")}
+            disableActiveWindow={() => setActiveWindow(null)}
+            isActiveWindow={activeWindow === "exercise"}
+            windowTitle="Select Exercise"
+            windowData={exercises}
+            isWindowDataLoading={isExercisesLoading}
+            onSelectData={(exercise) => {
+              setSelectedExercise(exercise);
+              setActiveWindow(null);
+            }}
+            renderWindowItem={(exercise) => <p>{exercise.name}</p>}
+          />
 
-          {selectedMetricType === "training" && (
-            <>
-              <p className="text-gray-400">Training</p>
-              <button
-                className="cursor-pointer w-full text-left flex justify-between items-center px-2 py-1 bg-components-main hover:bg-gray-600 transition-colors"
-                onClick={() => setActiveWindow("training")}
-              >
-                <span>
-                  {selectedTraining
-                    ? selectedTraining.name
-                    : "Select Training Plan"}
-                </span>
-                {activeWindow === "training" ? (
-                  <FaChevronUp />
-                ) : (
-                  <FaChevronDown />
-                )}
-              </button>
-              {activeWindow === "training" && (
-                <SelectOptionWindow
-                  title={"Select Training Plan"}
-                  onClose={() => setActiveWindow(null)}
-                  data={trainingPlans}
-                  isDataLoading={isTrainingPlansLoading}
-                  onSelect={(training) => {
-                    setSelectedTraining(training);
-                    setActiveWindow(null);
-                  }}
-                  renderItem={(training) => <p>{training.name}</p>}
-                />
-              )}
-            </>
-          )}
+          <ProgressPagePanel
+            isVisible={selectedMetricType === "training"}
+            title={"Training"}
+            buttonText={
+              selectedTraining ? selectedTraining.name : "Select Training Plan"
+            }
+            setActiveWindow={() => setActiveWindow("training")}
+            disableActiveWindow={() => setActiveWindow(null)}
+            isActiveWindow={activeWindow === "training"}
+            windowTitle="Select Training Plan"
+            windowData={trainingPlans}
+            isWindowDataLoading={isTrainingPlansLoading}
+            onSelectData={(training) => {
+              setSelectedTraining(training);
+              setActiveWindow(null);
+            }}
+            renderWindowItem={(training) => <p>{training.name}</p>}
+          />
 
-          <p className="text-gray-400">Date Range</p>
-          <button
-            className="cursor-pointer w-full text-left flex justify-between items-center px-2 py-1 bg-components-main hover:bg-gray-600 transition-colors"
-            onClick={() => setActiveWindow("range")}
-          >
-            <span>
-              {selectedDateRange
+          <ProgressPagePanel
+            isVisible={true}
+            title={"Date Range"}
+            buttonText={
+              selectedDateRange
                 ? DATE_RANGE_OPTIONS.filter(
                     (dataRangeOption) =>
                       dataRangeOption.value === selectedDateRange
                   )[0].label
-                : "Select Date Range"}
-            </span>
-            {activeWindow === "range" ? <FaChevronUp /> : <FaChevronDown />}
-          </button>
-          {activeWindow === "range" && (
-            <SelectOptionWindow
-              title={"Select Date Range"}
-              onClose={() => setActiveWindow(null)}
-              data={DATE_RANGE_OPTIONS}
-              onSelect={(item) => {
-                setSelectedDateRange(item.value);
-                setActiveWindow(null);
-              }}
-              renderItem={(item) => <p>{item.label}</p>}
-            />
-          )}
+                : "Select Date Range"
+            }
+            setActiveWindow={() => setActiveWindow("range")}
+            disableActiveWindow={() => setActiveWindow(null)}
+            isActiveWindow={activeWindow === "range"}
+            windowTitle="Select Date Range"
+            windowData={DATE_RANGE_OPTIONS}
+            isWindowDataLoading={false}
+            onSelectData={(item) => {
+              setSelectedDateRange(item.value);
+              setActiveWindow(null);
+            }}
+            renderWindowItem={(item) => <p>{item.label}</p>}
+          />
         </div>
 
-        <div className="bg-components-main mt-5 p-2">
+        <div className="bg-components-main mt-6 p-2">
           <h1 className="text-xl font-bold">
             {selectedMetricType === "training"
               ? selectedTraining

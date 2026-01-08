@@ -64,7 +64,6 @@ const CreateNewExerciseForm = ({ onClose }: CreateNewExerciseProps) => {
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
     if (newExerciseMutation.isPending) return;
 
     const newExerciseRequest: ExerciseCreationRequest = {

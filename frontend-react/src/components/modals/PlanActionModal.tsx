@@ -80,6 +80,7 @@ const PlanActionModal = ({
             onClick={onClose}
             additionalStyle="rounded-xl w-full"
             size={"medium"}
+            type="button"
           >
             <span>Cancel</span>
           </Button>
@@ -87,6 +88,7 @@ const PlanActionModal = ({
             btnStyle="approve"
             size={"medium"}
             additionalStyle="rounded-xl w-full"
+            type="submit"
           >
             <span>{saveButtonText}</span>
           </Button>

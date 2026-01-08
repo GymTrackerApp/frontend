@@ -41,9 +41,9 @@ const ExerciseUpdateModal = ({ onClose, exercise }: ExerciseUpdateProps) => {
     UpdateExerciseProps
   >({
     mutationFn: updateExercise,
-    onSuccess: () => {
+    onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: ["userExercises"] });
-      toast.success(`Exercise ${exercise.name} updated successfully.`);
+      toast.success(`Exercise ${response.name} updated successfully.`);
       onClose();
     },
     onError: (error) => {

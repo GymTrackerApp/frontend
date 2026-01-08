@@ -3,19 +3,19 @@ import type { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import {
   FaCalendar,
+  FaEnvelope,
   FaLock,
-  FaMailBulk,
   FaPencilAlt,
   FaUser,
 } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import Header from "../components/Header";
+import Button from "../components/ui/Button";
 import MainPagePanel from "../components/ui/MainPagePanel";
 import { signOut } from "../services/authService";
 import { getUserProfile } from "../services/userService";
 import type { ErrorResponse, GeneralResponse } from "../types/ApiResponse";
 import { displayLongFormattedDate } from "../utils/dateUtils";
-import Button from "../components/ui/Button";
 
 const ProfileSettings = () => {
   const navigate = useNavigate();
@@ -97,7 +97,7 @@ const ProfileSettings = () => {
               </div>
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-3">
-                  <FaMailBulk />
+                  <FaEnvelope />
                   <div className="flex flex-col">
                     <span className="text-subcomponents-text-main">Email</span>
                     <span>{userProfile.email}</span>
@@ -122,7 +122,7 @@ const ProfileSettings = () => {
         <MainPagePanel title={"Security"}>
           <div className="flex justify-between items-center mt-3">
             <div className="flex items-center gap-3">
-              <FaLock className="text-subcomponents-text-main" />
+              <FaLock />
               <div>
                 <span className="text-subcomponents-text-main">Password</span>
                 <p className="text-sm">********</p>
@@ -141,7 +141,7 @@ const ProfileSettings = () => {
           <button
             className="text-red-400 px-2 rounded-lg border border-red-400 cursor-pointer hover:opacity-80 mt-3"
             onClick={handleLogout}
-            customType="button"
+            type="button"
           >
             Logout
           </button>

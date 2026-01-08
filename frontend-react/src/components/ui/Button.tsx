@@ -15,28 +15,21 @@ const Button = ({
   additionalStyle,
   ...props
 }: ButtonProps) => {
-  let typeStyle;
-  if (btnStyle === "approve") {
-    typeStyle = "bg-blue-500 hover:bg-blue-400 transition-colors";
-  } else if (btnStyle === "details") {
-    typeStyle =
-      "border border-blue-400 text-blue-400 hover:border-blue-300 hover:text-blue-300 transition-colors";
-  } else if (btnStyle === "cancel") {
-    typeStyle =
-      "border border-gray-400 text-gray-400 hover:text-gray-300 transition-colors";
-  } else if (btnStyle === "options") {
-    typeStyle =
-      "w-full border border-gray-500 hover:text-gray-300 hover:border-gray-400 justify-between! transition-colors";
-  }
+  const typeStyle = {
+    approve: "bg-blue-500 hover:bg-blue-400 transition-colors",
+    details:
+      "border border-blue-400 text-blue-400 hover:border-blue-300 hover:text-blue-300 transition-colors",
+    cancel:
+      "border border-gray-400 text-gray-400 hover:text-gray-300 transition-colors",
+    options:
+      "w-full border border-gray-500 hover:text-gray-300 hover:border-gray-400 justify-between! transition-colors",
+  }[btnStyle];
 
-  let sizeStyle;
-  if (size === "small") {
-    sizeStyle = "py-0 px-2";
-  } else if (size === "medium") {
-    sizeStyle = "py-1 px-2";
-  } else if (size === "big") {
-    sizeStyle = "py-2 px-2";
-  }
+  const sizeStyle = {
+    small: "py-0 px-2",
+    medium: "py-1 px-2",
+    big: "py-2 px-2",
+  }[size];
 
   const finalStyle = clsx(
     "flex justify-center items-center gap-2 cursor-pointer",

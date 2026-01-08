@@ -18,7 +18,7 @@ const InputForm = ({ id, label, structure, ...props }: InputFormProps) => {
         {label}
       </label>
       <input
-        className="mt-0.5 mb-2 bg-gray-800 border border-gray-500 w-full focus:outline-none focus:ring-1 focus:ring-blue-500 rounded-md ps-1"
+        className="mt-0.5 mb-2 py-0.5 bg-gray-800 border border-gray-500 w-full focus:outline-none focus:ring-1 focus:ring-blue-500 rounded-md ps-1"
         id={id}
         {...props}
       />

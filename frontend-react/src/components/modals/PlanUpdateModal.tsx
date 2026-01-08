@@ -162,7 +162,7 @@ const PlanUpdateModal = ({ exercises, plan, onClose }: UpdatePlanProps) => {
               </span>
               <button
                 className="text-red-400 cursor-pointer hover:opacity-80"
-                customType="button"
+                type="button"
                 onClick={() =>
                   setPlanForm({
                     planName: planForm.planName,
