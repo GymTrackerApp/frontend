@@ -250,7 +250,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
             <header className="flex justify-between items-center">
               <p className="text-xl font-bold">Finish Workout</p>
               <FaTimes
-                className="cursor-pointer"
+                className="cursor-pointer hover:opacity-80"
                 onClick={() => setIsFinishedWorkoutWindowOpen(false)}
               />
             </header>

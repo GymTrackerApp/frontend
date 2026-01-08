@@ -40,7 +40,7 @@ const ProgressChart = ({ historyData, yAxisTitle }: ProgressChartProps) => {
 
   if (processedData.length === 0) {
     return (
-      <div className="text-gray-400 text-center mt-1">
+      <div className="text-gray-400 text-center mt-1 pb-3">
         <span>No workout data for the selected period.</span>
         <br />
         <span>Go log a workout to see your progress!</span>

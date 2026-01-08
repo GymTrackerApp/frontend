@@ -1,11 +1,11 @@
-import { Link } from "react-router-dom";
 import FetchHandler from "../components/FetchHandler";
 import Header from "../components/Header";
 import PlanBlock from "../components/PlanBlock";
 import QuickStart from "../components/QuickStart";
-import { useAvailablePlans } from "../hooks/useWorkoutFlow";
 import QuickStats from "../components/QuickStats";
 import RecentWorkouts from "../components/RecentWorkouts";
+import MainPagePanel from "../components/ui/MainPagePanel";
+import { useAvailablePlans } from "../hooks/useWorkoutFlow";
 
 const MainPage = () => {
   const {
@@ -24,15 +24,11 @@ const MainPage = () => {
         <QuickStart data={plans} isLoading={plansLoading} />
         <QuickStats />
         <RecentWorkouts />
-        <div className="w-full px-2 pt-3 bg-gray-700 mt-5 pb-8">
-          <div className="flex justify-between">
-            <h1 className="text-2xl font-semibold">My Plans</h1>
-            <Link to="/plan-manager">
-              <button className="px-2 py-1 border-2 text-blue-500 border-blue-500 rounded-xl cursor-pointer hover:border-blue-400 hover:text-blue-400 transition-colors">
-                Plan Manager
-              </button>
-            </Link>
-          </div>
+        <MainPagePanel
+          title={"My Plans"}
+          detailsPageLink="/plan-manager"
+          detailsPageButtonTitle="Plan Manager"
+        >
           <FetchHandler
             isEnabled={true}
             isLoading={plansLoading}
@@ -50,7 +46,7 @@ const MainPage = () => {
               ))
             }
           </FetchHandler>
-        </div>
+        </MainPagePanel>
       </div>
     </>
   );

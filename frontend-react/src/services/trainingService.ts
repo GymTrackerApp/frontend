@@ -47,3 +47,26 @@ export const createUserPlan = async (
   const response = await privateApi.post("/plans", requestData);
   return response.data;
 };
+
+export const removeTrainingPlan = async (
+  trainingPlanId: number
+): Promise<GeneralResponse> => {
+  const response = await privateApi.delete(`/plans/${trainingPlanId}`);
+  return response.data;
+};
+
+export interface UpdateTrainingPlanProps {
+  trainingPlanId: number;
+  trainingPlanUpdateRequest: PlanRequest;
+}
+
+export const updateTrainingPlan = async ({
+  trainingPlanId,
+  trainingPlanUpdateRequest,
+}: UpdateTrainingPlanProps) => {
+  const response = await privateApi.put(
+    `/plans/${trainingPlanId}`,
+    trainingPlanUpdateRequest
+  );
+  return response.data;
+};

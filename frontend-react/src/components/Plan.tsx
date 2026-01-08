@@ -4,17 +4,60 @@ import {
   FaRegEdit,
   FaTrashAlt,
 } from "react-icons/fa";
-import type { PlanResponse } from "../services/trainingService";
+import {
+  removeTrainingPlan,
+  type PlanResponse,
+} from "../services/trainingService";
 import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { ErrorResponse, GeneralResponse } from "../types/ApiResponse";
+import type { AxiosError } from "axios";
+import toast from "react-hot-toast";
+import PlanUpdateModal from "./modals/PlanUpdateModal";
+import type { ExerciseResponse } from "../services/exerciseService";
 
 interface PlanProps {
   plan: PlanResponse;
+  exercises: Array<ExerciseResponse>;
   updatable: boolean;
   removable: boolean;
 }
 
-const Plan = ({ plan, updatable, removable: removeable }: PlanProps) => {
+const Plan = ({
+  plan,
+  exercises,
+  updatable,
+  removable: removeable,
+}: PlanProps) => {
+  const queryClient = useQueryClient();
+
   const [isPlanExpanded, setIsPlanExpanded] = useState<boolean>(false);
+  const [updatePlan, setUpdatePlan] = useState<PlanResponse | null>(null);
+
+  const planRemoveMutation = useMutation<
+    GeneralResponse,
+    AxiosError<ErrorResponse>,
+    number
+  >({
+    mutationFn: removeTrainingPlan,
+    onSuccess: (response) => {
+      toast.success(response.message);
+      queryClient.invalidateQueries({ queryKey: ["userPlans"] });
+    },
+    onError: (error) => {
+      if (error.response) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error(error.message);
+      }
+    },
+  });
+
+  const handleRemovePlan = () => {
+    if (planRemoveMutation.isPending) return;
+
+    planRemoveMutation.mutate(plan.id);
+  };
 
   return (
     <>
@@ -26,12 +69,22 @@ const Plan = ({ plan, updatable, removable: removeable }: PlanProps) => {
           {plan.name}{" "}
           <span className="flex gap-2">
             {updatable && (
-              <FaRegEdit className="cursor-pointer hover:text-blue-400" />
+              <FaRegEdit
+                className="cursor-pointer hover:opacity-80"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setUpdatePlan(plan);
+                }}
+              />
             )}
             {removeable && (
               <FaTrashAlt
                 color="red"
                 className="cursor-pointer hover:opacity-80"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleRemovePlan();
+                }}
               />
             )}
             {isPlanExpanded ? (
@@ -56,6 +109,14 @@ const Plan = ({ plan, updatable, removable: removeable }: PlanProps) => {
             </li>
           ))}
         </ul>
+      )}
+
+      {updatePlan && (
+        <PlanUpdateModal
+          exercises={exercises}
+          plan={plan}
+          onClose={() => setUpdatePlan(null)}
+        />
       )}
     </>
   );

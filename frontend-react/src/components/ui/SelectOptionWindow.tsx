@@ -5,7 +5,7 @@ interface SelectOptionWindowProps<T> {
   title: string;
   emptyDataMessage?: string;
   onClose: () => void;
-  data: T[];
+  data: readonly T[];
   isDataLoading?: boolean;
   onSelect: (item: T) => void;
   renderItem: (data: T) => React.ReactNode;

@@ -10,10 +10,8 @@ import {
   type PlanRequest,
 } from "../../services/trainingService";
 import type { ErrorResponse, GeneralResponse } from "../../types/ApiResponse";
-import ExitApproveActionButtons from "../ExitApproveActionButtons";
-import InputForm from "../InputForm";
-import SelectOptionWindow from "../ui/SelectOptionWindow";
-import AbsoluteWindowWrapper from "../ui/AbsoluteWindowWrapper";
+import InputForm from "../ui/InputForm";
+import PlanActionModal from "./PlanActionModal";
 
 interface NewPlanProps {
   exercises: Array<ExerciseResponse>;
@@ -31,13 +29,11 @@ interface NewPlanForm {
   planItems: Array<PlanItemForm>;
 }
 
-const NewPlanModal = ({ exercises, onClose }: NewPlanProps) => {
+const PlanCreationModal = ({ exercises, onClose }: NewPlanProps) => {
   const [newPlanForm, setNewPlanForm] = useState<NewPlanForm>({
     planName: "",
     planItems: [],
   });
-
-  const [addExerciseEnabled, setAddExerciseEnabled] = useState<boolean>(false);
 
   const queryClient = useQueryClient();
 
@@ -66,6 +62,16 @@ const NewPlanModal = ({ exercises, onClose }: NewPlanProps) => {
   const handleSubmit = () => {
     if (newPlanMutation.isPending) return;
 
+    if (!newPlanForm.planName) {
+      toast.error("Plan name is required");
+      return;
+    }
+
+    if (newPlanForm.planItems.length === 0) {
+      toast.error("Plan must have at least one exercise");
+      return;
+    }
+
     const newPlanRequest: PlanRequest = {
       planName: newPlanForm.planName,
       planItems: newPlanForm.planItems.map((planItem) => {
@@ -81,14 +87,12 @@ const NewPlanModal = ({ exercises, onClose }: NewPlanProps) => {
   };
 
   const handleSelectExercise = (selectedExercise: ExerciseResponse) => {
-    setAddExerciseEnabled(false);
-
     if (
       newPlanForm.planItems.find(
         (element) => element.exerciseId === selectedExercise.exerciseId
       )
     ) {
-      toast.error("This element was already added");
+      toast.error("This exercise was already added");
       return;
     }
 
@@ -107,16 +111,12 @@ const NewPlanModal = ({ exercises, onClose }: NewPlanProps) => {
   };
 
   return (
-    <AbsoluteWindowWrapper isOpen={true} onClose={onClose}>
-      <form
-        className="w-full"
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmit();
-        }}
-      >
-        <h1 className="text-2xl font-bold">Create New Plan</h1>
-
+    <PlanActionModal
+      exercises={exercises}
+      handleSelectExercise={handleSelectExercise}
+      title={"Create New Plan"}
+      handleSubmit={handleSubmit}
+      remainingFormElements={
         <InputForm
           id={"plan-name"}
           label={"Plan Name"}
@@ -127,24 +127,25 @@ const NewPlanModal = ({ exercises, onClose }: NewPlanProps) => {
             setNewPlanForm({ ...newPlanForm, planName: e.target.value })
           }
         />
+      }
+      saveButtonText={"Create"}
+      onClose={onClose}
+    >
+      <div className="mt-3 mb-5">
+        {newPlanForm.planItems.map((planItem, planItemIndex) => (
+          <div key={planItem.exerciseId} className="flex justify-between">
+            <div className="flex w-3/4 gap-3">
+              <span className="flex justify-center items-center w-1/6 max-w-9 bg-gray-600 text-gray-300 text-sm">
+                {planItemIndex + 1}
+              </span>
+              <span className="flex items-center w-5/6">
+                {planItem.exerciseName}
+              </span>
+            </div>
 
-        <div className="flex justify-between items-center px-2 mb-3">
-          <p className="font-bold">Exercises</p>
-          <button
-            className="px-3 border rounded-md text-sm cursor-pointer"
-            onClick={() => setAddExerciseEnabled(true)}
-            type="button"
-          >
-            Add Exercise
-          </button>
-        </div>
-
-        <div className="my-5">
-          {newPlanForm.planItems.map((planItem) => (
-            <div key={planItem.exerciseId} className="flex px-2">
-              <span className="w-full">{planItem.exerciseName}</span>
+            <div className="flex justify-end items-center w-3/4">
               <input
-                className="w-full text-center bg-gray-700 text-white border border-gray-500 rounded-xl no-spinner focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors"
+                className="w-3/4 h-3/4 max-w-40 py-2 text-center bg-gray-700 text-white border border-gray-500 rounded-xl no-spinner focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-400 transition-colors"
                 type="number"
                 min={1}
                 value={String(planItem.defaultSets)}
@@ -164,7 +165,9 @@ const NewPlanModal = ({ exercises, onClose }: NewPlanProps) => {
                   });
                 }}
               />
-              <span className="text-gray-400 text-sm my-auto mx-2">sets</span>
+              <span className="text-gray-400 text-sm my-auto mx-2 w-1/6">
+                sets
+              </span>
               <button
                 className="text-red-400 cursor-pointer hover:opacity-80"
                 type="button"
@@ -182,31 +185,11 @@ const NewPlanModal = ({ exercises, onClose }: NewPlanProps) => {
                 <FaTimes />
               </button>
             </div>
-          ))}
-        </div>
-
-        {addExerciseEnabled && (
-          <SelectOptionWindow
-            title={"Select Exercise"}
-            onClose={() => setAddExerciseEnabled(false)}
-            data={exercises}
-            renderItem={(exercise) => (
-              <p key={exercise.exerciseId} className="flex flex-col">
-                <span>{exercise.name}</span>
-                <span className="text-gray-400 text-sm">
-                  {exercise.category.charAt(0) +
-                    exercise.category.substring(1).toLowerCase()}
-                </span>
-              </p>
-            )}
-            onSelect={handleSelectExercise}
-          />
-        )}
-
-        <ExitApproveActionButtons onCancel={onClose} />
-      </form>
-    </AbsoluteWindowWrapper>
+          </div>
+        ))}
+      </div>
+    </PlanActionModal>
   );
 };
 
-export default NewPlanModal;
+export default PlanCreationModal;

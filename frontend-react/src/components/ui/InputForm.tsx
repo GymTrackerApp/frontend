@@ -12,13 +12,13 @@ const InputForm = ({ id, label, structure, ...props }: InputFormProps) => {
   return (
     <>
       <label
-        className={clsx("mx-2 mt-2 font-semibold", { block: isVertical })}
+        className={clsx("mt-2 font-semibold", { block: isVertical })}
         htmlFor={id}
       >
         {label}
       </label>
       <input
-        className="mx-1 mt-0.5 mb-2 focus:outline-none focus:ring-1 focus:ring-blue-500 rounded-md ps-1"
+        className="mt-0.5 mb-2 py-0.5 bg-gray-800 border border-gray-500 w-full focus:outline-none focus:ring-1 focus:ring-blue-500 rounded-md ps-1"
         id={id}
         {...props}
       />
