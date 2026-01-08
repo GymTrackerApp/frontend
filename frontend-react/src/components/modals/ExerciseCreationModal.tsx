@@ -66,6 +66,11 @@ const CreateNewExerciseForm = ({ onClose }: CreateNewExerciseProps) => {
     e.preventDefault();
     if (newExerciseMutation.isPending) return;
 
+    if (!formData.exerciseName.trim()) {
+      toast.error("Exercise name is required");
+      return;
+    }
+
     const newExerciseRequest: ExerciseCreationRequest = {
       name: formData.exerciseName,
       category: formData.category || "UNCATEGORIZED",

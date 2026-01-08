@@ -66,6 +66,11 @@ const ExerciseUpdateModal = ({ onClose, exercise }: ExerciseUpdateProps) => {
     e.preventDefault();
     if (exerciseUpdateMutation.isPending) return;
 
+    if (!formData.exerciseName.trim()) {
+      toast.error("Exercise name is required");
+      return;
+    }
+
     const exerciseUpdateRequest: UpdateExerciseProps = {
       exerciseId: exercise.exerciseId,
       request: {

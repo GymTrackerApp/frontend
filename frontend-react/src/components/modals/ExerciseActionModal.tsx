@@ -38,6 +38,7 @@ const ExerciseActionModal = ({
             size={"medium"}
             additionalStyle="rounded-xl w-full text-sm"
             onClick={handleFormSubmit}
+            type="submit"
           >
             <span>{submitButtonTitle}</span>
           </Button>

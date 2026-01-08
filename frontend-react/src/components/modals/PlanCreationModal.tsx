@@ -62,6 +62,16 @@ const PlanCreationModal = ({ exercises, onClose }: NewPlanProps) => {
   const handleSubmit = () => {
     if (newPlanMutation.isPending) return;
 
+    if (!newPlanForm.planName) {
+      toast.error("Plan name is required");
+      return;
+    }
+
+    if (newPlanForm.planItems.length === 0) {
+      toast.error("Plan must have at least one exercise");
+      return;
+    }
+
     const newPlanRequest: PlanRequest = {
       planName: newPlanForm.planName,
       planItems: newPlanForm.planItems.map((planItem) => {

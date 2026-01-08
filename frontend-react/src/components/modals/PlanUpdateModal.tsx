@@ -63,6 +63,16 @@ const PlanUpdateModal = ({ exercises, plan, onClose }: UpdatePlanProps) => {
   const handleSubmit = () => {
     if (updatePlanMutation.isPending) return;
 
+    if (!planForm.planName) {
+      toast.error("Plan name is required");
+      return;
+    }
+
+    if (planForm.planItems.length === 0) {
+      toast.error("Plan must have at least one exercise");
+      return;
+    }
+
     const updatePlanRequest: UpdateTrainingPlanProps = {
       trainingPlanId: plan.id,
       trainingPlanUpdateRequest: {
