@@ -1,11 +1,14 @@
+import { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import AbsoluteWindowWrapper from "./AbsoluteWindowWrapper";
+import SearchBar from "./SearchBar";
 
 interface SelectOptionWindowProps<T> {
   title: string;
   emptyDataMessage?: string;
   onClose: () => void;
   data: readonly T[];
+  dataFilter?: (data: readonly T[], keyword: string) => T[];
   isDataLoading?: boolean;
   onSelect: (item: T) => void;
   renderItem: (data: T) => React.ReactNode;
@@ -16,10 +19,13 @@ const SelectOptionWindow = <T,>({
   emptyDataMessage,
   onClose,
   data,
+  dataFilter,
   isDataLoading,
   onSelect,
   renderItem,
 }: SelectOptionWindowProps<T>) => {
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
   return (
     <AbsoluteWindowWrapper isOpen={true} onClose={onClose}>
       <header className="flex justify-between items-center px-1 w-full mb-1">
@@ -39,15 +45,22 @@ const SelectOptionWindow = <T,>({
             {emptyDataMessage || "No options available"}
           </div>
         ) : (
-          data.map((item, index) => (
-            <div
-              key={index}
-              onClick={() => onSelect(item)}
-              className="bg-subcomponents-main cursor-pointer hover:bg-subcomponents-main-hover my-1 px-2 py-1 rounded-md"
-            >
-              {renderItem(item)}
-            </div>
-          ))
+          <>
+            {dataFilter && (
+              <SearchBar setSearchQuery={setSearchQuery} value={searchQuery} />
+            )}
+            {(dataFilter ? dataFilter(data, searchQuery) : data).map(
+              (item, index) => (
+                <div
+                  key={index}
+                  onClick={() => onSelect(item)}
+                  className="bg-subcomponents-main cursor-pointer hover:bg-subcomponents-main-hover my-1 px-2 py-1 rounded-md"
+                >
+                  {renderItem(item)}
+                </div>
+              )
+            )}
+          </>
         )}
       </div>
     </AbsoluteWindowWrapper>

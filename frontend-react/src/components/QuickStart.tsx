@@ -42,6 +42,11 @@ const QuickStart = ({ data, isLoading }: QuickStartProps) => {
           title={"Select a Plan"}
           onClose={() => setSelectWorkoutEnabled(false)}
           data={isLoading ? [] : data}
+          dataFilter={(data, keyword) =>
+            data.filter((plan) =>
+              plan.name.toLowerCase().includes(keyword.toLowerCase())
+            )
+          }
           emptyDataMessage="Loading plans..."
           onSelect={(item) => handleWorkoutStart(item)}
           renderItem={(plan) => (

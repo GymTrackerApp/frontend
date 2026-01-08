@@ -69,6 +69,11 @@ const PlanActionModal = ({
               </p>
             )}
             onSelect={handleSelectExercise}
+            dataFilter={(data, keyword) =>
+              data.filter((exercise) =>
+                exercise.name.toLowerCase().includes(keyword.toLowerCase())
+              )
+            }
           />
         )}
 

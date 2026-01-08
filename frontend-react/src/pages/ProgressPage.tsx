@@ -194,6 +194,11 @@ const Progress = () => {
             isActiveWindow={activeWindow === "exercise"}
             windowTitle="Select Exercise"
             windowData={exercises}
+            windowDataFilterFunction={(data, keyword) =>
+              data.filter((exercise) =>
+                exercise.name.toLowerCase().includes(keyword.toLowerCase())
+              )
+            }
             isWindowDataLoading={isExercisesLoading}
             onSelectData={(exercise) => {
               setSelectedExercise(exercise);
@@ -213,6 +218,11 @@ const Progress = () => {
             isActiveWindow={activeWindow === "training"}
             windowTitle="Select Training Plan"
             windowData={trainingPlans}
+            windowDataFilterFunction={(data, keyword) =>
+              data.filter((plan) =>
+                plan.name.toLowerCase().includes(keyword.toLowerCase())
+              )
+            }
             isWindowDataLoading={isTrainingPlansLoading}
             onSelectData={(training) => {
               setSelectedTraining(training);

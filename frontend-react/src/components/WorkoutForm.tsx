@@ -66,18 +66,6 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
     plan.planItems
   );
 
-  const TIMER_OPTIONS = [
-    { label: "30 seconds", value: 30 },
-    { label: "1 minute", value: 60 },
-    { label: "2 minutes", value: 120 },
-    { label: "3 minutes", value: 180 },
-    { label: "4 minutes", value: 240 },
-    { label: "5 minutes", value: 300 },
-    { label: "Custom Time (sec)", value: -1 },
-  ];
-
-  const { exercises, isLoading: isExercisesLoading } = useAvailableExercises();
-
   const [workoutCreationRequest, setWorkoutCreationRequest] =
     useState<WorkoutCreationRequest>({
       trainingId: plan.id,
@@ -90,6 +78,18 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
         })),
       })),
     });
+
+  const TIMER_OPTIONS = [
+    { label: "30 seconds", value: 30 },
+    { label: "1 minute", value: 60 },
+    { label: "2 minutes", value: 120 },
+    { label: "3 minutes", value: 180 },
+    { label: "4 minutes", value: 240 },
+    { label: "5 minutes", value: 300 },
+    { label: "Custom Time (sec)", value: -1 },
+  ];
+
+  const { exercises, isLoading: isExercisesLoading } = useAvailableExercises();
 
   const lastSessionResults = useQueries({
     queries: workoutItems.map((item) => ({

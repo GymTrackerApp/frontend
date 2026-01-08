@@ -32,7 +32,7 @@ const Workout = () => {
       ) : !plan ? (
         <p>Failed to fetch training plan.</p>
       ) : (
-        <WorkoutForm plan={plan!} />
+        <WorkoutForm key={JSON.stringify(plan)} plan={plan} />
       )}
     </>
   );

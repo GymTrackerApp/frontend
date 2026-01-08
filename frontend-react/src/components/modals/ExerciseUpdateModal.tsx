@@ -131,7 +131,12 @@ const ExerciseUpdateModal = ({ onClose, exercise }: ExerciseUpdateProps) => {
           renderItem={(category) => (
             <p className="capitalize">{category.toLowerCase()}</p>
           )}
-        ></SelectOptionWindow>
+          dataFilter={(data, keyword) =>
+            data.filter((exerciseCategory) =>
+              exerciseCategory.toLowerCase().includes(keyword.toLowerCase())
+            )
+          }
+        />
       )}
     </ExerciseActionModal>
   );

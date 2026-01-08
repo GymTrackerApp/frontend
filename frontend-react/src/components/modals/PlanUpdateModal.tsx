@@ -48,6 +48,9 @@ const PlanUpdateModal = ({ exercises, plan, onClose }: UpdatePlanProps) => {
       queryClient.invalidateQueries({
         queryKey: ["userPlans"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["trainingPlan", plan.id],
+      });
       toast.success(response.message);
       onClose();
     },

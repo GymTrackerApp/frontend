@@ -102,10 +102,20 @@ const Plan = ({
 
       {isPlanExpanded && (
         <ul className="px-1">
-          {plan.planItems.map((planItem) => (
+          {plan.planItems.map((planItem, planItemIndex) => (
             <li key={planItem.exerciseId} className="flex justify-between">
-              <span className="text-md">{planItem.exerciseName}</span>
-              <span className="text-gray-400">{planItem.defaultSets} sets</span>
+              <div className="flex gap-2">
+                <span className="flex justify-center items-center min-w-8 max-w-9 bg-gray-600 text-gray-300 text-sm py-1">
+                  {planItemIndex + 1}
+                </span>
+                <span className="flex justify-center items-center">
+                  {planItem.exerciseName}
+                </span>
+              </div>
+              <span className="flex justify-center items-center text-gray-400">
+                {planItem.defaultSets}{" "}
+                {planItem.defaultSets === 1 ? "set" : "sets"}
+              </span>
             </li>
           ))}
         </ul>
