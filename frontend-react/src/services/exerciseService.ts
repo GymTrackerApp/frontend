@@ -1,15 +1,17 @@
+import type { AxiosResponse } from "axios";
 import { privateApi, publicApi } from "../clients";
 import type { GeneralResponse } from "../types/ApiResponse";
+import { exerciseSorting } from "../utils/sortingUtils";
 
 export const EXERCISE_CATEGORIES = [
-  "CHEST",
-  "LEGS",
-  "BACK",
   "ARMS",
-  "SHOULDERS",
+  "BACK",
+  "CHEST",
   "CORE",
-  "GLUTES",
   "GENERAL",
+  "GLUTES",
+  "LEGS",
+  "SHOULDERS",
   "UNCATEGORIZED",
 ] as const;
 
@@ -34,8 +36,12 @@ export const createNewExercise = async (
 };
 
 export const getUserExercises = async (): Promise<Array<ExerciseResponse>> => {
-  const response = await privateApi.get("/exercises/user");
-  return response.data;
+  const response = await privateApi.get<
+    unknown,
+    AxiosResponse<Array<ExerciseResponse>>,
+    unknown
+  >("/exercises/user");
+  return response.data.sort(exerciseSorting);
 };
 
 export const getPredefinedExercises = async (): Promise<

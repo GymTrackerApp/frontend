@@ -11,8 +11,8 @@ import PlanCreationModal from "../components/modals/PlanCreationModal";
 import Plan from "../components/Plan";
 import PlanManagerToggleTabs from "../components/PlanManagerToggleTabs";
 import Button from "../components/ui/Button";
+import { useAvailableExercises } from "../hooks/useWorkoutFlow";
 import {
-  getPredefinedExercises,
   getUserExercises,
   removeExercise,
   type ExerciseResponse,
@@ -68,18 +68,7 @@ const PlanManager = () => {
     queryKey: ["userPlans"],
   });
 
-  const { data: predefinedExercises } = useQuery<
-    Array<ExerciseResponse>,
-    ErrorResponse
-  >({
-    queryFn: getPredefinedExercises,
-    queryKey: ["predefinedExercises"],
-  });
-
-  const allUserAvailableExercises = [
-    ...(predefinedExercises || []),
-    ...(myExercises || []),
-  ];
+  const { exercises: allUserAvailableExercises } = useAvailableExercises();
 
   const exerciseRemoveMutation = useMutation<
     GeneralResponse,

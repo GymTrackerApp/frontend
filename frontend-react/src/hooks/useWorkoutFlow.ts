@@ -10,6 +10,7 @@ import {
   getUserExercises,
   type ExerciseResponse,
 } from "../services/exerciseService";
+import { exerciseSorting } from "../utils/sortingUtils";
 
 export const useAvailablePlans = () => {
   const userPlans = useQuery<Array<PlanResponse>, ErrorResponse>({
@@ -46,7 +47,7 @@ export const useAvailableExercises = () => {
   const allExercises = [
     ...(userExercises.data || []),
     ...(predefinedExercises.data || []),
-  ];
+  ].sort(exerciseSorting);
 
   return {
     exercises: allExercises,

@@ -37,6 +37,8 @@ import WorkoutExerciseHistoryModal from "./modals/WorkoutExerciseHistoryModal";
 import RestTimer from "./RestTimer";
 import AbsoluteWindowWrapper from "./ui/AbsoluteWindowWrapper";
 import SelectOptionWindow from "./ui/SelectOptionWindow";
+import { preventForbbidenInputNumberKeys } from "../utils/inputUtils";
+import Button from "./ui/Button";
 
 interface WorkoutFormProps {
   plan: PlanResponse;
@@ -259,21 +261,25 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                 What would you like to do with this workout?
               </p>
               <div className="flex gap-2">
-                <button
-                  className="w-full rounded-lg bg-red-500 cursor-pointer"
+                <Button
+                  btnStyle="danger"
+                  size="small"
+                  additionalStyle="rounded-lg w-full"
                   onClick={() => {
                     toast.success("Workout discarded");
                     navigate("/");
                   }}
                 >
-                  Discard Workout
-                </button>
-                <button
-                  className="w-full rounded-lg bg-blue-500 cursor-pointer"
+                  <span>Discard Workout</span>
+                </Button>
+                <Button
+                  btnStyle={"approve"}
+                  size={"small"}
+                  additionalStyle="rounded-lg w-full"
                   onClick={handleFormSubmit}
                 >
-                  Save Workout
-                </button>
+                  <span>Save Workout</span>
+                </Button>
               </div>
             </section>
           </div>
@@ -339,12 +345,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                   onChange={(e) => {
                     setSelectedCustomRestTime(Number(e.target.value));
                   }}
-                  onKeyDown={(e) => {
-                    const invalidChars = ["-", "+", "e", "E"];
-                    if (invalidChars.includes(e.key)) {
-                      e.preventDefault();
-                    }
-                  }}
+                  onKeyDown={preventForbbidenInputNumberKeys}
                 />
                 <FaCheck
                   size={20}
@@ -369,7 +370,9 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
       )}
 
       <button
-        className="bg-blue-950 px-2 py-1 rounded-md w-full border border-gray-700 mb-2 font-light cursor-pointer hover:bg-blue-900 transition-colors"
+        className="bg-blue-950 px-2 py-1 rounded-md w-full border border-gray-700 mb-2 font-light cursor-pointer hover:bg-blue-900 transition-colors
+                   disabled:bg-gray-800 disabled:border-gray-900 disabled:text-gray-500 
+                     disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:bg-gray-800"
         onClick={() => setLastWorkoutEnabled(true)}
         disabled={
           isLastWorkoutLoading ||
@@ -378,7 +381,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
           lastWorkout.length === 0
         }
       >
-        Last Workout
+        {isLastWorkoutLoading ? "Loading..." : "Last Workout"}
       </button>
 
       {lastWorkoutEnabled && lastWorkout && lastWorkout.length > 0 && (
@@ -467,6 +470,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                         : workoutCreationRequest.workoutItems[exerciseIndex]
                             .sets[setIndex].weight
                     }
+                    onKeyDown={preventForbbidenInputNumberKeys}
                     onChange={(e) =>
                       handleUpdate(
                         exerciseIndex,
@@ -500,7 +504,8 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                       )
                     }
                     onKeyDown={(e) => {
-                      if (e.key === "." || e.key === "," || e.key === "e") {
+                      preventForbbidenInputNumberKeys(e);
+                      if (e.key === "." || e.key === ",") {
                         e.preventDefault();
                       }
                     }}
@@ -533,6 +538,11 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
           title={"Replace Exercise"}
           onClose={() => setReplacingExerciseId(null)}
           data={exercises}
+          dataFilter={(data, keyword) =>
+            data.filter((exercise) =>
+              exercise.name.toLowerCase().includes(keyword.toLowerCase())
+            )
+          }
           onSelect={(exercise) => {
             replaceExercise(exercise);
             setReplacingExerciseId(null);
