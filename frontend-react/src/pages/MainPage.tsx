@@ -7,22 +7,21 @@ import QuickStart from "../components/QuickStart";
 import QuickStats from "../components/QuickStats";
 import RecentWorkouts from "../components/RecentWorkouts";
 import Sidebar from "../components/Sidebar";
-import type { UserProfileResponse } from "../services/userService";
+import { useUserProfile } from "../hooks/useUserProfile";
+import { useAvailablePlans } from "../hooks/useWorkoutFlow";
 import { getWorkouts } from "../services/workoutService";
 import { getCurrentDate } from "../utils/dateUtils";
-import { useAvailablePlans } from "../hooks/useWorkoutFlow";
 
 const MainPage = () => {
   const { plans, isLoading: plansLoading, userPlansOnly } = useAvailablePlans();
 
   const [sidebarVisible, setSidebarVisible] = useState(false);
 
-  const currentUser: UserProfileResponse = {
-    userId: "",
-    username: "John Doe",
-    email: "john.doe@domain.com",
-    createdAt: "",
-  };
+  const {
+    data: currentUser,
+    isLoading: isCurrentUserLoading,
+    isError: isCurrentUserError,
+  } = useUserProfile();
 
   const displayCurrentDate = () => {
     const currentDate: Date = getCurrentDate();
@@ -64,14 +63,18 @@ const MainPage = () => {
       onClick={() => setSidebarVisible(false)}
     >
       <div className="relative flex h-screen w-full overflow-hidden">
-        <Sidebar username={currentUser.username} isOpen={sidebarVisible} />
+        <Sidebar username={currentUser?.username} isOpen={sidebarVisible} />
         <div className="flex-1 overflow-y-auto bg-background-light dark:bg-background-dark scrollbar-none">
           <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 p-6 md:p-10 lg:p-12">
             <header className="flex flex-wrap items-end justify-between gap-4">
               <div className="flex flex-col gap-1">
-                <h1 className="font-display text-3xl md:text-4xl font-black tracking-tight text-gray-900 dark:text-white">
-                  Welcome back, {currentUser.username}!
-                </h1>
+                {isCurrentUserLoading || isCurrentUserError || !currentUser ? (
+                  <div className="h-10 w-70 bg-gray-200 dark:bg-gray-800 animate-skeleton rounded-lg"></div>
+                ) : (
+                  <h1 className="font-display text-3xl md:text-4xl font-black tracking-tight text-gray-900 dark:text-white">
+                    Welcome back, {currentUser.username}!
+                  </h1>
+                )}
                 <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
                   <FaRegCalendar size={18} />
                   <p className="text-sm font-medium">{displayCurrentDate()}</p>

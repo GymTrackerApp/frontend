@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import {
@@ -12,8 +12,8 @@ import { useNavigate } from "react-router";
 import Sidebar from "../components/Sidebar";
 import Button from "../components/ui/Button";
 import MainPagePanel from "../components/ui/MainPagePanel";
+import { useUserProfile } from "../hooks/useUserProfile";
 import { signOut } from "../services/authService";
-import { getUserProfile } from "../services/userService";
 import type { ErrorResponse, GeneralResponse } from "../types/ApiResponse";
 import { displayLongFormattedDate } from "../utils/dateUtils";
 
@@ -24,10 +24,7 @@ const ProfileSettings = () => {
     data: userProfile,
     isLoading: isUserProfileLoading,
     isError: isUserProfileError,
-  } = useQuery({
-    queryFn: getUserProfile,
-    queryKey: ["userProfile"],
-  });
+  } = useUserProfile();
 
   const signOutMutation = useMutation<
     GeneralResponse,
@@ -70,7 +67,7 @@ const ProfileSettings = () => {
 
   return (
     <>
-      <Sidebar />
+      <Sidebar username={userProfile?.username} isOpen={false} />
       <div className="w-full min-h-dvh bg-background-main text-white p-2">
         <h1 className="text-2xl font-bold">Profile Settings</h1>
         <p className="text-subcomponents-text-main mb-2">

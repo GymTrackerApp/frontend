@@ -10,7 +10,7 @@ import {
 import { NavLink } from "react-router";
 
 interface SidebarProps {
-  username: string;
+  username: string | undefined;
   isOpen: boolean;
 }
 
@@ -68,9 +68,13 @@ const Sidebar = ({ username, isOpen }: SidebarProps) => {
             <FaUserCircle className="w-full h-full" />
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-semibold text-gray-900 dark:text-white">
-              {username || "Unknown"}
-            </span>
+            {username ? (
+              <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                {username}
+              </span>
+            ) : (
+              <div className="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded animate-skeleton"></div>
+            )}
           </div>
         </div>
       </div>
