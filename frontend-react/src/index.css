@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @plugin "tailwind-scrollbar";
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap");
 
 @theme {
   --color-components-main: var(--color-gray-700);
@@ -16,6 +17,26 @@
   --color-input-dark: #101723;
   --color-border-dark: #304669;
   --color-text-muted: #8fa6cc;
+  --color-surface-dark: #1f2937;
+  --color-surface-border: #374151;
+  --color-accent-teal: #14b8a6;
+  --color-accent-yellow: #f59e0b;
+
+  /* Fonts */
+  --font-display: [ "Inter", "sans-serif"];
+
+  /* Animations */
+  @keyframes pulse-custom {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  --animate-skeleton: pulse-custom 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 @utility no-spinner {

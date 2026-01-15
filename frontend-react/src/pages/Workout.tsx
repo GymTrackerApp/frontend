@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router";
-import Header from "../components/Header";
+import Sidebar from "../components/Sidebar";
 import WorkoutForm from "../components/WorkoutForm";
 import {
   getTrainingPlanById,
@@ -24,7 +24,7 @@ const Workout = () => {
 
   return (
     <>
-      <Header />
+      <Sidebar />
       {isError ? (
         <p>Failed to fetch training plan.</p>
       ) : isLoading ? (

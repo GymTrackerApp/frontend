@@ -9,7 +9,7 @@ import {
   FaUser,
 } from "react-icons/fa";
 import { useNavigate } from "react-router";
-import Header from "../components/Header";
+import Sidebar from "../components/Sidebar";
 import Button from "../components/ui/Button";
 import MainPagePanel from "../components/ui/MainPagePanel";
 import { signOut } from "../services/authService";
@@ -70,7 +70,7 @@ const ProfileSettings = () => {
 
   return (
     <>
-      <Header />
+      <Sidebar />
       <div className="w-full min-h-dvh bg-background-main text-white p-2">
         <h1 className="text-2xl font-bold">Profile Settings</h1>
         <p className="text-subcomponents-text-main mb-2">

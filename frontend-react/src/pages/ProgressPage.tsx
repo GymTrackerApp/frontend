@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { format, subDays, subMonths } from "date-fns";
 import { useState } from "react";
-import Header from "../components/Header";
+import Sidebar from "../components/Sidebar";
 import ProgressChart, { type DataContent } from "../components/ProgressChart";
 import ProgressPagePanel from "../components/ProgressPagePanel";
 import {
@@ -153,7 +153,7 @@ const Progress = () => {
 
   return (
     <>
-      <Header />
+      <Sidebar />
       <div className="bg-background-main text-white min-h-dvh p-3">
         <h1 className="text-3xl font-bold">Progress & Metrics</h1>
         <p className="text-gray-400 mb-3">

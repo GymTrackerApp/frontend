@@ -4,7 +4,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { FaPlus, FaRegEdit, FaTrashAlt } from "react-icons/fa";
 import FetchHandler from "../components/FetchHandler";
-import Header from "../components/Header";
+import Sidebar from "../components/Sidebar";
 import NewExerciseModal from "../components/modals/ExerciseCreationModal";
 import ExerciseUpdateModal from "../components/modals/ExerciseUpdateModal";
 import PlanCreationModal from "../components/modals/PlanCreationModal";
@@ -97,7 +97,7 @@ const PlanManager = () => {
 
   return (
     <>
-      <Header />
+      <Sidebar />
       <div className="bg-gray-800 text-white p-3 min-h-dvh">
         <h1 className="text-3xl font-bold">Plan Manager</h1>
         <p className="text-gray-400 mb-3">
