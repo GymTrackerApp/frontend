@@ -6,9 +6,16 @@
   --color-subcomponents-main: var(--color-gray-600);
   --color-subcomponents-main-hover: var(--color-gray-500);
   --color-subcomponents-text-main: var(--color-gray-400);
-  --color-background-main: var(--color-gray-800);
   --color-approve-button-main: var(--color-blue-500);
   --color-hover-approve-button-main: var(--color-blue-400);
+  --color-primary: #3780f6;
+  --color-primary-hover: #2563eb;
+  --color-background-light: #f9fafb;
+  --color-background-dark: #121926;
+  --color-card-dark: #182334;
+  --color-input-dark: #101723;
+  --color-border-dark: #304669;
+  --color-text-muted: #8fa6cc;
 }
 
 @utility no-spinner {

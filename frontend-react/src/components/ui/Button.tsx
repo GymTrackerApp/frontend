@@ -16,7 +16,7 @@ const Button = ({
   ...props
 }: ButtonProps) => {
   const typeStyle = {
-    approve: "bg-blue-500 hover:bg-blue-400 transition-colors",
+    approve: "bg-primary hover:bg-primary-hover transition-colors",
     details:
       "border border-blue-400 text-blue-400 hover:border-blue-300 hover:text-blue-300 transition-colors",
     cancel:
