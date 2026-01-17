@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { FaPlay } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import { type PlanResponse } from "../services/trainingService";
+import TrainingPlanSelectionOption from "./TrainingPlanSelectionOption";
 import SelectOptionWindow from "./ui/SelectOptionWindow";
 
 interface QuickStartProps {
@@ -24,7 +25,7 @@ const QuickStart = ({ data, workoutsThisWeek, isLoading }: QuickStartProps) => {
 
   return (
     <>
-      <div className="lg:col-span-2 relative rounded-2xl bg-white dark:bg-surface-dark p-6 md:p-8 shadow-sm ring-1 ring-gray-900/5 dark:ring-white/10">
+      <div className="col-span-3 lg:col-span-2 relative rounded-2xl bg-white dark:bg-surface-dark p-6 md:p-8 shadow-sm ring-1 ring-gray-900/5 dark:ring-white/10">
         <div className="absolute right-0 top-0 -mt-10 -mr-10 h-64 w-64 rounded-full bg-primary/10 blur-3xl"></div>
         <div className="relative z-10 flex h-full flex-col justify-between gap-6">
           <div className="flex flex-col gap-2">
@@ -53,7 +54,7 @@ const QuickStart = ({ data, workoutsThisWeek, isLoading }: QuickStartProps) => {
           </div>
           <div className="flex flex-wrap items-center gap-4">
             <button
-              className="flex items-center gap-2 rounded-xl bg-primary px-6 py-3 font-semibold text-white shadow-lg shadow-blue-500/20 transition-all hover:bg-blue-600 hover:shadow-blue-500/30 active:scale-95"
+              className="flex items-center gap-2 rounded-xl bg-primary px-6 py-3 font-semibold text-white shadow-lg shadow-blue-500/20 transition-all hover:bg-blue-600 hover:shadow-blue-500/30 active:scale-95 cursor-pointer"
               onClick={() => setSelectWorkoutEnabled(true)}
             >
               <FaPlay />
@@ -75,15 +76,7 @@ const QuickStart = ({ data, workoutsThisWeek, isLoading }: QuickStartProps) => {
           }
           emptyDataMessage="Loading plans..."
           onSelect={(item) => handleWorkoutStart(item)}
-          renderItem={(plan) => (
-            <p className="flex flex-col">
-              <span className="">{plan.name}</span>
-              <span className="text-gray-400">
-                {plan.planItems.length}{" "}
-                {plan.planItems.length === 1 ? "exercise" : "exercises"}
-              </span>
-            </p>
-          )}
+          renderItem={(plan) => <TrainingPlanSelectionOption plan={plan} />}
         />
       )}
     </>

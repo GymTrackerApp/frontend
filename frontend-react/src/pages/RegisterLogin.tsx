@@ -163,7 +163,7 @@ const RegisterLogin = () => {
                       <FaUser className="text-text-muted text-[20px]" />
                     </div>
                     <input
-                      className="block w-full rounded-lg border-border-dark bg-input-dark text-white placeholder:text-text-muted/50 focus:border-primary focus:ring-1 focus:ring-primary sm:text-sm pl-10 h-12 transition-all"
+                      className="block w-full rounded-lg border-border-dark bg-input-dark text-white placeholder:text-text-muted/50 focus:border-primary focus:ring-1 focus:outline-none focus:ring-primary sm:text-sm pl-10 h-12 transition-all"
                       id="username"
                       name="username"
                       type="text"
@@ -184,7 +184,7 @@ const RegisterLogin = () => {
                     <FaEnvelope className="text-text-muted text-[20px]" />
                   </div>
                   <input
-                    className="block w-full rounded-lg border-border-dark bg-input-dark text-white placeholder:text-text-muted/50 focus:border-primary focus:ring-1 focus:ring-primary sm:text-sm pl-10 h-12 transition-all"
+                    className="block w-full rounded-lg border-border-dark bg-input-dark text-white placeholder:text-text-muted/50 focus:border-primary focus:ring-1 focus:outline-none focus:ring-primary sm:text-sm pl-10 h-12 transition-all"
                     id="email"
                     name="email"
                     type="email"
@@ -211,7 +211,7 @@ const RegisterLogin = () => {
                     <FaLock className="text-text-muted text-[20px]" />
                   </div>
                   <input
-                    className="block w-full rounded-lg border-border-dark bg-input-dark text-white placeholder:text-text-muted/50 focus:border-primary focus:ring-1 focus:ring-primary sm:text-sm pl-10 h-12 transition-all"
+                    className="block w-full rounded-lg border-border-dark bg-input-dark text-white placeholder:text-text-muted/50 focus:border-primary focus:ring-1 focus:outline-none focus:ring-primary sm:text-sm pl-10 h-12 transition-all"
                     id="password"
                     name="password"
                     type="password"

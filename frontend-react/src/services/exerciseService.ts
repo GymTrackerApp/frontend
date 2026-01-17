@@ -26,6 +26,7 @@ export interface ExerciseResponse {
   exerciseId: number;
   category: string;
   name: string;
+  isCustom: boolean;
 }
 
 export const createNewExercise = async (

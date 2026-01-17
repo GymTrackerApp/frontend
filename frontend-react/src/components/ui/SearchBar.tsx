@@ -7,13 +7,13 @@ interface SearchBarProps {
 
 const SearchBar = ({ value, setSearchQuery }: SearchBarProps) => {
   return (
-    <div className="relative w-full mb-2">
-      <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-        <FaSearch className="text-gray-400" size={16} />
+    <div className="relative group">
+      <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-slate-500 group-focus-within:text-primary transition-colors">
+        <FaSearch className="text-xl" size={16} />
       </div>
       <input
         type="text"
-        className="w-full bg-gray-800 pl-10 px-2 py-1 rounded-md hover:outline-none focus:outline-none"
+        className="w-full bg-slate-800/50 border border-slate-700/50 rounded-xl py-3 pl-11 pr-4 text-white text-sm focus:ring-1 focus:ring-primary/50 focus:border-primary/50 outline-none transition-all placeholder:text-slate-500"
         placeholder="Search..."
         onChange={(e) => setSearchQuery(e.target.value)}
         value={value}

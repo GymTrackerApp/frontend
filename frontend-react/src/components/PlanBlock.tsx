@@ -3,6 +3,7 @@ import { formatDistanceToNow } from "date-fns";
 import { FaDumbbell, FaPlay, FaStopwatch } from "react-icons/fa";
 import type { PlanResponse } from "../services/trainingService";
 import { getWorkouts } from "../services/workoutService";
+import { calculateAverageTrainingTime } from "../utils/plansUtils";
 
 interface PlanBlockProps {
   plan: PlanResponse;
@@ -27,20 +28,6 @@ const PlanBlock = ({ plan }: PlanBlockProps) => {
       }),
   });
 
-  const calculateAverageTrainingTime = () => {
-    if (plan.planItems.length === 0) return 0;
-
-    const setsAmount = plan.planItems.reduce(
-      (total, item) => total + item.defaultSets,
-      0
-    );
-    const timePerSet = 4;
-    const totalTime = setsAmount * timePerSet;
-
-    const roundedTime = Math.ceil(totalTime / 15) * 15; // round to nearest 15 minutes
-    return roundedTime;
-  };
-
   return (
     <div className="relative flex flex-col justify-between overflow-hidden rounded-xl bg-white dark:bg-surface-dark p-5 shadow-sm ring-1 ring-gray-900/5 transition-all hover:ring-primary/50 dark:ring-white/10 dark:hover:ring-primary/50">
       <div className="flex items-start justify-between">
@@ -64,7 +51,7 @@ const PlanBlock = ({ plan }: PlanBlockProps) => {
       </div>
       <div className="mt-4 flex items-center gap-2 text-xs text-gray-500">
         <FaStopwatch size={14} />
-        <span>~ {calculateAverageTrainingTime()} min</span>
+        <span>~ {calculateAverageTrainingTime(plan)} min</span>
         <span className="text-gray-300 dark:text-gray-700">|</span>
         <FaDumbbell size={14} className="rotate-45" />
         <span>

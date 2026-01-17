@@ -1,0 +1,22 @@
+
+const PlanLoading = () => {
+  return (
+    <div className="flex flex-col bg-surface-dark rounded-xl border border-border-dark overflow-hidden hover:border-primary/50 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-primary/5 animate-skeleton">
+      <div className="p-5 flex flex-col gap-4 flex-1">
+        <div className="flex">
+          <div className="h-6 w-30 bg-gray-700 text-white mb-1"></div>
+        </div>
+        <div className="flex items-center gap-4 text-xs text-gray-400">
+          <div className="flex items-center gap-1.5 h-5 w-20 bg-gray-700"></div>
+          <div className="flex items-center gap-1.5 h-5 w-20 bg-gray-700"></div>
+        </div>
+        <div className="mt-auto pt-4 border-t border-border-dark flex gap-3">
+          <button className="flex-1 flex h-9 rounded-lg bg-gray-700"></button>
+          <button className="flex items-center justify-center h-9 w-9 rounded-lg bg-gray-700 "></button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default PlanLoading;

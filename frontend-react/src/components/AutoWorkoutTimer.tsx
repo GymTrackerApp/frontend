@@ -21,7 +21,16 @@ const AutoWorkoutTimer = () => {
       .join(":");
   };
 
-  return <p className="text-lg">{displayTime(seconds)}</p>;
+  return (
+    <div className="flex flex-col items-center justify-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+      <div className="font-mono text-3xl md:text-4xl font-bold tracking-tight text-white tabular-nums drop-shadow-[0_0_15px_rgba(55,128,246,0.15)]">
+        {displayTime(seconds)}
+      </div>
+      <span className="text-[10px] uppercase tracking-widest text-primary/80 font-bold mt-0.5">
+        Elapsed
+      </span>
+    </div>
+  );
 };
 
 export default AutoWorkoutTimer;

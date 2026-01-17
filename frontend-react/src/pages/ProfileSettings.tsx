@@ -1,150 +1,73 @@
-import { useMutation } from "@tanstack/react-query";
-import type { AxiosError } from "axios";
-import toast from "react-hot-toast";
-import {
-  FaCalendar,
-  FaEnvelope,
-  FaLock,
-  FaPencilAlt,
-  FaUser,
-} from "react-icons/fa";
-import { useNavigate } from "react-router";
-import Sidebar from "../components/Sidebar";
-import Button from "../components/ui/Button";
-import MainPagePanel from "../components/ui/MainPagePanel";
+import { formatDate } from "date-fns";
+import { FaRegCalendar, FaUserCircle } from "react-icons/fa";
+import PageWrapper from "../components/ui/PageWrapper";
+import ProfileSectionLoading from "../components/ProfileSectionLoading";
 import { useUserProfile } from "../hooks/useUserProfile";
-import { signOut } from "../services/authService";
-import type { ErrorResponse, GeneralResponse } from "../types/ApiResponse";
-import { displayLongFormattedDate } from "../utils/dateUtils";
 
 const ProfileSettings = () => {
-  const navigate = useNavigate();
-
   const {
     data: userProfile,
     isLoading: isUserProfileLoading,
     isError: isUserProfileError,
   } = useUserProfile();
 
-  const signOutMutation = useMutation<
-    GeneralResponse,
-    AxiosError<ErrorResponse>,
-    { refreshToken: string }
-  >({
-    mutationFn: signOut,
-    onSuccess: (response) => {
-      toast.success(response.message);
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      navigate("/register-login");
-    },
-    onError: (error) => {
-      if (error.response?.data.message) {
-        toast.error(error.response.data.message);
-      } else {
-        toast.error(error.message);
-      }
-    },
-  });
-
-  const handleLogout = () => {
-    if (signOutMutation.isPending) return;
-
-    const refreshToken = localStorage.getItem("refreshToken");
-
-    if (!refreshToken) {
-      toast.error("User is not logged in");
-      navigate("/register-login", { replace: true });
-      return;
-    }
-
-    const data = {
-      refreshToken: refreshToken,
-    };
-
-    signOutMutation.mutate(data);
-  };
+  const showUserProfile =
+    !!userProfile && !isUserProfileLoading && !isUserProfileError;
 
   return (
-    <>
-      <Sidebar username={userProfile?.username} isOpen={false} />
-      <div className="w-full min-h-dvh bg-background-main text-white p-2">
-        <h1 className="text-2xl font-bold">Profile Settings</h1>
-        <p className="text-subcomponents-text-main mb-2">
-          Manage your account and preferences
-        </p>
-        <MainPagePanel title={"Profile information"}>
-          {isUserProfileError ? (
-            <p className="mt-3">Failed to fetch user profile information</p>
-          ) : isUserProfileLoading || !userProfile ? (
-            <p className="mt-3">Loading...</p>
+    <PageWrapper>
+      <div className="p-8 lg:p-12 lg:max-w-3/4 mx-auto space-y-10">
+        <div className="flex flex-col gap-2">
+          <h1 className="text-4xl font-black tracking-tight text-gray-900 dark:text-white">
+            Account Settings
+          </h1>
+          <p className="text-gray-500 dark:text-gray-400 text-lg">
+            Manage your account
+          </p>
+        </div>
+        <section className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-bold tracking-tight px-1">Profile</h2>
+          </div>
+          {!showUserProfile ? (
+            <ProfileSectionLoading />
           ) : (
-            <div className="flex flex-col gap-3">
-              <div className="mt-3 flex justify-between items-center">
-                <div className="flex gap-2 items-center">
-                  <FaUser />
-                  <div className="flex flex-col">
-                    <span className="text-subcomponents-text-main">
-                      Username
-                    </span>
-                    <span>{userProfile.username}</span>
+            <div className="bg-white dark:bg-card-dark rounded-xl border border-gray-200 dark:border-border-dark p-6 overflow-hidden relative">
+              <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
+                <FaUserCircle className="w-32 h-32 rounded-2xl bg-cover bg-center shrink-0 shadow-2xl" />
+                <div className="flex-1 space-y-4 text-center md:text-left">
+                  <div className="space-y-1">
+                    <p className="text-3xl font-black text-gray-900 dark:text-white">
+                      {userProfile.username}
+                    </p>
+                    <p className="text-gray-500 font-medium">
+                      {userProfile.email}
+                    </p>
+                    <p className="text-sm text-primary font-semibold flex items-center justify-center md:justify-start gap-1">
+                      <FaRegCalendar className="text-sm" />
+                      Member Since:{" "}
+                      {formatDate(
+                        new Date(userProfile.createdAt),
+                        "dd MMM yyyy"
+                      )}
+                    </p>
+                  </div>
+                  <div className="w-full flex lg:flex-col lg:w-3/4 xl:w-1/2 gap-2">
+                    <button className="w-full bg-gray-100 dark:bg-border-dark hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white px-6 py-2 rounded-lg font-bold transition-colors cursor-pointer">
+                      Edit Profile Details
+                    </button>
+                    <button className="w-full py-2 bg-primary/10 text-primary hover:bg-primary/20 font-bold rounded-lg transition-colors flex items-center justify-center gap-2 px-6 cursor-pointer">
+                      Change Password
+                    </button>
                   </div>
                 </div>
-                <FaPencilAlt className="cursor-pointer hover:opacity-80" />
               </div>
-              <div className="flex justify-between items-center">
-                <div className="flex items-center gap-3">
-                  <FaEnvelope />
-                  <div className="flex flex-col">
-                    <span className="text-subcomponents-text-main">Email</span>
-                    <span>{userProfile.email}</span>
-                  </div>
-                </div>
-                <FaPencilAlt className="cursor-pointer hover:opacity-80" />
-              </div>
-              <div className="flex items-center gap-3">
-                <FaCalendar />
-                <div className="flex flex-col">
-                  <span className="text-subcomponents-text-main">
-                    Member since
-                  </span>
-                  <span>
-                    {displayLongFormattedDate(new Date(userProfile.createdAt))}
-                  </span>
-                </div>
-              </div>
+              <div className="absolute -right-12 -top-12 size-48 bg-primary/5 rounded-full blur-3xl"></div>
             </div>
           )}
-        </MainPagePanel>
-        <MainPagePanel title={"Security"}>
-          <div className="flex justify-between items-center mt-3">
-            <div className="flex items-center gap-3">
-              <FaLock />
-              <div>
-                <span className="text-subcomponents-text-main">Password</span>
-                <p className="text-sm">********</p>
-              </div>
-            </div>
-            <Button
-              btnStyle={"details"}
-              size={"medium"}
-              additionalStyle="rounded-xl"
-            >
-              <span>Change Password</span>
-            </Button>
-          </div>
-        </MainPagePanel>
-        <MainPagePanel title={"Account Actions"}>
-          <button
-            className="text-red-400 px-2 rounded-lg border border-red-400 cursor-pointer hover:opacity-80 mt-3"
-            onClick={handleLogout}
-            type="button"
-          >
-            Logout
-          </button>
-        </MainPagePanel>
+        </section>
       </div>
-    </>
+    </PageWrapper>
   );
 };
 

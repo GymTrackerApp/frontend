@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { FaChevronDown, FaInfoCircle } from "react-icons/fa";
 import {
   createNewExercise,
   EXERCISE_CATEGORIES,
@@ -10,11 +11,9 @@ import {
   type ExerciseResponse,
 } from "../../services/exerciseService";
 import type { ErrorResponse } from "../../types/ApiResponse";
-import InputForm from "../ui/InputForm";
-import ExerciseActionModal from "./ExerciseActionModal";
-import Button from "../ui/Button";
 import SelectOptionWindow from "../ui/SelectOptionWindow";
-import { FaChevronDown } from "react-icons/fa";
+import ExerciseActionModal from "./ExerciseActionModal";
+import CategorySelectionOption from "../CategorySelectionOption";
 
 interface CreateNewExerciseProps {
   onClose: () => void;
@@ -86,33 +85,51 @@ const CreateNewExerciseForm = ({ onClose }: CreateNewExerciseProps) => {
       handleFormSubmit={handleFormSubmit}
       submitButtonTitle={"Create"}
     >
-      <InputForm
-        id={"exercise-name"}
-        name="exerciseName"
-        label={"Exercise Name"}
-        structure="vertical"
-        placeholder="e.g. Benchpress"
-        onChange={handleFormUpdate}
-        value={formData["exerciseName"]}
-        required
-      />
-      <p className="mx-0 font-semibold mb-2">Exercise Category</p>
-      <Button
-        btnStyle={"options"}
-        size={"small"}
-        additionalStyle="rounded-lg mx-0 mb-4"
-        onClick={(e) => {
-          e.preventDefault();
-          setCategorySelection(true);
-        }}
-      >
-        <span className="capitalize">
-          {formData["category"] === "UNCATEGORIZED"
-            ? "Select Category"
-            : formData["category"].toLowerCase()}
-        </span>
-        <FaChevronDown />
-      </Button>
+      <div className="mx-auto max-w-xl px-6 py-16 flex flex-col gap-12">
+        <div className="group relative">
+          <label className="block text-[10px] font-bold text-primary uppercase tracking-[0.2em] mb-3">
+            Exercise Name
+          </label>
+          <input
+            className="w-full bg-transparent text-3xl md:text-4xl font-bold text-white placeholder-text-muted/20 border-0 border-b-2 border-surface-border focus:border-primary focus:outline-none focus:ring-0 px-0 pb-4 transition-colors"
+            name="exerciseName"
+            placeholder="e.g. Benchpress"
+            type="text"
+            onChange={handleFormUpdate}
+            value={formData["exerciseName"]}
+            required
+          />
+        </div>
+        <div className="space-y-6">
+          <div>
+            <label className="block text-[10px] font-bold text-primary uppercase tracking-[0.2em] mb-4">
+              Exercise Category
+            </label>
+            <button
+              className="w-full flex justify-between items-center bg-surface-dark border border-surface-border rounded-xl px-4 py-3 text-white focus:ring-1 focus:ring-primary focus:border-primary transition-all cursor-pointer"
+              onClick={(e) => {
+                e.preventDefault();
+                setCategorySelection(true);
+              }}
+            >
+              <span className="capitalize">
+                {formData["category"] === "UNCATEGORIZED"
+                  ? "Select Category"
+                  : formData["category"].toLowerCase()}
+              </span>
+              <FaChevronDown />
+            </button>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 p-4 rounded-xl bg-surface-dark/30 border border-surface-border/50">
+          <FaInfoCircle className="text-primary/60" size={25} />
+          <p className="text-xs text-text-muted leading-relaxed">
+            This exercise will be added to your personal library and can be used
+            in any of your training plans.
+          </p>
+        </div>
+      </div>
+
       {categorySelection && (
         <SelectOptionWindow
           title={"Select Category"}
@@ -126,7 +143,7 @@ const CreateNewExerciseForm = ({ onClose }: CreateNewExerciseProps) => {
             setCategorySelection(false);
           }}
           renderItem={(category) => (
-            <p className="capitalize">{category.toLowerCase()}</p>
+            <CategorySelectionOption exerciseCategory={category} />
           )}
           dataFilter={(data, keyword) =>
             data.filter((exerciseCategory) =>

@@ -25,7 +25,7 @@ const RecentWorkouts = () => {
 
   return (
     <>
-      <div className="flex flex-col gap-4">
+      <div className="col-span-3 flex flex-col gap-4">
         <h2 className="text-xl font-bold text-gray-900 dark:text-white">
           Recent Workouts
         </h2>
@@ -42,7 +42,7 @@ const RecentWorkouts = () => {
                 <th className="px-6 py-3" scope="col">
                   Volume
                 </th>
-                <th className="px-9 py-3" scope="col">
+                <th className="hidden sm:block px-9 py-3" scope="col">
                   Status
                 </th>
               </tr>
@@ -53,6 +53,7 @@ const RecentWorkouts = () => {
               ) : (
                 data.map((workout) => (
                   <WorkoutLog
+                    key={workout.workoutId}
                     workout={workout}
                     setSelectedWorkout={setSelectedWorkout}
                   />

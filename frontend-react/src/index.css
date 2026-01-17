@@ -1,6 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap");
 @import "tailwindcss";
 @plugin "tailwind-scrollbar";
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap");
 
 @theme {
   --color-components-main: var(--color-gray-700);
@@ -13,6 +13,7 @@
   --color-primary-hover: #2563eb;
   --color-background-light: #f9fafb;
   --color-background-dark: #121926;
+  --color-background-secondary: #1F2937;
   --color-card-dark: #182334;
   --color-input-dark: #101723;
   --color-border-dark: #304669;
