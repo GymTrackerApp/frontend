@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import type { PlanResponse } from "../services/trainingService";
 import CreateNewResource from "./CreateNewResource";
 import PlanBlock from "./PlanBlock";
@@ -10,6 +10,8 @@ interface MyPlansProps {
 }
 
 const MyPlans = ({ userPlans, plansLoading }: MyPlansProps) => {
+  const navigate = useNavigate();
+
   return (
     <div className="col-span-3 flex flex-col gap-6">
       <div className="flex items-center justify-between">
@@ -31,7 +33,9 @@ const MyPlans = ({ userPlans, plansLoading }: MyPlansProps) => {
         )}
         <CreateNewResource
           creationText={"Create New Plan"}
-          onNewResourceCreated={() => {}}
+          onNewResourceCreated={() => {
+            navigate("/plan-manager");
+          }}
         />
       </div>
     </div>

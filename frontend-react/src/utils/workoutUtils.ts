@@ -46,8 +46,6 @@ export const findMaxLift = (
 ) => {
   let maxLift = 0;
 
-  console.log(workoutExerciseHistory);
-
   workoutExerciseHistory.history.forEach((session: WorkoutSessionSnapshot) => {
     session.sets.forEach((set) => {
       const lift = set.weight;

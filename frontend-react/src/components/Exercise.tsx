@@ -1,5 +1,7 @@
 import { FaDumbbell, FaPen, FaTrashAlt } from "react-icons/fa";
 import type { ExerciseResponse } from "../services/exerciseService";
+import { useState } from "react";
+import ConfirmationWindow from "./ui/ConfirmationWindow";
 
 interface ExerciseProps {
   exercise: ExerciseResponse;
@@ -12,6 +14,8 @@ const Exercise = ({
   setUpdateExercise,
   handleRemoveExercise,
 }: ExerciseProps) => {
+  const [isExerciseRemovalWindowOpened, setIsExerciseRemovalWindowOpened] =
+    useState<boolean>(false);
   return (
     <div className="flex flex-col bg-surface-dark rounded-xl border border-border-dark overflow-hidden hover:border-primary/50 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-primary/5">
       <div className="p-5 flex flex-col justify-between gap-4 flex-1">
@@ -32,10 +36,7 @@ const Exercise = ({
               </button>
               <button
                 className="flex items-center justify-center h-7 w-7 rounded-lg border border-border-dark text-gray-400 hover:text-red-400 hover:border-red-400 transition-colors cursor-pointer"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleRemoveExercise(exercise.exerciseId);
-                }}
+                onClick={() => setIsExerciseRemovalWindowOpened(true)}
               >
                 <FaTrashAlt size={14} />
               </button>
@@ -49,6 +50,20 @@ const Exercise = ({
           </div>
         </div>
       </div>
+      {isExerciseRemovalWindowOpened && (
+        <ConfirmationWindow
+          onConfirm={() => {
+            handleRemoveExercise(exercise.exerciseId);
+          }}
+          onClose={() => setIsExerciseRemovalWindowOpened(false)}
+          confirmButtonText={"Yes, Remove Exercise"}
+          cancelButtonText={"No, Keep Exercise"}
+          windowTitle={"Remove Exercise"}
+          windowDescription={
+            "Are you sure you want to remove this exercise? This action cannot be undone."
+          }
+        />
+      )}
     </div>
   );
 };

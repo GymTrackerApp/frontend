@@ -111,6 +111,7 @@ const PlanUpdateModal = ({ exercises, plan, onClose }: UpdatePlanProps) => {
     };
 
     setPlanForm(updatedPlanForm);
+    toast.success("Exercise added to plan");
   };
 
   return (

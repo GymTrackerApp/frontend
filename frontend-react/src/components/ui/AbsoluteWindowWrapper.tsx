@@ -29,7 +29,7 @@ const AbsoluteWindowWrapper = ({
       onClick={onClose}
     >
       <div
-        className="bg-background-dark w-1/2 max-h-[75vh] lg:w-full min-w-90 max-w-160 md:max-h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-border-dark"
+        className="bg-background-dark w-3/4 max-h-[75vh] lg:w-full min-w-90 max-w-160 md:max-h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-border-dark"
         onClick={(e) => {
           e.stopPropagation();
         }}

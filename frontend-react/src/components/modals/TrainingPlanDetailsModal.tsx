@@ -3,6 +3,8 @@ import type { ExerciseResponse } from "../../services/exerciseService";
 import type { PlanResponse } from "../../services/trainingService";
 import AbsoluteWindowWrapper from "../ui/AbsoluteWindowWrapper";
 import { calculateAverageTrainingTime } from "../../utils/plansUtils";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router";
 
 interface TrainingPlanDetailsModalProps {
   onClose: () => void;
@@ -15,6 +17,13 @@ const TrainingPlanDetailsModal = ({
   plan,
   exercises,
 }: TrainingPlanDetailsModalProps) => {
+  const navigate = useNavigate();
+
+  const handleWorkoutStart = (trainingPlan: PlanResponse) => {
+    toast.success(`Starting workout: ${trainingPlan.name}`);
+    navigate("/workout?trainingPlanId=" + trainingPlan.id);
+  };
+
   return (
     <AbsoluteWindowWrapper isOpen={true} onClose={onClose}>
       <div className="flex items-center justify-between pl-6 pr-4 py-5 border-b border-gray-700/50 bg-[#1F2937] rounded-t-xl sticky top-0 z-20">
@@ -63,7 +72,7 @@ const TrainingPlanDetailsModal = ({
                     {planItem.defaultSets}
                   </span>
                   <span className="text-sm text-gray-400 font-medium uppercase tracking-wider">
-                    Sets
+                    {planItem.defaultSets === 1 ? "Set" : "Sets"}
                   </span>
                 </div>
               </div>
@@ -82,7 +91,10 @@ const TrainingPlanDetailsModal = ({
             {plan.planItems.length === 1 ? "exercise" : "exercises"}
           </span>
         </div>
-        <button className="bg-primary hover:bg-blue-600 active:scale-95 text-white text-sm font-bold py-2 px-6 rounded-lg transition-all shadow-lg shadow-primary/20 flex items-center gap-2 cursor-pointer">
+        <button
+          className="bg-primary hover:bg-blue-600 active:scale-95 text-white text-sm font-bold py-2 px-6 rounded-lg transition-all shadow-lg shadow-primary/20 flex items-center gap-2 cursor-pointer"
+          onClick={() => handleWorkoutStart(plan)}
+        >
           Start Workout
           <FaPlay size={18} />
         </button>

@@ -4,7 +4,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import type { AxiosError } from "axios";
+import { type AxiosError } from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import {
@@ -38,8 +38,7 @@ import AutoWorkoutTimer from "./AutoWorkoutTimer";
 import WorkoutDetails from "./modals/WorkoutDetailsModal";
 import WorkoutExerciseHistoryModal from "./modals/WorkoutExerciseHistoryModal";
 import RestTimer from "./RestTimer";
-import AbsoluteWindowWrapper from "./ui/AbsoluteWindowWrapper";
-import Button from "./ui/Button";
+import ConfirmationWindow from "./ui/ConfirmationWindow";
 import SelectOptionWindow from "./ui/SelectOptionWindow";
 
 interface WorkoutFormProps {
@@ -53,6 +52,8 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
   const [exerciseHistory, setExerciseHistory] =
     useState<PlanItemResponse | null>(null);
   const [isFinishedWorkoutWindowOpen, setIsFinishedWorkoutWindowOpen] =
+    useState<boolean>(false);
+  const [isCancelWorkoutWindowOpen, setIsCancelWorkoutWindowOpen] =
     useState<boolean>(false);
   const [replacingExerciseId, setReplacingExerciseId] = useState<number | null>(
     null
@@ -250,10 +251,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
           <div className="flex items-center gap-3">
             <button
               className="p-2 -ml-2 rounded-full hover:bg-white/5 text-gray-400 hover:text-white transition-colors cursor-pointer"
-              onClick={() => {
-                toast.success("Workout discarded");
-                navigate("/");
-              }}
+              onClick={() => setIsCancelWorkoutWindowOpen(true)}
             >
               <FaArrowLeft />
             </button>
@@ -551,46 +549,32 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
       )}
 
       {isFinishedWorkoutWindowOpen && (
-        <AbsoluteWindowWrapper
-          isOpen={true}
+        <ConfirmationWindow
+          onConfirm={handleFormSubmit}
           onClose={() => setIsFinishedWorkoutWindowOpen(false)}
-        >
-          <div>
-            <header className="flex justify-between items-center">
-              <p className="text-xl font-bold">Finish Workout</p>
-              <FaTimes
-                className="cursor-pointer hover:opacity-80"
-                onClick={() => setIsFinishedWorkoutWindowOpen(false)}
-              />
-            </header>
-            <section>
-              <p className="text-gray-400 text-center text-md my-4">
-                What would you like to do with this workout?
-              </p>
-              <div className="flex gap-2">
-                <Button
-                  btnStyle="danger"
-                  size="small"
-                  additionalStyle="rounded-lg w-full"
-                  onClick={() => {
-                    toast.success("Workout discarded");
-                    navigate("/");
-                  }}
-                >
-                  <span>Discard Workout</span>
-                </Button>
-                <Button
-                  btnStyle={"approve"}
-                  size={"small"}
-                  additionalStyle="rounded-lg w-full"
-                  onClick={handleFormSubmit}
-                >
-                  <span>Save Workout</span>
-                </Button>
-              </div>
-            </section>
-          </div>
-        </AbsoluteWindowWrapper>
+          confirmButtonText={"Finish Workout"}
+          cancelButtonText={"Keep Training"}
+          windowTitle={"Finish Workout?"}
+          windowDescription={
+            "All your work will be saved to your progress history"
+          }
+        />
+      )}
+
+      {isCancelWorkoutWindowOpen && (
+        <ConfirmationWindow
+          onConfirm={() => {
+            toast.success("Workout discarded");
+            navigate("/");
+          }}
+          onClose={() => setIsCancelWorkoutWindowOpen(false)}
+          confirmButtonText={"Confirm"}
+          cancelButtonText={"Keep Training"}
+          windowTitle={"Discard Workout?"}
+          windowDescription={
+            "All your progress will be lost. Are you sure you want to discard this workout?"
+          }
+        />
       )}
 
       {selectTimerEnabled && (

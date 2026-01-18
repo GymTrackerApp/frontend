@@ -1,7 +1,14 @@
+import clsx from "clsx";
 import { formatDate } from "date-fns";
-import { FaRegCalendar, FaUserCircle } from "react-icons/fa";
-import PageWrapper from "../components/ui/PageWrapper";
+import { useState } from "react";
+import {
+  FaBalanceScale,
+  FaMoon,
+  FaRegCalendar,
+  FaUserCircle,
+} from "react-icons/fa";
 import ProfileSectionLoading from "../components/ProfileSectionLoading";
+import PageWrapper from "../components/ui/PageWrapper";
 import { useUserProfile } from "../hooks/useUserProfile";
 
 const ProfileSettings = () => {
@@ -14,25 +21,32 @@ const ProfileSettings = () => {
   const showUserProfile =
     !!userProfile && !isUserProfileLoading && !isUserProfileError;
 
+  const [darkModeEnabled, setDarkModeEnabled] = useState<boolean>(true);
+  const [preferredWeightUnits, setPreferredWeightUnits] = useState<
+    "kg" | "lbs"
+  >("kg");
+
   return (
     <PageWrapper>
-      <div className="p-8 lg:p-12 lg:max-w-3/4 mx-auto space-y-10">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-4xl font-black tracking-tight text-gray-900 dark:text-white">
-            Account Settings
+      <div className="p-8 lg:p-12 mx-auto space-y-10">
+        <div className="text-center md:text-left">
+          <h1 className="text-3xl font-black tracking-tight text-gray-900 dark:text-white">
+            Settings
           </h1>
-          <p className="text-gray-500 dark:text-gray-400 text-lg">
-            Manage your account
+          <p className="text-gray-500 dark:text-gray-400 mt-1">
+            Keep your profile simple and your focus on the gym.
           </p>
         </div>
         <section className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold tracking-tight px-1">Profile</h2>
+            <h2 className="md:text-lg text-md font-bold tracking-tight px-1 text-gray-400 uppercase">
+              Account Information
+            </h2>
           </div>
           {!showUserProfile ? (
             <ProfileSectionLoading />
           ) : (
-            <div className="bg-white dark:bg-card-dark rounded-xl border border-gray-200 dark:border-border-dark p-6 overflow-hidden relative">
+            <div className="bg-white dark:bg-card-dark rounded-2xl border border-gray-200 dark:border-border-dark p-8 relative overflow-hidden">
               <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
                 <FaUserCircle className="w-32 h-32 rounded-2xl bg-cover bg-center shrink-0 shadow-2xl" />
                 <div className="flex-1 space-y-4 text-center md:text-left">
@@ -53,10 +67,10 @@ const ProfileSettings = () => {
                     </p>
                   </div>
                   <div className="w-full flex lg:flex-col lg:w-3/4 xl:w-1/2 gap-2">
-                    <button className="w-full bg-gray-100 dark:bg-border-dark hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white px-6 py-2 rounded-lg font-bold transition-colors cursor-pointer">
+                    <button className="bg-primary text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-blue-600 transition-colors shadow-lg shadow-primary/20 cursor-pointer">
                       Edit Profile Details
                     </button>
-                    <button className="w-full py-2 bg-primary/10 text-primary hover:bg-primary/20 font-bold rounded-lg transition-colors flex items-center justify-center gap-2 px-6 cursor-pointer">
+                    <button className="bg-gray-100 dark:bg-border-dark hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white px-6 py-2.5 rounded-xl font-bold text-sm transition-colors flex justify-center items-center gap-2 cursor-pointer">
                       Change Password
                     </button>
                   </div>
@@ -65,6 +79,79 @@ const ProfileSettings = () => {
               <div className="absolute -right-12 -top-12 size-48 bg-primary/5 rounded-full blur-3xl"></div>
             </div>
           )}
+        </section>
+        <section className="space-y-4">
+          <h2 className="md:text-lg font-bold tracking-tight px-1 text-gray-400 uppercase text-md">
+            App Preferences
+          </h2>
+          <div className="bg-white dark:bg-card-dark rounded-2xl border border-gray-200 dark:border-border-dark divide-y divide-gray-100 dark:divide-border-dark">
+            <div className="p-6 flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="p-2 bg-primary/10 rounded-lg">
+                  <FaMoon className="text-primary" />
+                </div>
+                <div>
+                  <p className="font-bold">Dark Mode</p>
+                  <p className="text-sm text-gray-500">
+                    Easier on the eyes in the gym.
+                  </p>
+                </div>
+              </div>
+              <button
+                className={clsx(
+                  "relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer",
+                  darkModeEnabled
+                    ? "bg-primary hover:bg-primary/80"
+                    : "bg-subcomponents-main hover:bg-subcomponents-main/80"
+                )}
+                onClick={() => setDarkModeEnabled(!darkModeEnabled)}
+              >
+                <span
+                  className={clsx(
+                    "inline-block h-4 w-4 transform rounded-full bg-white transition shadow-sm",
+                    darkModeEnabled ? "translate-x-6" : "translate-x-1"
+                  )}
+                ></span>
+              </button>
+            </div>
+            <div className="p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="p-2 bg-primary/10 rounded-lg">
+                  <FaBalanceScale className="text-primary" />
+                </div>
+                <div>
+                  <p className="font-bold">Weight Units</p>
+                  <p className="text-sm text-gray-500">
+                    Preferred measurement for your lifts.
+                  </p>
+                </div>
+              </div>
+              <div className="flex bg-gray-100 dark:bg-border-dark p-1 rounded-xl w-full md:w-32">
+                <button
+                  className={clsx(
+                    "flex-1 py-1.5 rounded-lg font-bold text-xs transition-all cursor-pointer",
+                    preferredWeightUnits === "kg"
+                      ? "bg-white dark:bg-card-dark text-primary shadow-sm"
+                      : "text-gray-400 dark:hover:text-white"
+                  )}
+                  onClick={() => setPreferredWeightUnits("kg")}
+                >
+                  KG
+                </button>
+                <button
+                  className={clsx(
+                    "flex-1 py-1.5 rounded-lg font-bold text-xs transition-all text-gray-400 cursor-pointer",
+                    preferredWeightUnits === "lbs"
+                      ? "bg-white dark:bg-gray-800 text-primary shadow-sm"
+                      : "text-gray-400 dark:hover:text-white"
+                  )}
+                  onClick={() => setPreferredWeightUnits("lbs")}
+                >
+                  LBS
+                </button>
+              </div>
+            </div>
+          </div>
         </section>
       </div>
     </PageWrapper>

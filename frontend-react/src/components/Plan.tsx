@@ -18,6 +18,7 @@ import type { ErrorResponse, GeneralResponse } from "../types/ApiResponse";
 import { calculateAverageTrainingTime } from "../utils/plansUtils";
 import PlanUpdateModal from "./modals/PlanUpdateModal";
 import TrainingPlanDetailsModal from "./modals/TrainingPlanDetailsModal";
+import ConfirmationWindow from "./ui/ConfirmationWindow";
 
 interface PlanProps {
   plan: PlanResponse;
@@ -30,6 +31,8 @@ const Plan = ({ plan, exercises, updatable, removable }: PlanProps) => {
   const queryClient = useQueryClient();
 
   const [isPlanExpanded, setIsPlanExpanded] = useState<boolean>(false);
+  const [isPlanRemovalWindowOpened, setIsPlanRemovalWindowOpened] =
+    useState<boolean>(false);
   const [updatePlan, setUpdatePlan] = useState<PlanResponse | null>(null);
 
   const planRemoveMutation = useMutation<
@@ -70,10 +73,7 @@ const Plan = ({ plan, exercises, updatable, removable }: PlanProps) => {
             {removable && (
               <button
                 className="opacity-0 group-hover:opacity-100 p-2 rounded-lg hover:bg-red-500/10 text-text-muted hover:text-red-400 transition-all cursor-pointer"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleRemovePlan();
-                }}
+                onClick={() => setIsPlanRemovalWindowOpened(true)}
               >
                 <FaTrashAlt size={16} />
               </button>
@@ -128,6 +128,21 @@ const Plan = ({ plan, exercises, updatable, removable }: PlanProps) => {
           exercises={exercises}
           plan={plan}
           onClose={() => setUpdatePlan(null)}
+        />
+      )}
+
+      {isPlanRemovalWindowOpened && (
+        <ConfirmationWindow
+          onConfirm={() => {
+            handleRemovePlan();
+          }}
+          onClose={() => setIsPlanRemovalWindowOpened(false)}
+          confirmButtonText={"Yes, Remove Plan"}
+          cancelButtonText={"No, Keep Plan"}
+          windowTitle={"Remove Training Plan"}
+          windowDescription={
+            "Are you sure you want to remove this training plan? This action cannot be undone."
+          }
         />
       )}
     </>
