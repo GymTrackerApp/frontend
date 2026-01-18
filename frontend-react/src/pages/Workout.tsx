@@ -6,6 +6,8 @@ import {
   type PlanResponse,
 } from "../services/trainingService";
 import type { ErrorResponse } from "../types/ApiResponse";
+import LoadingPage from "./LoadingPage";
+import ErrorPage from "./ErrorPage";
 
 const Workout = () => {
   const [searchParams] = useSearchParams();
@@ -24,11 +26,12 @@ const Workout = () => {
   return (
     <>
       {isError ? (
-        <p>Failed to fetch training plan.</p>
-      ) : isLoading ? (
-        <p>Loading training plan...</p>
-      ) : !plan ? (
-        <p>Failed to fetch training plan.</p>
+        <ErrorPage />
+      ) : isLoading || !plan ? (
+        <LoadingPage
+          title="Preparing your workout..."
+          description="Loading your personalized plan, please wait."
+        />
       ) : (
         <WorkoutForm key={JSON.stringify(plan)} plan={plan} />
       )}

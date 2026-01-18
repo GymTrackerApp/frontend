@@ -141,7 +141,10 @@ const PlanUpdateModal = ({ exercises, plan, onClose }: UpdatePlanProps) => {
       onClose={onClose}
     >
       {planForm.planItems.map((planItem) => (
-        <div className="group grid grid-cols-12 gap-4 px-5 py-4 bg-surface-dark items-center transition-colors hover:bg-surface-dark/80">
+        <div
+          key={planItem.exerciseId}
+          className="group grid grid-cols-12 gap-4 px-5 py-4 bg-surface-dark items-center transition-colors hover:bg-surface-dark/80"
+        >
           <div className="col-span-8 md:col-span-9 flex items-center gap-4">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-background-dark border border-surface-border text-primary">
               <FaDumbbell className="text-xl rotate-45" />

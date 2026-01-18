@@ -75,9 +75,13 @@ const MainPage = () => {
           </header>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <QuickStart
-              data={plans}
-              isLoading={plansLoading}
-              workoutsThisWeek={workoutsThisWeek?.length || 0}
+              plans={plans}
+              isPlansLoading={plansLoading}
+              workoutsThisWeek={
+                workoutsThisWeek ? workoutsThisWeek?.length : null
+              }
+              isWorkoutsThisWeekLoading={isWorkoutsThisWeekLoading}
+              isWorkoutsThisWeekError={isWorkoutsThisWeekError}
             />
             <QuickStats
               workoutsThisWeek={workoutsThisWeek}

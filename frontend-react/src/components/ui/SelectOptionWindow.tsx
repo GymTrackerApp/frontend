@@ -45,12 +45,12 @@ const SelectOptionWindow = <T,>({
       <div className="flex-1 overflow-y-auto scrollbar-none p-6 pt-2">
         <div className="grid grid-cols-1 gap-3">
           {isDataLoading ? (
-            <div className="bg-components-main my-1 px-2 py-1 rounded-md">
+            <div className="flex items-center justify-between p-4 bg-slate-800/40 rounded-xl border border-slate-700/30 text-left font-semibold">
               <p>Loading data...</p>
             </div>
           ) : !data || data.length === 0 ? (
-            <div className="bg-gray-700 my-1 px-2 py-1 rounded-md">
-              {emptyDataMessage || "No options available"}
+            <div className="flex items-center justify-between p-4 bg-slate-800/40 rounded-xl border border-slate-700/30 text-left font-semibold">
+              <p>{emptyDataMessage || "No options available"}</p>
             </div>
           ) : (
             <>

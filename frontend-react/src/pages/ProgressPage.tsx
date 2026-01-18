@@ -38,7 +38,7 @@ interface MetricOption {
 }
 
 const METRIC_OPTIONS: MetricOption[] = [
-  { label: "Total Training Volume", value: "training" },
+  { label: "Training Volume", value: "training" },
   { label: "Exercise Performance", value: "exercise" },
 ];
 
@@ -62,8 +62,11 @@ type WindowType = "metric" | "range" | "exercise" | "training" | null;
 const Progress = () => {
   const [selectedMetricType, setSelectedMetricType] =
     useState<MetricType>("exercise");
-  const [selectedExercise, setSelectedExercise] = useState<ExerciseResponse>();
-  const [selectedTraining, setSelectedTraining] = useState<PlanResponse>();
+  const [selectedExercise, setSelectedExercise] =
+    useState<ExerciseResponse | null>(null);
+  const [selectedTraining, setSelectedTraining] = useState<PlanResponse | null>(
+    null
+  );
   const [selectedDateRange, setSelectedDateRange] =
     useState<DateRangeType>("7d");
   const [activeWindow, setActiveWindow] = useState<WindowType>(null);
@@ -171,10 +174,22 @@ const Progress = () => {
   const showAnalysisPlaceholder =
     !selectedMetricType || isMetricSelectedWithoutResource();
 
+  const handleMetricChange = (newMetric: MetricType) => {
+    if (newMetric === selectedMetricType) return;
+
+    if (newMetric === "exercise") {
+      setSelectedTraining(null);
+    } else if (newMetric === "training") {
+      setSelectedExercise(null);
+    }
+
+    setSelectedMetricType(newMetric);
+  };
+
   return (
     <PageWrapper>
       <div className="w-full max-w-350 mx-auto p-6 md:p-8 lg:p-10 space-y-8">
-        <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+        <header className="flex flex-col xl:flex-row xl:items-end justify-between gap-6">
           <div className="space-y-2">
             <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
               Progress Analysis
@@ -185,40 +200,40 @@ const Progress = () => {
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-white dark:bg-surface-dark p-2 rounded-xl border border-gray-200 dark:border-border-dark shadow-sm">
-            <div className="flex justify-center w-full bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
+          <div className="flex gap-4 bg-white dark:bg-surface-dark px-2 py-2 rounded-xl border border-gray-200 dark:border-border-dark shadow-sm">
+            <div className="flex flex-col lg:flex-row flex-1 justify-center bg-gray-100 dark:bg-gray-800">
               {METRIC_OPTIONS.map((metricOption, index) => (
                 <button
                   key={index}
                   className={clsx(
-                    "px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 cursor-pointer",
+                    "w-full px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 cursor-pointer",
                     selectedMetricType === metricOption.value
                       ? "bg-white dark:bg-background-dark text-primary shadow-sm"
                       : "text-gray-500 dark:text-gray-400 dark:hover:text-gray-200"
                   )}
-                  onClick={() => setSelectedMetricType(metricOption.value)}
+                  onClick={() => handleMetricChange(metricOption.value)}
                 >
                   {metricOption.label}
                 </button>
               ))}
             </div>
 
-            <div className="h-8 w-px bg-gray-200 dark:bg-border-dark hidden sm:block"></div>
-            <hr className="xs:block sm:hidden h-px border-none dark:bg-border-dark w-full" />
+            <div className="h-14 lg:h-8 my-auto w-px bg-gray-200 dark:bg-border-dark"></div>
 
-            <div className="flex justify-center w-full">
+            <div className="flex flex-col lg:flex-row flex-1 justify-center">
               {selectedMetricType === "training" && (
                 <button
-                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-colors"
+                  className="w-full flex justify-center items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-colors cursor-pointer"
                   onClick={() => {
                     setActiveWindow("training");
                   }}
                 >
-                  <FaDumbbell size={20} className="text-gray-400 rotate-45" />
+                  <FaDumbbell
+                    size={20}
+                    className="hidden lg:block text-gray-400 rotate-45"
+                  />
                   <span>
-                    {selectedTraining
-                      ? selectedTraining.name
-                      : "Select Training Plan"}
+                    {selectedTraining ? selectedTraining.name : "Select Plan"}
                   </span>
                   <FaChevronDown size={16} className="text-gray-400" />
                 </button>
@@ -226,12 +241,15 @@ const Progress = () => {
 
               {selectedMetricType === "exercise" && (
                 <button
-                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-colors cursor-pointer"
+                  className="w-full flex justify-center items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-colors cursor-pointer"
                   onClick={() => {
                     setActiveWindow("exercise");
                   }}
                 >
-                  <FaDumbbell size={20} className="text-gray-400 rotate-45" />
+                  <FaDumbbell
+                    size={20}
+                    className="hidden lg:block text-gray-400 rotate-45"
+                  />
                   <span>
                     {selectedExercise
                       ? selectedExercise.name
@@ -242,12 +260,15 @@ const Progress = () => {
               )}
 
               <button
-                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-colors cursor-pointer"
+                className="w-full flex justify-center items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-colors cursor-pointer"
                 onClick={() => {
                   setActiveWindow("range");
                 }}
               >
-                <FaCalendar size={20} className="text-gray-400" />
+                <FaCalendar
+                  size={20}
+                  className="hidden lg:block text-gray-400"
+                />
                 <span>
                   {selectedDateRange
                     ? DATE_RANGE_OPTIONS.filter(
@@ -313,11 +334,21 @@ const Progress = () => {
 
               {selectedMetricType === "exercise" && selectedExercise ? (
                 isExerciseHistoryError ? (
-                  <p>Error when fetching exercise history</p>
+                  <div className="flex justify-center items-center w-full h-full">
+                    <p className="text-2xl text-gray-400">
+                      Error when fetching exercise history
+                    </p>
+                  </div>
                 ) : isExerciseHistoryLoading ? (
-                  <p>Loading exercise history...</p>
+                  <div className="flex justify-center items-center w-full h-full">
+                    <p className="text-2xl text-gray-400">
+                      Loading exercise history...
+                    </p>
+                  </div>
                 ) : !exerciseHistoryData ? (
-                  <p>No data available</p>
+                  <div className="flex justify-center items-center w-full h-full">
+                    <p className="text-2xl text-gray-400">No data available</p>
+                  </div>
                 ) : (
                   <ProgressChart
                     historyData={prepareChartData(exerciseHistoryData)}
@@ -326,11 +357,21 @@ const Progress = () => {
                 )
               ) : selectedMetricType === "training" && selectedTraining ? (
                 isTrainingHistoryError ? (
-                  <p>Error when fetching training history</p>
+                  <div className="flex justify-center items-center w-full h-full">
+                    <p className="text-2xl text-gray-400">
+                      Error when fetching training history
+                    </p>
+                  </div>
                 ) : isTrainingHistoryLoading ? (
-                  <p>Loading training history...</p>
+                  <div className="flex justify-center items-center w-full h-full">
+                    <p className="text-2xl text-gray-400">
+                      Loading training history...
+                    </p>
+                  </div>
                 ) : !trainingHistoryData ? (
-                  <p>No data available</p>
+                  <div className="flex justify-center items-center w-full h-full">
+                    <p className="text-2xl text-gray-400">No data available</p>
+                  </div>
                 ) : (
                   <ProgressChart
                     historyData={prepareChartData(trainingHistoryData) || []}

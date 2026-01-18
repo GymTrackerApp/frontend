@@ -332,7 +332,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
             lastWorkout.length === 0
           }
         >
-          {isLastWorkoutLoading ? "Loading..." : "Show Last Workout"}
+          Show Last Workout
         </button>
       </div>
 
@@ -418,7 +418,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                       }
 
                       return (
-                        <tr className="group/row">
+                        <tr key={setIndex} className="group/row">
                           <td className="pl-3 py-2">
                             <div className="w-8 h-8 rounded-full bg-[#1F2D42] text-gray-400 flex items-center justify-center text-sm font-bold font-mono">
                               {setIndex + 1}

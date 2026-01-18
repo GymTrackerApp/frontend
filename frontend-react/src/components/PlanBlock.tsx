@@ -47,8 +47,10 @@ const PlanBlock = ({ plan }: PlanBlockProps) => {
           <p className="text-xs text-gray-500 dark:text-gray-400">
             {isLastWorkoutLoading
               ? "Loading..."
-              : isLastWorkoutError || !lastWorkout || lastWorkout?.length === 0
-              ? "Never performed"
+              : isLastWorkoutError
+              ? "Could not load"
+              : !lastWorkout || lastWorkout?.length === 0
+              ? "Never perfomred"
               : `Last done: ${formatDistanceToNow(
                   lastWorkout[0].createdAt
                 )} ago`}

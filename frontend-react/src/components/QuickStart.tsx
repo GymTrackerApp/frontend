@@ -7,12 +7,20 @@ import TrainingPlanSelectionOption from "./TrainingPlanSelectionOption";
 import SelectOptionWindow from "./ui/SelectOptionWindow";
 
 interface QuickStartProps {
-  data: Array<PlanResponse>;
-  workoutsThisWeek: number;
-  isLoading: boolean;
+  plans: Array<PlanResponse>;
+  isPlansLoading: boolean;
+  workoutsThisWeek: number | null;
+  isWorkoutsThisWeekLoading: boolean;
+  isWorkoutsThisWeekError: boolean;
 }
 
-const QuickStart = ({ data, workoutsThisWeek, isLoading }: QuickStartProps) => {
+const QuickStart = ({
+  plans: data,
+  isPlansLoading: isLoading,
+  workoutsThisWeek,
+  isWorkoutsThisWeekLoading,
+  isWorkoutsThisWeekError,
+}: QuickStartProps) => {
   const [selectWorkoutEnabled, setSelectWorkoutEnabled] =
     useState<boolean>(false);
 
@@ -33,7 +41,11 @@ const QuickStart = ({ data, workoutsThisWeek, isLoading }: QuickStartProps) => {
               Ready to crush it?
             </h2>
             <p className="max-w-md text-gray-500 dark:text-gray-400">
-              {workoutsThisWeek > 0 ? (
+              {isWorkoutsThisWeekError ? (
+                <span>Failed to fetch workouts</span>
+              ) : isWorkoutsThisWeekLoading || !workoutsThisWeek ? (
+                <span>Loading workouts...</span>
+              ) : workoutsThisWeek > 0 ? (
                 <>
                   You've completed{" "}
                   <span className="text-primary font-bold">
@@ -68,7 +80,8 @@ const QuickStart = ({ data, workoutsThisWeek, isLoading }: QuickStartProps) => {
         <SelectOptionWindow
           title={"Select a Plan"}
           onClose={() => setSelectWorkoutEnabled(false)}
-          data={isLoading ? [] : data}
+          data={data}
+          isDataLoading={isLoading}
           dataFilter={(data, keyword) =>
             data.filter((plan) =>
               plan.name.toLowerCase().includes(keyword.toLowerCase())

@@ -24,7 +24,7 @@ const AnalysisPlaceholder = ({ type }: AnalysisPlaceholderProps) => {
           Choose{" "}
           {type === "exercise"
             ? "an exercise from the 'Select Exercise'"
-            : "a training from the 'Select Training Plan'"}{" "}
+            : "a training from the 'Select Plan'"}{" "}
           dropdown above to visualize your stats and training progress.
         </p>
       </div>

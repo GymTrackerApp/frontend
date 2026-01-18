@@ -10,7 +10,7 @@ const WorkoutLogLoading = () => {
       <td className="px-6 py-4">
         <div className="h-5 w-full bg-gray-200 dark:bg-gray-700 rounded"></div>
       </td>
-      <td className="px-6 py-4 text-right">
+      <td className="hidden px-6 py-4 text-center sm:block">
         <div className="inline-flex justify-center h-6 w-7/8 rounded bg-gray-200 dark:bg-gray-700"></div>
       </td>
     </tr>
