@@ -60,7 +60,7 @@ const Exercise = ({
           cancelButtonText={"No, Keep Exercise"}
           windowTitle={"Remove Exercise"}
           windowDescription={
-            "Are you sure you want to remove this exercise? This action cannot be undone."
+            "Are you sure you want to remove this exercise? This action may affect existing workout plans."
           }
         />
       )}

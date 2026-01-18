@@ -50,7 +50,7 @@ const PlanBlock = ({ plan }: PlanBlockProps) => {
               : isLastWorkoutError
               ? "Could not load"
               : !lastWorkout || lastWorkout?.length === 0
-              ? "Never perfomred"
+              ? "Never performed"
               : `Last done: ${formatDistanceToNow(
                   lastWorkout[0].createdAt
                 )} ago`}

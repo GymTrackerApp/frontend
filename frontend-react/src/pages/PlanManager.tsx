@@ -81,6 +81,7 @@ const PlanManager = () => {
     onSuccess: (response) => {
       toast.success(response.message);
       queryClient.invalidateQueries({ queryKey: ["userExercises"] });
+      queryClient.invalidateQueries({ queryKey: ["userPlans"] });
     },
     onError: (error) => {
       if (error.response) {
