@@ -26,7 +26,7 @@ const TrainingPlanDetailsModal = ({
 
   return (
     <AbsoluteWindowWrapper isOpen={true} onClose={onClose}>
-      <div className="flex items-center justify-between pl-6 pr-4 py-5 border-b border-gray-700/50 bg-[#1F2937] rounded-t-xl sticky top-0 z-20">
+      <div className="flex items-center justify-between pl-6 pr-4 py-5 border-b border-gray-700/50 rounded-t-xl sticky top-0 z-20">
         <div>
           <div className="flex items-center gap-3">
             <FaDumbbell size={20} className="text-primary rotate-45" />
@@ -42,7 +42,7 @@ const TrainingPlanDetailsModal = ({
           <FaTimes size={24} className="transition-transform duration-300" />
         </button>
       </div>
-      <div className="overflow-y-auto px-6 py-6 scrollbar-none bg-linear-to-b from-[#1F2937] to-[#1a232f] space-y-4">
+      <div className="overflow-y-auto px-6 py-6 scrollbar-none bg-linear-to-b space-y-4">
         {plan.planItems.map((planItem) => (
           <div
             key={planItem.exerciseId}
@@ -80,7 +80,7 @@ const TrainingPlanDetailsModal = ({
           </div>
         ))}
       </div>
-      <div className="px-6 py-4 border-t border-gray-700/50 flex justify-between items-center bg-[#1F2937] rounded-b-xl">
+      <div className="px-6 py-4 border-t border-gray-700/50 flex justify-between items-center rounded-b-xl">
         <div>
           <span className="text-md font-medium text-gray-500">
             ~{calculateAverageTrainingTime(plan)} minutes

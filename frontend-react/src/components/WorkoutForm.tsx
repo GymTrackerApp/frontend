@@ -10,12 +10,13 @@ import toast from "react-hot-toast";
 import {
   FaArrowLeft,
   FaCheck,
+  FaChevronRight,
   FaDumbbell,
+  FaEllipsisV,
   FaHistory,
   FaPlus,
   FaStopwatch,
   FaSync,
-  FaTimes,
   FaTrashAlt,
 } from "react-icons/fa";
 import { useNavigate } from "react-router";
@@ -35,11 +36,13 @@ import {
 import type { ErrorResponse, GeneralResponse } from "../types/ApiResponse";
 import { preventForbbidenInputNumberKeys } from "../utils/inputUtils";
 import AutoWorkoutTimer from "./AutoWorkoutTimer";
+import ExerciseSelectionOption from "./ExerciseSelectionOption";
 import WorkoutDetails from "./modals/WorkoutDetailsModal";
 import WorkoutExerciseHistoryModal from "./modals/WorkoutExerciseHistoryModal";
 import RestTimer from "./RestTimer";
 import ConfirmationWindow from "./ui/ConfirmationWindow";
 import SelectOptionWindow from "./ui/SelectOptionWindow";
+import { exercisesFilter } from "../utils/exerciseUtils";
 
 interface WorkoutFormProps {
   plan: PlanResponse;
@@ -49,6 +52,8 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+  const [planItemSelectedForDetails, setPlanItemSelectedForDetails] =
+    useState<PlanItemResponse | null>(null);
   const [exerciseHistory, setExerciseHistory] =
     useState<PlanItemResponse | null>(null);
   const [isFinishedWorkoutWindowOpen, setIsFinishedWorkoutWindowOpen] =
@@ -58,6 +63,8 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
   const [replacingExerciseId, setReplacingExerciseId] = useState<number | null>(
     null
   );
+  const [isAddExerciseWindowEnabled, setIsAddExerciseWindowEnabled] =
+    useState<boolean>(false);
   const [lastWorkoutEnabled, setLastWorkoutEnabled] = useState<boolean>(false);
   const [selectTimerEnabled, setSelectTimerEnabled] = useState<boolean>(false);
   const [selectedTimerOption, setSelectedTimerOption] = useState<number | null>(
@@ -238,14 +245,61 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
     }));
   };
 
+  const removeExercise = (exerciseId: number) => {
+    const updatedItems = workoutItems.filter(
+      (item) => item.exerciseId !== exerciseId
+    );
+
+    setWorkoutItems(updatedItems);
+
+    setWorkoutCreationRequest((prev) => ({
+      ...prev,
+      workoutItems: prev.workoutItems.filter(
+        (workoutItem) => workoutItem.exerciseId !== exerciseId
+      ),
+    }));
+  };
+
+  const addExercise = (exercise: ExerciseResponse) => {
+    if (workoutItems.some((item) => item.exerciseId === exercise.exerciseId)) {
+      toast.error("Exercise already exists in the plan");
+      return;
+    }
+
+    const updatedItems = [
+      ...workoutItems,
+      {
+        exerciseId: exercise.exerciseId,
+        exerciseName: exercise.name,
+        defaultSets: 1,
+      },
+    ];
+
+    setWorkoutItems(updatedItems);
+
+    setWorkoutCreationRequest((prev) => ({
+      ...prev,
+      workoutItems: [
+        ...prev.workoutItems,
+        {
+          exerciseId: exercise.exerciseId,
+          type: "REPS",
+          sets: [{ reps: 0, weight: 0 }],
+        },
+      ],
+    }));
+  };
+
   const handleFormSubmit = () => {
     if (workoutMutation.isPending) return;
+
+    console.log(workoutCreationRequest);
 
     workoutMutation.mutate(workoutCreationRequest);
   };
 
   return (
-    <div className="bg-background-dark text-white font-display antialiased overflow-x-hidden min-h-screen flex flex-col relative selection:bg-primary/30">
+    <div className="bg-background-dark text-white font-display antialiased overflow-x-hidden min-h-screen flex flex-col relative selection:bg-primary/30 pb-8">
       <header className="sticky top-0 z-50 w-full backdrop-blur-xl bg-background-dark/90 border-b border-input-dark">
         <div className="max-w-7xl mx-auto px-4 md:px-6 h-20 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
@@ -336,7 +390,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
         </button>
       </div>
 
-      <main className="flex-1 w-full max-w-5xl mx-auto px-4 md:px-6 py-8 pb-32">
+      <main className="flex-1 w-full max-w-5xl mx-auto px-4 md:px-6 py-8 pb-8">
         <div className="grid grid-cols-1 gap-8">
           {workoutItems.map((planItem, exerciseIndex) => (
             <article
@@ -362,29 +416,12 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-1">
-                  <button
-                    className="h-9 w-9 flex items-center justify-center rounded-lg hover:bg-white/5 text-primary hover:text-primary/80 transition-colors cursor-pointer"
-                    title="View History"
-                    onClick={() => setExerciseHistory(planItem)}
-                  >
-                    <FaHistory size={20} />
-                  </button>
-                  <button
-                    className="p-2 rounded-lg hover:bg-white/5 hover:text-text-muted/80 text-text-muted transition-all cursor-pointer"
-                    title="View History"
-                    onClick={() => setReplacingExerciseId(planItem.exerciseId)}
-                  >
-                    <FaSync size={20} />
-                  </button>
-
-                  <button
-                    className="p-2 rounded-lg hover:bg-red-500/10 text-text-muted hover:text-red-400 transition-all cursor-pointer"
-                    onClick={() => {}}
-                  >
-                    <FaTrashAlt size={20} />
-                  </button>
-                </div>
+                <button
+                  className="p-2 rounded-lg hover:bg-white/5 hover:text-text-muted/80 text-text-muted transition-all cursor-pointer"
+                  onClick={() => setPlanItemSelectedForDetails(planItem)}
+                >
+                  <FaEllipsisV size={20} />
+                </button>
               </div>
               <div className="p-2 md:p-4">
                 <table className="w-full border-collapse">
@@ -426,7 +463,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                           </td>
                           <td className="px-2 py-2">
                             <input
-                              className="w-full h-12 bg-input-dark border border-border-dark focus:border-primary focus:ring-1 focus:ring-primary rounded-lg text-center text-white font-bold text-lg placeholder-gray-600 transition-all no-spinner"
+                              className="w-full h-12 bg-input-dark border border-border-dark focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none rounded-lg text-center text-white font-bold text-lg placeholder-gray-600 transition-all no-spinner"
                               type="number"
                               step="any"
                               inputMode="decimal"
@@ -454,7 +491,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                           </td>
                           <td className="px-2 py-2">
                             <input
-                              className="w-full h-12 bg-input-dark border border-border-dark focus:border-primary focus:ring-1 focus:ring-primary rounded-lg text-center text-white font-bold text-lg placeholder-gray-600 transition-all no-spinner"
+                              className="w-full h-12 bg-input-dark border border-border-dark focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none rounded-lg text-center text-white font-bold text-lg placeholder-gray-600 transition-all no-spinner"
                               type="number"
                               placeholder={String(repsPlaceholder)}
                               step="1"
@@ -485,13 +522,14 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                             />
                           </td>
                           <td className="pr-3 py-2 text-center">
-                            <FaTimes
-                              className="inline w-8 h-8 cursor-pointer transition-all duration-200 ease-out transform active:scale-90"
-                              color="red"
+                            <button
+                              className="p-2 rounded-lg hover:bg-red-500/10 text-text-muted hover:text-red-400 transition-all cursor-pointer"
                               onClick={() =>
                                 removeSetFromExercise(exerciseIndex, setIndex)
                               }
-                            />
+                            >
+                              <FaTrashAlt size={20} />
+                            </button>
                           </td>
                         </tr>
                       );
@@ -512,6 +550,16 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
           ))}
         </div>
       </main>
+
+      <footer className="w-full px-4 md:px-6 relative pointer-events-auto">
+        <button
+          className="h-14 px-8 rounded-2xl bg-primary hover:bg-blue-600 text-white shadow-lg shadow-primary/25 border border-white/10 flex justify-center items-center gap-3 transition-all hover:scale-105 active:scale-95 cursor-pointer mx-auto"
+          onClick={() => setIsAddExerciseWindowEnabled(true)}
+        >
+          <FaPlus />
+          <span className="font-bold text-lg tracking-wide">Add Exercise</span>
+        </button>
+      </footer>
 
       {lastWorkoutEnabled && lastWorkout && lastWorkout.length > 0 && (
         <WorkoutDetails
@@ -535,9 +583,23 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
             setReplacingExerciseId(null);
           }}
           renderItem={(exercise) => (
-            <p key={exercise.exerciseId}>{exercise.name}</p>
+            <ExerciseSelectionOption exercise={exercise} />
           )}
           isDataLoading={isExercisesLoading}
+        />
+      )}
+
+      {isAddExerciseWindowEnabled && (
+        <SelectOptionWindow
+          title={"Add Exercise"}
+          onClose={() => setIsAddExerciseWindowEnabled(false)}
+          data={exercises}
+          dataFilter={exercisesFilter}
+          isDataLoading={isExercisesLoading}
+          onSelect={(exercise) => addExercise(exercise)}
+          renderItem={(exercise) => (
+            <ExerciseSelectionOption exercise={exercise} />
+          )}
         />
       )}
 
@@ -591,9 +653,9 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
           }}
           renderItem={(timerOption) =>
             timerOption.value === -1 ? (
-              <div className="flex items-center">
+              <div className="group w-full flex justify-between items-center">
                 <input
-                  className="w-full no-spinner outline-none"
+                  className="w-full no-spinner outline-none font-semibold"
                   type="number"
                   min={1}
                   placeholder={timerOption.label}
@@ -601,27 +663,92 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                   onChange={(e) => {
                     setSelectedCustomRestTime(Number(e.target.value));
                   }}
-                  onKeyDown={preventForbbidenInputNumberKeys}
-                />
-                <FaCheck
-                  size={20}
-                  className="cursor-pointer hover:opacity-80 transition-colors"
-                  onClick={() => {
-                    if (
-                      selectedCustomRestTime == null ||
-                      selectedCustomRestTime < 1
-                    )
-                      return;
-                    setSelectTimerEnabled(false);
-                    setSelectedTimerOption(selectedCustomRestTime);
-                    setSelectedCustomRestTime(null);
+                  onKeyDown={(e) => {
+                    preventForbbidenInputNumberKeys(e);
+                    if (e.key === "Enter") {
+                      if (
+                        selectedCustomRestTime == null ||
+                        selectedCustomRestTime < 1 ||
+                        selectedCustomRestTime > 3600
+                      ) {
+                        toast.error(
+                          "Custom time must be between 1 and 3600 sec"
+                        );
+                        return;
+                      }
+                      setSelectTimerEnabled(false);
+                      setSelectedTimerOption(selectedCustomRestTime);
+                      setSelectedCustomRestTime(null);
+                    }
                   }}
                 />
+                <div className="cursor-pointer hover:bg-slate-700 p-1 rounded-md transition-color group-hover:text-primary">
+                  <FaCheck
+                    size={20}
+                    onClick={() => {
+                      if (
+                        selectedCustomRestTime == null ||
+                        selectedCustomRestTime < 1 ||
+                        selectedCustomRestTime > 3600
+                      ) {
+                        toast.error(
+                          "Custom time must be between 1 and 3600 sec"
+                        );
+                        return;
+                      }
+                      setSelectTimerEnabled(false);
+                      setSelectedTimerOption(selectedCustomRestTime);
+                      setSelectedCustomRestTime(null);
+                    }}
+                  />
+                </div>
               </div>
             ) : (
-              <p key={timerOption.value}>{timerOption.label}</p>
+              <div className="group w-full flex justify-between items-center">
+                <p
+                  className="font-semibold group-hover:text-primary"
+                  key={timerOption.value}
+                >
+                  {timerOption.label}
+                </p>
+                <FaChevronRight className="group-hover:text-primary group-hover:translate-x-1 transition-all" />
+              </div>
             )
           }
+        />
+      )}
+
+      {planItemSelectedForDetails && (
+        <SelectOptionWindow
+          title={"Workout Exercise Options"}
+          onClose={() => setPlanItemSelectedForDetails(null)}
+          data={["View History", "Replace", "Delete"]}
+          onSelect={(item) => {
+            if (item === "View History") {
+              setExerciseHistory(planItemSelectedForDetails);
+            } else if (item === "Replace") {
+              setReplacingExerciseId(planItemSelectedForDetails.exerciseId);
+            } else if (item === "Delete") {
+              removeExercise(planItemSelectedForDetails.exerciseId);
+              toast.success("Exercise removed from workout");
+            }
+            setPlanItemSelectedForDetails(null);
+          }}
+          renderItem={(item) => (
+            <div className="group flex justify-between items-center w-full">
+              <div className="flex items-center gap-4">
+                <div className="size-12 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform bg-blue-500/10 text-blue-400">
+                  {item === "View History" && <FaHistory />}
+                  {item === "Replace" && <FaSync />}
+                  {item === "Delete" && <FaTrashAlt />}
+                </div>
+                <span className="group-hover:text-primary font-semibold">
+                  {item}
+                </span>
+              </div>
+              <FaChevronRight className="group-hover:translate-x-1 group-hover:text-primary transition-all" />
+            </div>
+          )}
         />
       )}
     </div>

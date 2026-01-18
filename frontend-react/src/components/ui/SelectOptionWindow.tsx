@@ -28,7 +28,7 @@ const SelectOptionWindow = <T,>({
 
   return (
     <AbsoluteWindowWrapper isOpen={true} onClose={onClose}>
-      <div className="px-6 pt-6 pb-4 flex items-center justify-between">
+      <div className="px-6 pt-6 pb-3 flex items-center justify-between">
         <h2 className="text-xl font-bold text-white tracking-tight">{title}</h2>
         <button
           className="p-2 hover:bg-surface-dark rounded-full transition-colors group cursor-pointer"

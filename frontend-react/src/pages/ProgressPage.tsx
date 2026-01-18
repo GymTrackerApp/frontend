@@ -299,32 +299,32 @@ const Progress = () => {
                 {selectedMetricType === "training" && trainingHistoryData ? (
                   selectedTraining ? (
                     <div className="flex items-baseline gap-3 mt-1">
-                      <span className="text-4xl font-bold text-gray-900 dark:text-white">
-                        {findMaxVolume(trainingHistoryData)}
-                      </span>
-                      <span className="text-lg font-medium text-gray-400 dark:text-gray-500">
-                        kg (highest volume)
-                      </span>
+                      {trainingHistoryData.history.length > 0 && (
+                        <>
+                          <span className="text-3xl font-bold text-gray-900 dark:text-white">
+                            {findMaxVolume(trainingHistoryData)}
+                          </span>
+                          <span className="text-lg font-medium text-gray-400 dark:text-gray-500">
+                            kg (highest volume)
+                          </span>
+                        </>
+                      )}
                     </div>
-                  ) : (
-                    <span className="text-sm font-medium text-gray-400 dark:text-gray-500">
-                      Waiting for input...
-                    </span>
-                  )
+                  ) : null
                 ) : selectedExercise && exerciseHistoryData ? (
                   <div className="flex items-baseline gap-3 mt-1">
-                    <span className="text-4xl font-bold text-gray-900 dark:text-white">
-                      {findMaxLift(exerciseHistoryData)}
-                    </span>
-                    <span className="text-lg font-medium text-gray-400 dark:text-gray-500">
-                      kg (highest lift)
-                    </span>
+                    {exerciseHistoryData.history.length > 0 && (
+                      <>
+                        <span className="text-3xl font-bold text-gray-900 dark:text-white">
+                          {findMaxLift(exerciseHistoryData)}
+                        </span>
+                        <span className="text-lg font-medium text-gray-400 dark:text-gray-500">
+                          kg (highest lift)
+                        </span>
+                      </>
+                    )}
                   </div>
-                ) : (
-                  <span className="text-sm font-medium text-gray-400 dark:text-gray-500">
-                    Waiting for input...
-                  </span>
-                )}
+                ) : null}
               </div>
             </div>
             <div className="flex-1 w-full relative z-10">

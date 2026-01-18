@@ -1,8 +1,10 @@
+import { Fragment } from "react/jsx-runtime";
+
 const WorkoutExerciseHistoryLoading = () => {
   return (
     <>
-      {[1, 2, 3].map(() => (
-        <>
+      {[1, 2, 3].map((item) => (
+        <Fragment key={item}>
           <div className="flex flex-col items-center pt-2 animate-skeleton">
             <div className="flex items-center justify-center w-3 h-3 rounded-full bg-gray-700 mt-5 z-10 ring-4 ring-[#1F2937]"></div>
           </div>
@@ -30,7 +32,7 @@ const WorkoutExerciseHistoryLoading = () => {
               ))}
             </div>
           </div>
-        </>
+        </Fragment>
       ))}
     </>
   );

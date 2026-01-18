@@ -32,7 +32,7 @@ const WorkoutExerciseHistoryModal = ({
   return (
     <AbsoluteWindowWrapper isOpen={true} onClose={onClose}>
       <div className="w-full mx-auto my-auto">
-        <div className="flex items-center justify-between pl-6 pr-4 py-5 border-b border-gray-700/50 bg-[#1F2937] rounded-t-xl sticky top-0 z-20">
+        <div className="flex items-center justify-between pl-6 pr-4 py-5 border-b border-gray-700/50 rounded-t-xl sticky top-0 z-20">
           <div>
             <div className="flex items-center gap-2">
               <FaHistory size={20} className="text-primary " />
@@ -52,10 +52,8 @@ const WorkoutExerciseHistoryModal = ({
           </button>
         </div>
 
-        <div className="overflow-y-auto px-6 py-2 custom-scrollbar bg-linear-to-b from-[#1F2937] to-[#1a232f]">
+        <div className="overflow-y-auto px-6 py-2 custom-scrollbar bg-linear-to-b ">
           <div className="grid grid-cols-[40px_1fr] gap-x-3 relative min-h-30">
-            <div className="absolute left-4.75 top-8 bottom-8 w-0.5 bg-gray-700/40 -z-10"></div>
-
             {isLoading || !data ? (
               <WorkoutExerciseHistoryLoading />
             ) : isError ? (
@@ -64,11 +62,17 @@ const WorkoutExerciseHistoryModal = ({
                   Failed to fetch history
                 </span>
               </div>
+            ) : data.history.length === 0 ? (
+              <div className="flex justify-center items-center col-span-3">
+                <span className="text-lg text-gray-400">
+                  There is no history for this exercise yet
+                </span>
+              </div>
             ) : (
               data.history.map((workoutSessionSnapshot, index) => (
                 <Fragment key={index}>
                   <div className="flex flex-col items-center pt-2">
-                    <div className="flex items-center justify-center w-3 h-3 rounded-full bg-gray-600 mt-5 z-10 ring-4 ring-[#1F2937]"></div>
+                    <div className="flex items-center justify-center w-3 h-3 rounded-full bg-gray-700 mt-5 z-10 ring-4 ring-gray-800"></div>
                   </div>
                   <div className="flex flex-col py-5 pl-2 border-t border-gray-700/30 group hover:bg-gray-800/20 rounded-lg transition-colors px-2 -mx-2">
                     <div className="flex justify-between items-baseline mb-3">

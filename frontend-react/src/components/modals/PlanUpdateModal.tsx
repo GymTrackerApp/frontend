@@ -212,9 +212,9 @@ const PlanUpdateModal = ({ exercises, plan, onClose }: UpdatePlanProps) => {
               </button>
             </div>
           </div>
-          <div className="col-span-1 flex justify-end">
+          <div className="col-span-1 flex justify-center">
             <button
-              className="opacity-0 group-hover:opacity-100 p-2 rounded-lg hover:bg-red-500/10 text-text-muted hover:text-red-400 transition-all cursor-pointer"
+              className="opacity-0 group-hover:opacity-100 p-0 md:p-2 rounded-lg hover:bg-red-500/10 text-text-muted hover:text-red-400 transition-all cursor-pointer"
               onClick={(e) => {
                 e.preventDefault();
                 setPlanForm({
@@ -227,7 +227,7 @@ const PlanUpdateModal = ({ exercises, plan, onClose }: UpdatePlanProps) => {
                 });
               }}
             >
-              <FaTrashAlt className="text-xl" />
+              <FaTrashAlt className="text-sm md:text-lg" />
             </button>
           </div>
         </div>

@@ -4,12 +4,13 @@ import {
   FaListAlt,
   FaPlusCircle,
   FaSave,
-  FaTimes
+  FaTimes,
 } from "react-icons/fa";
 import type { ExerciseResponse } from "../../services/exerciseService";
 import ExerciseSelectionOption from "../ExerciseSelectionOption";
 import AbsoluteWindowWrapper from "../ui/AbsoluteWindowWrapper";
 import SelectOptionWindow from "../ui/SelectOptionWindow";
+import { exercisesFilter } from "../../utils/exerciseUtils";
 
 interface PlanActionModalProps {
   exercises: Array<ExerciseResponse>;
@@ -36,7 +37,7 @@ const PlanActionModal = ({
 
   return (
     <AbsoluteWindowWrapper isOpen={true} onClose={onClose}>
-      <header className="flex-none flex items-center justify-between border-b border-surface-border bg-background-dark/95 backdrop-blur-md px-6 py-4 z-20">
+      <header className="flex-none flex items-center justify-between border-b border-surface-border px-6 py-4 z-20">
         <div className="flex items-center gap-3">
           <div className="size-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
             <FaEdit className="text-lg" />
@@ -46,7 +47,7 @@ const PlanActionModal = ({
           </h2>
         </div>
         <button
-          className="group flex size-9 cursor-pointer items-center justify-center rounded-full bg-surface-dark hover:bg-surface-border text-text-muted hover:text-white transition-colors"
+          className="group flex size-9 cursor-pointer items-center justify-center rounded-full hover:bg-surface-border text-text-muted hover:text-white transition-colors"
           onClick={onClose}
         >
           <FaTimes size={18} />
@@ -73,8 +74,10 @@ const PlanActionModal = ({
               </div>
               <div className="flex flex-col gap-px bg-surface-border/30 rounded-xl overflow-hidden border border-surface-border">
                 <div className="grid grid-cols-12 gap-4 px-5 py-3 bg-surface-dark/50 text-[10px] font-bold text-text-muted uppercase tracking-widest border-b border-surface-border">
-                  <div className="col-span-8 md:col-span-9">Exercise</div>
-                  <div className="col-span-3 md:col-span-2 text-center">
+                  <div className="col-span-8 md:col-span-9 my-auto">
+                    Exercise
+                  </div>
+                  <div className="col-span-3 md:col-span-2 text-center my-auto">
                     Default Sets
                   </div>
                   <div className="col-span-1"></div>
@@ -122,11 +125,7 @@ const PlanActionModal = ({
             <ExerciseSelectionOption exercise={exercise} />
           )}
           onSelect={handleSelectExercise}
-          dataFilter={(data, keyword) =>
-            data.filter((exercise) =>
-              exercise.name.toLowerCase().includes(keyword.toLowerCase())
-            )
-          }
+          dataFilter={exercisesFilter}
         />
       )}
     </AbsoluteWindowWrapper>

@@ -28,7 +28,7 @@ const ExerciseActionModal = ({
           </h2>
         </div>
         <button
-          className="group flex size-9 cursor-pointer items-center justify-center rounded-full bg-surface-dark hover:bg-surface-border text-text-muted hover:text-white transition-colors"
+          className="group flex size-9 cursor-pointer items-center justify-center rounded-full hover:bg-surface-border text-text-muted hover:text-white transition-colors"
           onClick={onClose}
         >
           <FaTimes />
