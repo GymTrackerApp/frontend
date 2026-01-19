@@ -1,4 +1,4 @@
-export const preventForbbidenInputNumberKeys = (
+export const preventForbiddenInputNumberKeys = (
   e: React.KeyboardEvent<HTMLInputElement>
 ) => {
   const forbiddenKeys = ["e", "E", "-", "+"];

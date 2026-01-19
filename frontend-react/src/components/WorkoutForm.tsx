@@ -19,7 +19,7 @@ import {
   FaSync,
   FaTrashAlt,
 } from "react-icons/fa";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { useAvailableExercises } from "../hooks/useWorkoutFlow";
 import type { ExerciseResponse } from "../services/exerciseService";
 import type {
@@ -34,7 +34,7 @@ import {
   type WorkoutCreationRequest,
 } from "../services/workoutService";
 import type { ErrorResponse, GeneralResponse } from "../types/ApiResponse";
-import { preventForbbidenInputNumberKeys } from "../utils/inputUtils";
+import { preventForbiddenInputNumberKeys } from "../utils/inputUtils";
 import AutoWorkoutTimer from "./AutoWorkoutTimer";
 import ExerciseSelectionOption from "./ExerciseSelectionOption";
 import WorkoutDetails from "./modals/WorkoutDetailsModal";
@@ -262,7 +262,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
 
   const addExercise = (exercise: ExerciseResponse) => {
     if (workoutItems.some((item) => item.exerciseId === exercise.exerciseId)) {
-      toast.error("Exercise already exists in the plan");
+      toast.error("Exercise already exists in the workout");
       return;
     }
 
@@ -292,8 +292,6 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
 
   const handleFormSubmit = () => {
     if (workoutMutation.isPending) return;
-
-    console.log(workoutCreationRequest);
 
     workoutMutation.mutate(workoutCreationRequest);
   };
@@ -394,7 +392,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
         <div className="grid grid-cols-1 gap-8">
           {workoutItems.map((planItem, exerciseIndex) => (
             <article
-              key={exerciseIndex}
+              key={planItem.exerciseId}
               className="flex flex-col bg-card-dark rounded-2xl border border-border-dark overflow-hidden shadow-xl shadow-black/20 group hover:border-primary/30 transition-colors duration-300"
             >
               <div className="flex items-center justify-between p-5 border-b border-border-dark bg-[#1A2436]">
@@ -478,7 +476,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                                       exerciseIndex
                                     ].sets[setIndex].weight
                               }
-                              onKeyDown={preventForbbidenInputNumberKeys}
+                              onKeyDown={preventForbiddenInputNumberKeys}
                               onChange={(e) =>
                                 handleUpdate(
                                   exerciseIndex,
@@ -514,7 +512,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                                 )
                               }
                               onKeyDown={(e) => {
-                                preventForbbidenInputNumberKeys(e);
+                                preventForbiddenInputNumberKeys(e);
                                 if (e.key === "." || e.key === ",") {
                                   e.preventDefault();
                                 }
@@ -664,7 +662,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                     setSelectedCustomRestTime(Number(e.target.value));
                   }}
                   onKeyDown={(e) => {
-                    preventForbbidenInputNumberKeys(e);
+                    preventForbiddenInputNumberKeys(e);
                     if (e.key === "Enter") {
                       if (
                         selectedCustomRestTime == null ||

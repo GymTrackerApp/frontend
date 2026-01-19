@@ -4,7 +4,7 @@ import type { PlanResponse } from "../../services/trainingService";
 import AbsoluteWindowWrapper from "../ui/AbsoluteWindowWrapper";
 import { calculateAverageTrainingTime } from "../../utils/plansUtils";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 interface TrainingPlanDetailsModalProps {
   onClose: () => void;

@@ -20,7 +20,7 @@ const AnalysisPlaceholder = ({ type }: AnalysisPlaceholderProps) => {
         <h4 className="text-2xl font-bold text-gray-900 dark:text-white">
           Start your analysis
         </h4>
-        <p className="text-gray-500 dark:text-text-secondary">
+        <p className="text-gray-500 dark:text-gray-400">
           Choose{" "}
           {type === "exercise"
             ? "an exercise from the 'Select Exercise'"

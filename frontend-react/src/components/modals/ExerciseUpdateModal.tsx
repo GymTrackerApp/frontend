@@ -109,6 +109,7 @@ const ExerciseUpdateModal = ({ onClose, exercise }: ExerciseUpdateProps) => {
               Exercise Category
             </label>
             <button
+              type="button"
               className="w-full flex justify-between items-center bg-surface-dark border border-surface-border rounded-xl px-4 py-3 text-white focus:ring-1 focus:ring-primary focus:border-primary transition-all cursor-pointer"
               onClick={(e) => {
                 e.preventDefault();

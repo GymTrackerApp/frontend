@@ -54,16 +54,16 @@ const WorkoutExerciseHistoryModal = ({
 
         <div className="overflow-y-auto px-6 py-2 custom-scrollbar bg-linear-to-b ">
           <div className="grid grid-cols-[40px_1fr] gap-x-3 relative min-h-30">
-            {isLoading || !data ? (
-              <WorkoutExerciseHistoryLoading />
-            ) : isError ? (
-              <div className="flex justify-center items-center col-span-3">
+            {isError ? (
+              <div className="flex justify-center items-center col-span-2">
                 <span className="text-lg text-gray-400">
                   Failed to fetch history
                 </span>
               </div>
-            ) : data.history.length === 0 ? (
-              <div className="flex justify-center items-center col-span-3">
+            ) : isLoading ? (
+              <WorkoutExerciseHistoryLoading />
+            ) : !data || data.history.length === 0 ? (
+              <div className="flex justify-center items-center col-span-2">
                 <span className="text-lg text-gray-400">
                   There is no history for this exercise yet
                 </span>

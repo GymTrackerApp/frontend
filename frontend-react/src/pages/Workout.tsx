@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "react-router";
+import { useSearchParams } from "react-router-dom";
 import WorkoutForm from "../components/WorkoutForm";
 import {
   getTrainingPlanById,
@@ -25,7 +25,7 @@ const Workout = () => {
 
   return (
     <>
-      {isError ? (
+      {!trainingPlanId || isError ? (
         <ErrorPage />
       ) : isLoading || !plan ? (
         <LoadingPage

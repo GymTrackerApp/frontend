@@ -38,12 +38,14 @@ const ConfirmationWindow = ({
           </p>
           <div className="flex flex-col w-full gap-3">
             <button
+              type="button"
               className="flex w-full cursor-pointer items-center justify-center rounded-lg h-14 px-5 bg-primary hover:bg-primary/90 text-white text-base font-bold leading-normal tracking-wide transition-all shadow-lg shadow-primary/20"
               onClick={onConfirm}
             >
               <span className="truncate">{confirmButtonText}</span>
             </button>
             <button
+              type="button"
               className="flex w-full cursor-pointer items-center justify-center rounded-lg h-14 px-5 bg-transparent hover:bg-slate-100 dark:hover:bg-zinc-800 text-slate-600 dark:text-zinc-300 text-base font-semibold leading-normal tracking-wide transition-all border border-slate-200 dark:border-zinc-700"
               onClick={onClose}
             >

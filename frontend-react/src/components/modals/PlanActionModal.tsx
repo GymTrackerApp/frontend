@@ -55,11 +55,8 @@ const PlanActionModal = ({
       </header>
 
       <form
-        className="h-screen overflow-hidden flex flex-col"
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmit();
-        }}
+        className="h-full overflow-hidden flex flex-col"
+        onSubmit={handleSubmit}
       >
         <div className="flex-1 overflow-y-auto scrollbar-none px-4 py-8 md:px-0">
           <div className="mx-auto max-w-2xl px-6 py-12 flex flex-col gap-10">
@@ -101,6 +98,7 @@ const PlanActionModal = ({
           <div className="mx-auto max-w-2xl flex items-center justify-between">
             <button
               className="px-4 py-2 text-sm font-medium text-text-muted hover:text-white transition-colors cursor-pointer"
+              type="button"
               onClick={onClose}
             >
               Cancel
@@ -120,7 +118,7 @@ const PlanActionModal = ({
         <SelectOptionWindow
           title={"Select Exercise"}
           onClose={() => setAddExerciseEnabled(false)}
-          data={exercises.sort((a) => (a.isCustom ? -1 : 1))}
+          data={exercises}
           renderItem={(exercise) => (
             <ExerciseSelectionOption exercise={exercise} />
           )}

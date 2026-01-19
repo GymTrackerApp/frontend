@@ -9,9 +9,9 @@ import {
   FaListAlt,
   FaSignOutAlt,
   FaThLarge,
-  FaUserCircle
+  FaUserCircle,
 } from "react-icons/fa";
-import { NavLink, useNavigate } from "react-router";
+import { NavLink, useNavigate } from "react-router-dom";
 import { signOut } from "../services/authService";
 import type { ErrorResponse, GeneralResponse } from "../types/ApiResponse";
 
@@ -58,6 +58,8 @@ const Sidebar = ({ username, isOpen }: SidebarProps) => {
     const refreshToken = localStorage.getItem("refreshToken");
 
     if (!refreshToken) {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
       toast.error("User is not logged in");
       navigate("/register-login", { replace: true });
       return;
@@ -84,7 +86,7 @@ const Sidebar = ({ username, isOpen }: SidebarProps) => {
             <FaDumbbell className="w-7 h-7 rotate-45" />
           </div>
           <div className="flex flex-col">
-            <h1 className="text-lg font-bold tracking-tight text-white">
+            <h1 className="text-lg font-bold tracking-tight text-gray-900 dark:text-white">
               Gym Tracker
             </h1>
           </div>

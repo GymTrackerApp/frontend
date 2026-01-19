@@ -1,7 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { FaPlay } from "react-icons/fa";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { type PlanResponse } from "../services/trainingService";
 import TrainingPlanSelectionOption from "./TrainingPlanSelectionOption";
 import SelectOptionWindow from "./ui/SelectOptionWindow";
@@ -43,13 +43,14 @@ const QuickStart = ({
             <p className="max-w-md text-gray-500 dark:text-gray-400">
               {isWorkoutsThisWeekError ? (
                 <span>Failed to fetch workouts</span>
-              ) : isWorkoutsThisWeekLoading || !workoutsThisWeek ? (
+              ) : isWorkoutsThisWeekLoading || workoutsThisWeek == null ? (
                 <span>Loading workouts...</span>
               ) : workoutsThisWeek > 0 ? (
                 <>
                   You've completed{" "}
                   <span className="text-primary font-bold">
-                    {workoutsThisWeek} sessions
+                    {workoutsThisWeek}{" "}
+                    {workoutsThisWeek == 1 ? "session" : "sessions"}
                   </span>{" "}
                   this week. One more to stay ahead of your goals!
                 </>
@@ -87,7 +88,6 @@ const QuickStart = ({
               plan.name.toLowerCase().includes(keyword.toLowerCase())
             )
           }
-          emptyDataMessage="Loading plans..."
           onSelect={(item) => handleWorkoutStart(item)}
           renderItem={(plan) => <TrainingPlanSelectionOption plan={plan} />}
         />

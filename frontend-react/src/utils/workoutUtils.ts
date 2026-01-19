@@ -17,6 +17,8 @@ export const calculateWorkoutVolume = (workout: WorkoutResponse) => {
 };
 
 export const calculateTotalSets = (workout: WorkoutResponse) => {
+  if (!workout.workoutItems) return 0;
+
   return workout.workoutItems.reduce(
     (prev, curr) => prev + curr.sets.length,
     0

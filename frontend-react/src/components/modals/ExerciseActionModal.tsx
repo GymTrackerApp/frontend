@@ -35,22 +35,23 @@ const ExerciseActionModal = ({
         </button>
       </header>
 
-      <form className="w-full h-screen flex flex-col justify-between overflow-hidden">
-        <div className="overflow-y-auto">{children}</div>
+      <form
+        className="w-full h-full flex flex-col justify-between overflow-hidden"
+        onSubmit={handleFormSubmit}
+      >
+        <div className="overflow-y-auto scrollbar-none">{children}</div>
         <footer className="flex-none border-t border-surface-border bg-background-dark p-6 z-30">
           <div className="mx-auto max-w-xl flex items-center justify-between">
             <button
               className="px-6 py-2 text-sm font-medium text-text-muted hover:text-white transition-colors cursor-pointer"
-              onClick={(e) => {
-                e.preventDefault();
-                onClose();
-              }}
+              type="button"
+              onClick={onClose}
             >
               Cancel
             </button>
             <button
               className="flex items-center gap-2 rounded-xl bg-primary px-10 py-3.5 text-sm font-bold text-white shadow-lg shadow-primary/25 hover:bg-primary-dark hover:-translate-y-px transition-all active:translate-y-0 active:scale-95 cursor-pointer"
-              onClick={handleFormSubmit}
+              // onClick={handleFormSubmit}
               type="submit"
             >
               <FaPlus />

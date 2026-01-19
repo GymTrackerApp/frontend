@@ -12,9 +12,10 @@ const CreateNewResource = ({
   onNewResourceCreated,
 }: CreateNewResourceProps) => {
   return (
-    <div
+    <button
       className="group relative flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-700 bg-transparent p-5 text-center transition-colors hover:border-primary hover:bg-primary/5 dark:hover:border-primary dark:hover:bg-primary/5 cursor-pointer min-h-35"
       onClick={onNewResourceCreated}
+      type="button"
     >
       <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-gray-400 group-hover:text-primary transition-colors">
         <FaPlus />
@@ -27,7 +28,7 @@ const CreateNewResource = ({
           {descriptionText}
         </span>
       )}
-    </div>
+    </button>
   );
 };
 

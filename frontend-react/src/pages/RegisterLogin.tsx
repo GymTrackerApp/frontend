@@ -9,7 +9,7 @@ import {
   FaLock,
   FaUser,
 } from "react-icons/fa";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import AuthToggleTabs from "../components/AuthToggleTabs";
 import Button from "../components/ui/Button";
 import {
@@ -168,6 +168,7 @@ const RegisterLogin = () => {
                       name="username"
                       type="text"
                       placeholder="John Doe"
+                      value={signUpFormData.username}
                       onChange={handleFormChange}
                       required
                     />
@@ -189,6 +190,7 @@ const RegisterLogin = () => {
                     name="email"
                     type="email"
                     placeholder="john.doe@domain.com"
+                    value={signInFormData.email}
                     onChange={handleFormChange}
                     required
                   />
@@ -216,6 +218,7 @@ const RegisterLogin = () => {
                     name="password"
                     type="password"
                     placeholder="********"
+                    value={signInFormData.password}
                     onChange={handleFormChange}
                     required
                   />

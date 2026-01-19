@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import type { PlanResponse } from "../services/trainingService";
 import CreateNewResource from "./CreateNewResource";
 import PlanBlock from "./PlanBlock";

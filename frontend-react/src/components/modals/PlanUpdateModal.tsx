@@ -131,7 +131,7 @@ const PlanUpdateModal = ({ exercises, plan, onClose }: UpdatePlanProps) => {
             type="text"
             required
             onChange={(e) =>
-              setPlanForm({ ...planForm, planName: e.target.value })
+              setPlanForm((prev) => ({ ...prev, planName: e.target.value }))
             }
             value={planForm["planName"]}
           />
@@ -158,7 +158,7 @@ const PlanUpdateModal = ({ exercises, plan, onClose }: UpdatePlanProps) => {
                   .find(
                     (exercise) => exercise.exerciseId === planItem.exerciseId
                   )
-                  ?.category.toLowerCase()}{" "}
+                  ?.category?.toLowerCase() ?? ""}{" "}
               </p>
             </div>
           </div>
@@ -217,14 +217,12 @@ const PlanUpdateModal = ({ exercises, plan, onClose }: UpdatePlanProps) => {
               className="opacity-0 group-hover:opacity-100 p-0 md:p-2 rounded-lg hover:bg-red-500/10 text-text-muted hover:text-red-400 transition-all cursor-pointer"
               onClick={(e) => {
                 e.preventDefault();
-                setPlanForm({
-                  planName: planForm.planName,
-                  planItems: [
-                    ...planForm.planItems.filter(
-                      (item) => item.exerciseId !== planItem.exerciseId
-                    ),
-                  ],
-                });
+                setPlanForm((prev) => ({
+                  ...prev,
+                  planItems: prev.planItems.filter(
+                    (item) => item.exerciseId !== planItem.exerciseId
+                  ),
+                }));
               }}
             >
               <FaTrashAlt className="text-sm md:text-lg" />

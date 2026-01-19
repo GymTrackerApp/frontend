@@ -4,7 +4,7 @@ import { FaDumbbell, FaPlay, FaStopwatch } from "react-icons/fa";
 import type { PlanResponse } from "../services/trainingService";
 import { getWorkouts } from "../services/workoutService";
 import { calculateAverageTrainingTime } from "../utils/plansUtils";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 interface PlanBlockProps {

@@ -26,6 +26,8 @@ const SelectOptionWindow = <T,>({
 }: SelectOptionWindowProps<T>) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
 
+  const filteredData = dataFilter ? dataFilter(data, searchQuery) : data;
+
   return (
     <AbsoluteWindowWrapper isOpen={true} onClose={onClose}>
       <div className="px-6 pt-6 pb-3 flex items-center justify-between">
@@ -48,23 +50,24 @@ const SelectOptionWindow = <T,>({
             <div className="flex items-center justify-between p-4 bg-slate-800/40 rounded-xl border border-slate-700/30 text-left font-semibold">
               <p>Loading data...</p>
             </div>
-          ) : !data || data.length === 0 ? (
+          ) : filteredData.length === 0 ? (
             <div className="flex items-center justify-between p-4 bg-slate-800/40 rounded-xl border border-slate-700/30 text-left font-semibold">
-              <p>{emptyDataMessage || "No options available"}</p>
+              <p>
+                {emptyDataMessage ||
+                  (dataFilter ? "No matches found" : "No options available")}
+              </p>
             </div>
           ) : (
             <>
-              {(dataFilter ? dataFilter(data, searchQuery) : data).map(
-                (item, index) => (
-                  <button
-                    key={index}
-                    onClick={() => onSelect(item)}
-                    className="group flex items-center justify-between p-4 bg-slate-800/40 rounded-xl border border-slate-700/30 hover:bg-slate-800/80 transition-all text-left cursor-pointer"
-                  >
-                    {renderItem(item)}
-                  </button>
-                )
-              )}
+              {filteredData.map((item, index) => (
+                <button
+                  key={index}
+                  onClick={() => onSelect(item)}
+                  className="group flex items-center justify-between p-4 bg-slate-800/40 rounded-xl border border-slate-700/30 hover:bg-slate-800/80 transition-all text-left cursor-pointer"
+                >
+                  {renderItem(item)}
+                </button>
+              ))}
             </>
           )}
         </div>

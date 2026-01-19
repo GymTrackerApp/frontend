@@ -39,6 +39,7 @@ const PlanManagerToggleTabs = ({
             disableAllButtons();
             setIsMyPlansEnabled(true);
           }}
+          type="button"
         >
           <span className="text-sm font-bold tracking-wide">My Plans</span>
         </button>
@@ -52,6 +53,7 @@ const PlanManagerToggleTabs = ({
             disableAllButtons();
             setIsPredefinedPlansEnabled(true);
           }}
+          type="button"
         >
           <span className="text-sm font-medium tracking-wide">
             Predefined Plans
@@ -67,6 +69,7 @@ const PlanManagerToggleTabs = ({
             disableAllButtons();
             setIsMyExercisesEnabled(true);
           }}
+          type="button"
         >
           <span className="text-sm font-medium tracking-wide">
             My Exercises

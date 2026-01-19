@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { formatDate } from "date-fns";
+import { format } from "date-fns";
 import { useState } from "react";
 import {
   FaBalanceScale,
@@ -60,10 +60,7 @@ const ProfileSettings = () => {
                     <p className="text-sm text-primary font-semibold flex items-center justify-center md:justify-start gap-1">
                       <FaRegCalendar className="text-sm" />
                       Member Since:{" "}
-                      {formatDate(
-                        new Date(userProfile.createdAt),
-                        "dd MMM yyyy"
-                      )}
+                      {format(new Date(userProfile.createdAt), "dd MMM yyyy")}
                     </p>
                   </div>
                   <div className="w-full flex lg:flex-col lg:w-3/4 xl:w-1/2 gap-2">

@@ -29,6 +29,7 @@ import {
 } from "../services/workoutService";
 import { getCurrentDate } from "../utils/dateUtils";
 import { findMaxLift, findMaxVolume } from "../utils/workoutUtils";
+import { exercisesFilter } from "../utils/exerciseUtils";
 
 type MetricType = "training" | "exercise";
 
@@ -388,7 +389,7 @@ const Progress = () => {
             <SelectOptionWindow
               title={"Select Exercise"}
               onClose={() => setActiveWindow(null)}
-              data={exercises.sort((a) => (a.isCustom ? -1 : 1))}
+              data={exercises}
               isDataLoading={isExercisesLoading}
               onSelect={(exercise) => {
                 setSelectedExercise(exercise);
@@ -397,11 +398,7 @@ const Progress = () => {
               renderItem={(exercise) => (
                 <ExerciseSelectionOption exercise={exercise} />
               )}
-              dataFilter={(data, keyword) =>
-                data.filter((exercise) =>
-                  exercise.name.toLowerCase().includes(keyword.toLowerCase())
-                )
-              }
+              dataFilter={exercisesFilter}
             />
           )}
 
