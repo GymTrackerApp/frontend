@@ -2,17 +2,19 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { FaPlus, FaRegEdit, FaTrashAlt } from "react-icons/fa";
-import FetchHandler from "../components/FetchHandler";
-import Header from "../components/Header";
+import { FaPlus } from "react-icons/fa";
+import CreateNewResource from "../components/CreateNewResource";
+import Exercise from "../components/Exercise";
+import ExerciseLoading from "../components/ExerciseLoading";
 import NewExerciseModal from "../components/modals/ExerciseCreationModal";
 import ExerciseUpdateModal from "../components/modals/ExerciseUpdateModal";
 import PlanCreationModal from "../components/modals/PlanCreationModal";
+import PageWrapper from "../components/ui/PageWrapper";
 import Plan from "../components/Plan";
+import PlanLoading from "../components/PlanLoading";
 import PlanManagerToggleTabs from "../components/PlanManagerToggleTabs";
-import Button from "../components/ui/Button";
+import { useAvailableExercises } from "../hooks/useWorkoutFlow";
 import {
-  getPredefinedExercises,
   getUserExercises,
   removeExercise,
   type ExerciseResponse,
@@ -68,18 +70,7 @@ const PlanManager = () => {
     queryKey: ["userPlans"],
   });
 
-  const { data: predefinedExercises } = useQuery<
-    Array<ExerciseResponse>,
-    ErrorResponse
-  >({
-    queryFn: getPredefinedExercises,
-    queryKey: ["predefinedExercises"],
-  });
-
-  const allUserAvailableExercises = [
-    ...(predefinedExercises || []),
-    ...(myExercises || []),
-  ];
+  const { exercises: allUserAvailableExercises } = useAvailableExercises();
 
   const exerciseRemoveMutation = useMutation<
     GeneralResponse,
@@ -90,6 +81,7 @@ const PlanManager = () => {
     onSuccess: (response) => {
       toast.success(response.message);
       queryClient.invalidateQueries({ queryKey: ["userExercises"] });
+      queryClient.invalidateQueries({ queryKey: ["userPlans"] });
     },
     onError: (error) => {
       if (error.response) {
@@ -107,36 +99,51 @@ const PlanManager = () => {
   };
 
   return (
-    <>
-      <Header />
-      <div className="bg-gray-800 text-white p-3 min-h-dvh">
-        <h1 className="text-3xl font-bold">Plan Manager</h1>
-        <p className="text-gray-400 mb-3">
-          Create and manage your training plans
-        </p>
-        <div>
-          <PlanManagerToggleTabs
-            isMyPlansEnabled={isMyPlansEnabled}
-            isPredefinedPlansEnabled={isPredefinedPlansEnabled}
-            isMyExercisesEnabled={isMyExercisesEnabled}
-            setIsMyPlansEnabled={setIsMyPlansEnabled}
-            setIsPredefinedPlansEnabled={setIsPredefinedPlansEnabled}
-            setIsMyExercisesEnabled={setIsMyExercisesEnabled}
-          />
-
-          {/* My Plans */}
+    <PageWrapper>
+      <div className="w-full max-w-300 mx-auto px-6 py-8 flex flex-col gap-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div className="flex flex-col gap-2">
+            <h1 className="text-white text-3xl font-black tracking-tight">
+              Plan Manager
+            </h1>
+            <p className="text-gray-400 text-base font-normal max-w-lg">
+              Manage your workout routines, customize schedules, and track your
+              exercise library
+            </p>
+          </div>
 
           {isMyPlansEnabled && (
-            <Button
-              btnStyle={"approve"}
-              size="small"
-              additionalStyle="rounded-md"
+            <button
+              className="flex cursor-pointer items-center justify-center rounded-lg h-11 px-5 bg-primary hover:bg-blue-600 text-white gap-2 text-sm font-bold shadow-[0_0_15px_rgba(59,130,246,0.4)] transition-all transform active:scale-95"
               onClick={() => setNewPlanModalEnabled(true)}
             >
-              <FaPlus />
+              <FaPlus size={20} />
               <span>Create New Plan</span>
-            </Button>
+            </button>
           )}
+
+          {isMyExercisesEnabled && (
+            <button
+              className="flex cursor-pointer items-center justify-center rounded-lg h-11 px-5 bg-primary hover:bg-blue-600 text-white gap-2 text-sm font-bold shadow-[0_0_15px_rgba(59,130,246,0.4)] transition-all transform active:scale-95"
+              onClick={() => setNewExerciseModalEnabled(true)}
+            >
+              <FaPlus size={20} />
+              <span>Create New Exercise</span>
+            </button>
+          )}
+        </div>
+
+        <PlanManagerToggleTabs
+          isMyPlansEnabled={isMyPlansEnabled}
+          isPredefinedPlansEnabled={isPredefinedPlansEnabled}
+          isMyExercisesEnabled={isMyExercisesEnabled}
+          setIsMyPlansEnabled={setIsMyPlansEnabled}
+          setIsPredefinedPlansEnabled={setIsPredefinedPlansEnabled}
+          setIsMyExercisesEnabled={setIsMyExercisesEnabled}
+        />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-12">
+          {/* My Plans */}
 
           {newPlanModalEnabled && (
             <PlanCreationModal
@@ -145,39 +152,30 @@ const PlanManager = () => {
             />
           )}
 
-          <FetchHandler
-            isEnabled={isMyPlansEnabled}
-            isLoading={isMyPlansLoading}
-            isError={isMyPlansError}
-            data={myPlans}
-            emptyMessage={"You currently don't have any plans."}
-          >
-            {(data: Array<PlanResponse>) =>
-              data.map((plan) => (
-                <Plan
-                  key={plan.id}
-                  plan={plan}
-                  updatable={true}
-                  removable={true}
-                  exercises={allUserAvailableExercises}
+          {isMyPlansLoading || isMyPlansError || !myPlans ? (
+            <PlanLoading />
+          ) : (
+            isMyPlansEnabled && (
+              <>
+                {myPlans.map((plan) => (
+                  <Plan
+                    key={plan.id}
+                    plan={plan}
+                    updatable={true}
+                    removable={true}
+                    exercises={allUserAvailableExercises}
+                  />
+                ))}
+                <CreateNewResource
+                  creationText={"Create Custom Plan"}
+                  descriptionText="Design a new routine from scratch tailored to your goals"
+                  onNewResourceCreated={() => setNewPlanModalEnabled(true)}
                 />
-              ))
-            }
-          </FetchHandler>
+              </>
+            )
+          )}
 
           {/* My Exercises */}
-
-          {isMyExercisesEnabled && (
-            <Button
-              btnStyle={"approve"}
-              size={"small"}
-              additionalStyle="rounded-md"
-              onClick={() => setNewExerciseModalEnabled(true)}
-            >
-              <FaPlus />
-              <span>Create New Exercise</span>
-            </Button>
-          )}
 
           {newExerciseModalEnabled && (
             <NewExerciseModal
@@ -185,40 +183,27 @@ const PlanManager = () => {
             />
           )}
 
-          <FetchHandler
-            isEnabled={isMyExercisesEnabled}
-            isLoading={isMyExercisesLoading}
-            isError={isMyExercisesError}
-            data={myExercises}
-            emptyMessage={"You currently don't have any exercises."}
-          >
-            {(data: Array<ExerciseResponse>) =>
-              data.map((ex) => (
-                <p
-                  key={ex.exerciseId}
-                  className="flex flex-col bg-gray-700 rounded-xl my-3 px-3 py-1"
-                >
-                  <span className="flex justify-between items-center">
-                    <span>{ex.name}</span>
-                    <span className="flex gap-3 items-center">
-                      <FaRegEdit
-                        size={15}
-                        className="cursor-pointer hover:opacity-80"
-                        onClick={() => setUpdateExercise(ex)}
-                      />
-                      <FaTrashAlt
-                        color="red"
-                        size={15}
-                        className="cursor-pointer hover:opacity-80"
-                        onClick={() => handleRemoveExercise(ex.exerciseId)}
-                      />
-                    </span>
-                  </span>
-                  <span className="text-gray-400 text-sm">{ex.category}</span>
-                </p>
-              ))
-            }
-          </FetchHandler>
+          {isMyExercisesLoading || isMyExercisesError || !myExercises ? (
+            <ExerciseLoading />
+          ) : (
+            isMyExercisesEnabled && (
+              <>
+                {myExercises?.map((exercise) => (
+                  <Exercise
+                    key={exercise.exerciseId}
+                    exercise={exercise}
+                    setUpdateExercise={setUpdateExercise}
+                    handleRemoveExercise={handleRemoveExercise}
+                  />
+                ))}
+                <CreateNewResource
+                  creationText={"Create New Exercise"}
+                  descriptionText="Expand your library with custom exercises"
+                  onNewResourceCreated={() => setNewExerciseModalEnabled(true)}
+                />
+              </>
+            )
+          )}
 
           {updateExercise && (
             <ExerciseUpdateModal
@@ -229,28 +214,25 @@ const PlanManager = () => {
 
           {/* Predefined Plans */}
 
-          <FetchHandler
-            isEnabled={isPredefinedPlansEnabled}
-            isLoading={isPredefinedPlansLoading}
-            isError={isPredefinedPlansError}
-            data={predefinedPlans}
-            emptyMessage={"There are currently no predefined plans."}
-          >
-            {(data: Array<PlanResponse>) =>
-              data.map((plan: PlanResponse) => (
-                <Plan
-                  key={plan.id}
-                  plan={plan}
-                  updatable={false}
-                  removable={false}
-                  exercises={[]}
-                />
-              ))
-            }
-          </FetchHandler>
+          {isPredefinedPlansLoading ||
+          isPredefinedPlansError ||
+          !predefinedPlans ? (
+            <PlanLoading />
+          ) : (
+            isPredefinedPlansEnabled &&
+            predefinedPlans.map((plan) => (
+              <Plan
+                key={plan.id}
+                plan={plan}
+                updatable={false}
+                removable={false}
+                exercises={allUserAvailableExercises}
+              />
+            ))
+          )}
         </div>
       </div>
-    </>
+    </PageWrapper>
   );
 };
 

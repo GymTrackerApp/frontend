@@ -1,110 +1,78 @@
-import { useQuery } from "@tanstack/react-query";
-import MainPagePanel from "./ui/MainPagePanel";
-import { getWorkouts } from "../services/workoutService";
-import { startOfWeek } from "date-fns";
-import { displayShortFormattedDate, getCurrentDate } from "../utils/dateUtils";
+import { type WorkoutResponse } from "../services/workoutService";
+import { calculateWorkoutVolume } from "../utils/workoutUtils";
 
-const QuickStats = () => {
-  const currentDate = getCurrentDate();
-  const weekStartDate = startOfWeek(currentDate, { weekStartsOn: 1 });
+interface QuickStatsProps {
+  workoutsThisWeek: Array<WorkoutResponse> | undefined;
+  isWorkoutsThisWeekLoading: boolean;
+  isWorkoutsThisWeekError: boolean;
+}
 
-  const {
-    data: workoutsThisWeek,
-    isLoading: isWorkoutsThisWeekLoading,
-    isError: isWorkoutsThisWeekError,
-  } = useQuery({
-    queryFn: () => getWorkouts(weekStartDate, currentDate, null, 0, 10_000),
-    queryKey: [
-      "workoutsThisWeek",
-      weekStartDate.getTime(),
-      currentDate.getTime(),
-    ],
-    select: (data) =>
-      data.map((workout) => {
-        const createdAt = new Date(workout.createdAt);
-        createdAt.setHours(0, 0, 0, 0);
-        return {
-          ...workout,
-          createdAt: createdAt,
-        };
-      }),
-  });
-
-  const {
-    data: lastWorkout,
-    isLoading: isLastWorkoutLoading,
-    isError: isLastWorkoutError,
-  } = useQuery({
-    queryFn: () => getWorkouts(null, null, null, 0, 1),
-    queryKey: ["lastWorkout"],
-    select: (data) =>
-      data.map((workout) => {
-        const createdAt = new Date(workout.createdAt);
-        createdAt.setHours(0, 0, 0, 0);
-        return {
-          ...workout,
-          createdAt: createdAt,
-        };
-      }),
-  });
-
-  const getDaysDifference = (date: Date) => {
-    const now: Date = new Date();
-    now.setHours(0, 0, 0, 0);
-
-    const diffInMs = now.getTime() - date.getTime();
-    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
-
-    if (diffInDays === 0) {
-      return "Today";
-    } else if (diffInDays === 1) {
-      return "Yesterday";
-    } else {
-      return `${diffInDays} days ago`;
-    }
-  };
-
+const QuickStats = ({
+  workoutsThisWeek,
+  isWorkoutsThisWeekLoading,
+  isWorkoutsThisWeekError,
+}: QuickStatsProps) => {
   return (
-    <MainPagePanel
-      title="Quick Stats"
-      detailsPageLink="/progress"
-      detailsPageButtonTitle="View Full Progress"
-    >
-      <div className="flex justify-between gap-5 mt-5">
-        <section className="w-full bg-subcomponents-main text-subcomponents-text-main p-2">
-          <p>This week</p>
-          <p className="text-white">
-            {isWorkoutsThisWeekError
-              ? "--"
-              : isWorkoutsThisWeekLoading
-              ? "Loading..."
-              : workoutsThisWeek?.length}
-          </p>
-          <p>
-            {workoutsThisWeek && workoutsThisWeek.length === 1
-              ? "workout"
-              : "workouts"}
-          </p>
-        </section>
-        <section className="w-full bg-subcomponents-main text-white p-2">
-          <p className="text-subcomponents-text-main">Last Workout</p>
-          {isLastWorkoutError ? (
-            <p>Cannot fetch...</p>
-          ) : isLastWorkoutLoading ? (
-            <p>Loading...</p>
-          ) : !lastWorkout || lastWorkout.length === 0 ? (
-            <p>No workouts yet</p>
-          ) : (
-            <>
-              <p>{displayShortFormattedDate(lastWorkout[0].createdAt)}</p>
-              <p className="text-subcomponents-text-main">
-                {getDaysDifference(lastWorkout[0].createdAt)}
-              </p>
-            </>
-          )}
-        </section>
+    <div className="relative flex flex-col col-span-3 lg:col-span-1 justify-between rounded-2xl bg-white dark:bg-surface-dark p-6 shadow-sm ring-1 ring-gray-900/5 dark:ring-white/10">
+      <div className="flex items-start justify-between">
+        <div className="flex flex-col gap-1">
+          <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
+            Weekly Volume
+          </h3>
+          <div className="flex items-baseline gap-2">
+            <span className="text-3xl font-bold text-gray-900 dark:text-white">
+              {isWorkoutsThisWeekLoading
+                ? "Loading..."
+                : isWorkoutsThisWeekError || !workoutsThisWeek
+                ? "--"
+                : workoutsThisWeek.reduce(
+                    (a, b) => a + calculateWorkoutVolume(b),
+                    0
+                  )}
+            </span>
+            {!isWorkoutsThisWeekLoading && (
+              <span className="text-sm font-medium text-gray-500">kg</span>
+            )}
+          </div>
+        </div>
       </div>
-    </MainPagePanel>
+      <div className="mt-6 h-16 w-full">
+        <svg
+          className="h-full w-full overflow-visible text-primary"
+          preserveAspectRatio="none"
+          viewBox="0 0 100 40"
+        >
+          <path
+            d="M0 35 C 10 35, 15 20, 25 25 C 35 30, 40 10, 50 15 C 60 20, 65 5, 75 10 C 85 15, 90 2, 100 5"
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeWidth="2"
+            vectorEffect="non-scaling-stroke"
+          ></path>
+          <defs>
+            <linearGradient id="gradient" x1="0" x2="0" y1="0" y2="1">
+              <stop
+                offset="0%"
+                stopColor="currentColor"
+                stopOpacity="0.2"
+              ></stop>
+              <stop
+                offset="100%"
+                stopColor="currentColor"
+                stopOpacity="0"
+              ></stop>
+            </linearGradient>
+          </defs>
+          <path
+            d="M0 35 C 10 35, 15 20, 25 25 C 35 30, 40 10, 50 15 C 60 20, 65 5, 75 10 C 85 15, 90 2, 100 5 V 40 H 0 Z"
+            fill="url(#gradient)"
+            stroke="none"
+          ></path>
+        </svg>
+      </div>
+      <p className="mt-2 text-xs text-gray-400">Total volume moved this week</p>
+    </div>
   );
 };
 

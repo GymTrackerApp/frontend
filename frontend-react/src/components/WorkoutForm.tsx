@@ -4,19 +4,22 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import type { AxiosError } from "axios";
+import { type AxiosError } from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import {
+  FaArrowLeft,
   FaCheck,
+  FaChevronRight,
+  FaDumbbell,
+  FaEllipsisV,
   FaHistory,
   FaPlus,
-  FaRegClock,
   FaStopwatch,
   FaSync,
-  FaTimes,
+  FaTrashAlt,
 } from "react-icons/fa";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { useAvailableExercises } from "../hooks/useWorkoutFlow";
 import type { ExerciseResponse } from "../services/exerciseService";
 import type {
@@ -31,12 +34,15 @@ import {
   type WorkoutCreationRequest,
 } from "../services/workoutService";
 import type { ErrorResponse, GeneralResponse } from "../types/ApiResponse";
+import { preventForbiddenInputNumberKeys } from "../utils/inputUtils";
 import AutoWorkoutTimer from "./AutoWorkoutTimer";
+import ExerciseSelectionOption from "./ExerciseSelectionOption";
 import WorkoutDetails from "./modals/WorkoutDetailsModal";
 import WorkoutExerciseHistoryModal from "./modals/WorkoutExerciseHistoryModal";
 import RestTimer from "./RestTimer";
-import AbsoluteWindowWrapper from "./ui/AbsoluteWindowWrapper";
+import ConfirmationWindow from "./ui/ConfirmationWindow";
 import SelectOptionWindow from "./ui/SelectOptionWindow";
+import { exercisesFilter } from "../utils/exerciseUtils";
 
 interface WorkoutFormProps {
   plan: PlanResponse;
@@ -46,13 +52,19 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+  const [planItemSelectedForDetails, setPlanItemSelectedForDetails] =
+    useState<PlanItemResponse | null>(null);
   const [exerciseHistory, setExerciseHistory] =
     useState<PlanItemResponse | null>(null);
   const [isFinishedWorkoutWindowOpen, setIsFinishedWorkoutWindowOpen] =
     useState<boolean>(false);
+  const [isCancelWorkoutWindowOpen, setIsCancelWorkoutWindowOpen] =
+    useState<boolean>(false);
   const [replacingExerciseId, setReplacingExerciseId] = useState<number | null>(
     null
   );
+  const [isAddExerciseWindowEnabled, setIsAddExerciseWindowEnabled] =
+    useState<boolean>(false);
   const [lastWorkoutEnabled, setLastWorkoutEnabled] = useState<boolean>(false);
   const [selectTimerEnabled, setSelectTimerEnabled] = useState<boolean>(false);
   const [selectedTimerOption, setSelectedTimerOption] = useState<number | null>(
@@ -66,18 +78,6 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
     plan.planItems
   );
 
-  const TIMER_OPTIONS = [
-    { label: "30 seconds", value: 30 },
-    { label: "1 minute", value: 60 },
-    { label: "2 minutes", value: 120 },
-    { label: "3 minutes", value: 180 },
-    { label: "4 minutes", value: 240 },
-    { label: "5 minutes", value: 300 },
-    { label: "Custom Time (sec)", value: -1 },
-  ];
-
-  const { exercises, isLoading: isExercisesLoading } = useAvailableExercises();
-
   const [workoutCreationRequest, setWorkoutCreationRequest] =
     useState<WorkoutCreationRequest>({
       trainingId: plan.id,
@@ -90,6 +90,18 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
         })),
       })),
     });
+
+  const TIMER_OPTIONS = [
+    { label: "30 seconds", value: 30 },
+    { label: "1 minute", value: 60 },
+    { label: "2 minutes", value: 120 },
+    { label: "3 minutes", value: 180 },
+    { label: "4 minutes", value: 240 },
+    { label: "5 minutes", value: 300 },
+    { label: "Custom Time (sec)", value: -1 },
+  ];
+
+  const { exercises, isLoading: isExercisesLoading } = useAvailableExercises();
 
   const lastSessionResults = useQueries({
     queries: workoutItems.map((item) => ({
@@ -203,7 +215,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
     if (
       workoutItems.some((item) => item.exerciseId === newExercise.exerciseId)
     ) {
-      toast.error("Exercise already exists in the plan");
+      toast.error("Exercise already exists in the workout");
       return;
     }
 
@@ -233,6 +245,53 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
     }));
   };
 
+  const removeExercise = (exerciseId: number) => {
+    const updatedItems = workoutItems.filter(
+      (item) => item.exerciseId !== exerciseId
+    );
+
+    setWorkoutItems(updatedItems);
+
+    setWorkoutCreationRequest((prev) => ({
+      ...prev,
+      workoutItems: prev.workoutItems.filter(
+        (workoutItem) => workoutItem.exerciseId !== exerciseId
+      ),
+    }));
+
+    queryClient.invalidateQueries({ queryKey: ["lastSession"] });
+  };
+
+  const addExercise = (exercise: ExerciseResponse) => {
+    if (workoutItems.some((item) => item.exerciseId === exercise.exerciseId)) {
+      toast.error("Exercise already exists in the workout");
+      return;
+    }
+
+    const updatedItems = [
+      ...workoutItems,
+      {
+        exerciseId: exercise.exerciseId,
+        exerciseName: exercise.name,
+        defaultSets: 1,
+      },
+    ];
+
+    setWorkoutItems(updatedItems);
+
+    setWorkoutCreationRequest((prev) => ({
+      ...prev,
+      workoutItems: [
+        ...prev.workoutItems,
+        {
+          exerciseId: exercise.exerciseId,
+          type: "REPS",
+          sets: [{ reps: 0, weight: 0 }],
+        },
+      ],
+    }));
+  };
+
   const handleFormSubmit = () => {
     if (workoutMutation.isPending) return;
 
@@ -240,80 +299,341 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
   };
 
   return (
-    <div className="bg-gray-800 text-white min-h-dvh">
-      {isFinishedWorkoutWindowOpen && (
-        <AbsoluteWindowWrapper
-          isOpen={true}
-          onClose={() => setIsFinishedWorkoutWindowOpen(false)}
-        >
-          <div>
-            <header className="flex justify-between items-center">
-              <p className="text-xl font-bold">Finish Workout</p>
-              <FaTimes
-                className="cursor-pointer hover:opacity-80"
-                onClick={() => setIsFinishedWorkoutWindowOpen(false)}
-              />
-            </header>
-            <section>
-              <p className="text-gray-400 text-center text-md my-4">
-                What would you like to do with this workout?
-              </p>
-              <div className="flex gap-2">
-                <button
-                  className="w-full rounded-lg bg-red-500 cursor-pointer"
-                  onClick={() => {
-                    toast.success("Workout discarded");
-                    navigate("/");
-                  }}
-                >
-                  Discard Workout
-                </button>
-                <button
-                  className="w-full rounded-lg bg-blue-500 cursor-pointer"
-                  onClick={handleFormSubmit}
-                >
-                  Save Workout
-                </button>
-              </div>
-            </section>
+    <div className="bg-background-dark text-white font-display antialiased overflow-x-hidden min-h-screen flex flex-col relative selection:bg-primary/30 pb-8">
+      <header className="sticky top-0 z-50 w-full backdrop-blur-xl bg-background-dark/90 border-b border-input-dark">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 h-20 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <button
+              className="p-2 -ml-2 rounded-full hover:bg-white/5 text-gray-400 hover:text-white transition-colors cursor-pointer"
+              onClick={() => setIsCancelWorkoutWindowOpen(true)}
+            >
+              <FaArrowLeft />
+            </button>
+            <div className="hidden md:flex flex-col">
+              <h1 className="text-base font-bold text-white leading-tight">
+                {plan.name}
+              </h1>
+            </div>
           </div>
-        </AbsoluteWindowWrapper>
-      )}
-
-      <div className="flex justify-between items-center py-2 px-1">
-        <div className="flex gap-2 justify-center items-center">
-          <FaRegClock className="text-gray-400" size={22} />
           <AutoWorkoutTimer />
+          <div className="flex items-center gap-3">
+            <button
+              className="hidden md:flex h-10 px-5 items-center justify-center rounded-xl bg-[#223149]/50 hover:bg-[#223149] border border-[#223149] text-gray-300 hover:text-white text-sm font-semibold transition-all cursor-pointer"
+              onClick={() => setIsFinishedWorkoutWindowOpen(true)}
+            >
+              Finish
+            </button>
+            <button
+              className="hidden md:flex items-center gap-2 h-10 pl-3 pr-4 rounded-xl bg-accent-yellow hover:bg-[#D97706] text-input-dark transition-all shadow-[0_0_20px_rgba(245,158,11,0.2)] group cursor-pointer"
+              onClick={() => {
+                setSelectedTimerOption(null);
+                setSelectTimerEnabled(true);
+              }}
+            >
+              <FaStopwatch className="text-[20px] group-hover:animate-pulse" />
+              <span className="text-sm font-bold whitespace-nowrap">
+                {selectedTimerOption ? (
+                  <RestTimer
+                    time={selectedTimerOption}
+                    disableTimer={() => setSelectedTimerOption(null)}
+                  />
+                ) : (
+                  "Rest Timer"
+                )}
+              </span>
+            </button>
+          </div>
         </div>
+      </header>
+
+      <div className="flex flex-col gap-3">
         <button
-          className="bg-red-400 px-2 py-1 rounded-xl cursor-pointer hover:opacity-80"
+          className="md:hidden w-full flex py-1 px-2 items-center justify-center bg-[#223149]/50 hover:bg-[#223149] text-gray-300 hover:text-white text-sm font-semibold transition-all cursor-pointer"
           onClick={() => setIsFinishedWorkoutWindowOpen(true)}
-          type="button"
         >
-          Finish Workout
+          Finish
+        </button>
+
+        <button
+          className="md:hidden w-full flex justify-center items-center gap-2 py-1 pl-3 pr-4 bg-accent-yellow hover:bg-[#D97706] text-input-dark transition-all shadow-[0_0_20px_rgba(245,158,11,0.2)] group cursor-pointer"
+          onClick={() => {
+            setSelectedTimerOption(null);
+            setSelectTimerEnabled(true);
+          }}
+        >
+          <FaStopwatch className="text-[20px] group-hover:animate-pulse" />
+          <span className="text-sm font-bold whitespace-nowrap">
+            {selectedTimerOption ? (
+              <RestTimer
+                time={selectedTimerOption}
+                disableTimer={() => setSelectedTimerOption(null)}
+              />
+            ) : (
+              "Rest Timer"
+            )}
+          </span>
+        </button>
+
+        <button
+          className="bg-blue-900 text-sm font-bold px-2 py-1 w-full border border-gray-700 cursor-pointer hover:bg-blue-950 transition-colors
+                   disabled:bg-gray-800 disabled:border-gray-900 disabled:text-gray-500 
+                     disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:bg-gray-800"
+          onClick={() => setLastWorkoutEnabled(true)}
+          disabled={
+            isLastWorkoutLoading ||
+            isLastWorkoutError ||
+            !lastWorkout ||
+            lastWorkout.length === 0
+          }
+        >
+          Show Last Workout
         </button>
       </div>
 
-      <button
-        onClick={() => {
-          setSelectedTimerOption(null);
-          setSelectTimerEnabled(true);
-        }}
-        className="mb-2 bg-approve-button-main px-2 py-1 w-full rounded-md flex justify-center items-center gap-2 font-light cursor-pointer hover:bg-hover-approve-button-main transition-colors"
-        type="button"
-      >
-        <FaStopwatch />
-        <span>
-          {selectedTimerOption ? (
-            <RestTimer
-              time={selectedTimerOption}
-              disableTimer={() => setSelectedTimerOption(null)}
-            />
-          ) : (
-            "Start Rest Timer"
+      <main className="flex-1 w-full max-w-5xl mx-auto px-4 md:px-6 py-8 pb-8">
+        <div className="grid grid-cols-1 gap-8">
+          {workoutItems.map((planItem, exerciseIndex) => (
+            <article
+              key={planItem.exerciseId}
+              className="flex flex-col bg-card-dark rounded-2xl border border-border-dark overflow-hidden shadow-xl shadow-black/20 group hover:border-primary/30 transition-colors duration-300"
+            >
+              <div className="flex items-center justify-between p-5 border-b border-border-dark bg-[#1A2436]">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-input-dark border border-border-dark flex items-center justify-center text-primary shadow-inner">
+                    <FaDumbbell size={25} className="rotate-45" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white tracking-tight">
+                      {planItem.exerciseName}
+                    </h3>
+                    <p className="text-xs text-gray-400 mt-0.5 font-medium">
+                      {
+                        exercises.find(
+                          (exercise) =>
+                            planItem.exerciseId === exercise.exerciseId
+                        )?.category
+                      }
+                    </p>
+                  </div>
+                </div>
+                <button
+                  className="p-2 rounded-lg hover:bg-white/5 hover:text-text-muted/80 text-text-muted transition-all cursor-pointer"
+                  onClick={() => setPlanItemSelectedForDetails(planItem)}
+                >
+                  <FaEllipsisV size={20} />
+                </button>
+              </div>
+              <div className="p-2 md:p-4">
+                <table className="w-full border-collapse">
+                  <thead>
+                    <tr className="text-xs uppercase tracking-wider text-gray-500 font-semibold text-left">
+                      <th className="pl-3 py-3 w-16">Set</th>
+                      <th className="px-2 py-3">kg</th>
+                      <th className="px-2 py-3">Reps</th>
+                      <th className="pr-3 py-3 w-14 text-center"></th>
+                    </tr>
+                  </thead>
+                  <tbody className="space-y-2">
+                    {workoutCreationRequest.workoutItems[
+                      exerciseIndex
+                    ].sets.map((_, setIndex) => {
+                      let repsPlaceholder = "0";
+                      let weightPlaceholder = "0";
+
+                      if (lastSessionResults[exerciseIndex].isLoading) {
+                        repsPlaceholder = "...";
+                        weightPlaceholder = "...";
+                      } else if (
+                        lastSessionResults[exerciseIndex].data?.history?.[0]
+                          ?.sets?.[setIndex]
+                      ) {
+                        const prevSet =
+                          lastSessionResults[exerciseIndex].data.history[0]
+                            .sets[setIndex];
+                        repsPlaceholder = prevSet.reps.toString();
+                        weightPlaceholder = prevSet.weight.toString();
+                      }
+
+                      return (
+                        <tr key={setIndex} className="group/row">
+                          <td className="pl-3 py-2">
+                            <div className="w-8 h-8 rounded-full bg-[#1F2D42] text-gray-400 flex items-center justify-center text-sm font-bold font-mono">
+                              {setIndex + 1}
+                            </div>
+                          </td>
+                          <td className="px-2 py-2">
+                            <input
+                              className="w-full h-12 bg-input-dark border border-border-dark focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none rounded-lg text-center text-white font-bold text-lg placeholder-gray-600 transition-all no-spinner"
+                              type="number"
+                              step="any"
+                              inputMode="decimal"
+                              min={0}
+                              placeholder={String(weightPlaceholder)}
+                              value={
+                                workoutCreationRequest.workoutItems[
+                                  exerciseIndex
+                                ].sets[setIndex].weight === 0
+                                  ? ""
+                                  : workoutCreationRequest.workoutItems[
+                                      exerciseIndex
+                                    ].sets[setIndex].weight
+                              }
+                              onKeyDown={preventForbiddenInputNumberKeys}
+                              onChange={(e) =>
+                                handleUpdate(
+                                  exerciseIndex,
+                                  setIndex,
+                                  "weight",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </td>
+                          <td className="px-2 py-2">
+                            <input
+                              className="w-full h-12 bg-input-dark border border-border-dark focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none rounded-lg text-center text-white font-bold text-lg placeholder-gray-600 transition-all no-spinner"
+                              type="number"
+                              placeholder={String(repsPlaceholder)}
+                              step="1"
+                              value={
+                                workoutCreationRequest.workoutItems[
+                                  exerciseIndex
+                                ].sets[setIndex].reps === 0
+                                  ? ""
+                                  : workoutCreationRequest.workoutItems[
+                                      exerciseIndex
+                                    ].sets[setIndex].reps
+                              }
+                              min={1}
+                              onChange={(e) =>
+                                handleUpdate(
+                                  exerciseIndex,
+                                  setIndex,
+                                  "reps",
+                                  e.target.value
+                                )
+                              }
+                              onKeyDown={(e) => {
+                                preventForbiddenInputNumberKeys(e);
+                                if (e.key === "." || e.key === ",") {
+                                  e.preventDefault();
+                                }
+                              }}
+                            />
+                          </td>
+                          <td className="pr-3 py-2 text-center">
+                            <button
+                              className="p-2 rounded-lg hover:bg-red-500/10 text-text-muted hover:text-red-400 transition-all cursor-pointer"
+                              onClick={() =>
+                                removeSetFromExercise(exerciseIndex, setIndex)
+                              }
+                            >
+                              <FaTrashAlt size={20} />
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+                <div className="mt-4 px-2">
+                  <button
+                    className="w-full py-3 rounded-xl border border-dashed border-border-dark text-gray-400 hover:text-primary hover:border-primary hover:bg-primary/5 text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer"
+                    onClick={() => addSetToExercise(exerciseIndex)}
+                  >
+                    <FaPlus size={18} />
+                    Add Set
+                  </button>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </main>
+
+      <footer className="w-full px-4 md:px-6 relative pointer-events-auto">
+        <button
+          className="h-14 px-8 rounded-2xl bg-primary hover:bg-blue-600 text-white shadow-lg shadow-primary/25 border border-white/10 flex justify-center items-center gap-3 transition-all hover:scale-105 active:scale-95 cursor-pointer mx-auto"
+          onClick={() => setIsAddExerciseWindowEnabled(true)}
+        >
+          <FaPlus />
+          <span className="font-bold text-lg tracking-wide">Add Exercise</span>
+        </button>
+      </footer>
+
+      {lastWorkoutEnabled && lastWorkout && lastWorkout.length > 0 && (
+        <WorkoutDetails
+          workout={lastWorkout[0]}
+          onClose={() => setLastWorkoutEnabled(false)}
+        />
+      )}
+
+      {replacingExerciseId && (
+        <SelectOptionWindow
+          title={"Replace Exercise"}
+          onClose={() => setReplacingExerciseId(null)}
+          data={exercises}
+          dataFilter={exercisesFilter}
+          onSelect={(exercise) => {
+            replaceExercise(exercise);
+            setReplacingExerciseId(null);
+          }}
+          renderItem={(exercise) => (
+            <ExerciseSelectionOption exercise={exercise} />
           )}
-        </span>
-      </button>
+          isDataLoading={isExercisesLoading}
+        />
+      )}
+
+      {isAddExerciseWindowEnabled && (
+        <SelectOptionWindow
+          title={"Add Exercise"}
+          onClose={() => setIsAddExerciseWindowEnabled(false)}
+          data={exercises}
+          dataFilter={exercisesFilter}
+          isDataLoading={isExercisesLoading}
+          onSelect={(exercise) => addExercise(exercise)}
+          renderItem={(exercise) => (
+            <ExerciseSelectionOption exercise={exercise} />
+          )}
+        />
+      )}
+
+      {exerciseHistory && (
+        <WorkoutExerciseHistoryModal
+          planItem={exerciseHistory}
+          onClose={() => setExerciseHistory(null)}
+        />
+      )}
+
+      {isFinishedWorkoutWindowOpen && (
+        <ConfirmationWindow
+          onConfirm={handleFormSubmit}
+          onClose={() => setIsFinishedWorkoutWindowOpen(false)}
+          confirmButtonText={"Finish Workout"}
+          cancelButtonText={"Keep Training"}
+          windowTitle={"Finish Workout?"}
+          windowDescription={
+            "All your work will be saved to your progress history"
+          }
+        />
+      )}
+
+      {isCancelWorkoutWindowOpen && (
+        <ConfirmationWindow
+          onConfirm={() => {
+            toast.success("Workout discarded");
+            navigate("/");
+          }}
+          onClose={() => setIsCancelWorkoutWindowOpen(false)}
+          confirmButtonText={"Confirm"}
+          cancelButtonText={"Keep Training"}
+          windowTitle={"Discard Workout?"}
+          windowDescription={
+            "All your progress will be lost. Are you sure you want to discard this workout?"
+          }
+        />
+      )}
 
       {selectTimerEnabled && (
         <SelectOptionWindow
@@ -329,9 +649,9 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
           }}
           renderItem={(timerOption) =>
             timerOption.value === -1 ? (
-              <div className="flex items-center">
+              <div className="group w-full flex justify-between items-center">
                 <input
-                  className="w-full no-spinner outline-none"
+                  className="w-full no-spinner outline-none font-semibold"
                   type="number"
                   min={1}
                   placeholder={timerOption.label}
@@ -340,214 +660,91 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                     setSelectedCustomRestTime(Number(e.target.value));
                   }}
                   onKeyDown={(e) => {
-                    const invalidChars = ["-", "+", "e", "E"];
-                    if (invalidChars.includes(e.key)) {
-                      e.preventDefault();
+                    preventForbiddenInputNumberKeys(e);
+                    if (e.key === "Enter") {
+                      if (
+                        selectedCustomRestTime == null ||
+                        selectedCustomRestTime < 1 ||
+                        selectedCustomRestTime > 3600
+                      ) {
+                        toast.error(
+                          "Custom time must be between 1 and 3600 sec"
+                        );
+                        return;
+                      }
+                      setSelectTimerEnabled(false);
+                      setSelectedTimerOption(selectedCustomRestTime);
+                      setSelectedCustomRestTime(null);
                     }
                   }}
                 />
-                <FaCheck
-                  size={20}
-                  className="cursor-pointer hover:opacity-80 transition-colors"
-                  onClick={() => {
-                    if (
-                      selectedCustomRestTime == null ||
-                      selectedCustomRestTime < 1
-                    )
-                      return;
-                    setSelectTimerEnabled(false);
-                    setSelectedTimerOption(selectedCustomRestTime);
-                    setSelectedCustomRestTime(null);
-                  }}
-                />
+                <div className="cursor-pointer hover:bg-slate-700 p-1 rounded-md transition-color group-hover:text-primary">
+                  <FaCheck
+                    size={20}
+                    onClick={() => {
+                      if (
+                        selectedCustomRestTime == null ||
+                        selectedCustomRestTime < 1 ||
+                        selectedCustomRestTime > 3600
+                      ) {
+                        toast.error(
+                          "Custom time must be between 1 and 3600 sec"
+                        );
+                        return;
+                      }
+                      setSelectTimerEnabled(false);
+                      setSelectedTimerOption(selectedCustomRestTime);
+                      setSelectedCustomRestTime(null);
+                    }}
+                  />
+                </div>
               </div>
             ) : (
-              <p key={timerOption.value}>{timerOption.label}</p>
+              <div className="group w-full flex justify-between items-center">
+                <p
+                  className="font-semibold group-hover:text-primary"
+                  key={timerOption.value}
+                >
+                  {timerOption.label}
+                </p>
+                <FaChevronRight className="group-hover:text-primary group-hover:translate-x-1 transition-all" />
+              </div>
             )
           }
         />
       )}
 
-      <button
-        className="bg-blue-950 px-2 py-1 rounded-md w-full border border-gray-700 mb-2 font-light cursor-pointer hover:bg-blue-900 transition-colors"
-        onClick={() => setLastWorkoutEnabled(true)}
-        disabled={
-          isLastWorkoutLoading ||
-          isLastWorkoutError ||
-          !lastWorkout ||
-          lastWorkout.length === 0
-        }
-      >
-        Last Workout
-      </button>
-
-      {lastWorkoutEnabled && lastWorkout && lastWorkout.length > 0 && (
-        <WorkoutDetails
-          workout={lastWorkout[0]}
-          onClose={() => setLastWorkoutEnabled(false)}
-        />
-      )}
-
-      {workoutItems.map((planItem, exerciseIndex) => (
-        <div
-          key={exerciseIndex}
-          className="bg-gray-700 p-2 border-b border-b-gray-700"
-        >
-          <div className="flex justify-between items-center mb-4 pe-3">
-            <div className="flex items-center gap-2">
-              <p key={planItem.exerciseId} className="text-xl">
-                {planItem.exerciseName}
-              </p>
-              <FaHistory
-                className="cursor-pointer text-gray-400"
-                onClick={() => setExerciseHistory(planItem)}
-              />
-            </div>
-            <FaSync
-              className="text-gray-400 cursor-pointer"
-              onClick={() => setReplacingExerciseId(planItem.exerciseId)}
-            />
-          </div>
-
-          <div className="grid grid-cols-[30px_1fr_1fr_30px] gap-2 text-gray-400 text-center mb-2 px-1">
-            <span className="text-xs font-bold text-gray-500 uppercase">
-              Set
-            </span>
-            <span className="text-xs font-bold text-gray-500 uppercase">
-              Weight (kg)
-            </span>
-            <span className="text-xs font-bold text-gray-500 uppercase">
-              Reps
-            </span>
-            <span></span>
-          </div>
-
-          {workoutCreationRequest.workoutItems[exerciseIndex].sets.map(
-            (_, setIndex) => {
-              let repsPlaceholder = "0";
-              let weightPlaceholder = "0";
-
-              if (lastSessionResults[exerciseIndex].isLoading) {
-                repsPlaceholder = "...";
-                weightPlaceholder = "...";
-              } else if (
-                lastSessionResults[exerciseIndex].data?.history?.[0]?.sets?.[
-                  setIndex
-                ]
-              ) {
-                const prevSet =
-                  lastSessionResults[exerciseIndex].data.history[0].sets[
-                    setIndex
-                  ];
-                repsPlaceholder = prevSet.reps.toString();
-                weightPlaceholder = prevSet.weight.toString();
-              }
-
-              return (
-                <div
-                  key={setIndex}
-                  className="grid grid-cols-[30px_1fr_1fr_30px] gap-2 items-center"
-                >
-                  <span className="text-center text-gray-400">
-                    {setIndex + 1}
-                  </span>
-                  <input
-                    className="bg-gray-800 border border-gray-700 text-center py-2 px-1 rounded-lg
-    focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200 no-spinner"
-                    type="number"
-                    step="any"
-                    inputMode="decimal"
-                    min={0}
-                    placeholder={String(weightPlaceholder)}
-                    value={
-                      workoutCreationRequest.workoutItems[exerciseIndex].sets[
-                        setIndex
-                      ].weight === 0
-                        ? ""
-                        : workoutCreationRequest.workoutItems[exerciseIndex]
-                            .sets[setIndex].weight
-                    }
-                    onChange={(e) =>
-                      handleUpdate(
-                        exerciseIndex,
-                        setIndex,
-                        "weight",
-                        e.target.value
-                      )
-                    }
-                  />
-                  <input
-                    className="bg-gray-800 border border-gray-700 text-center py-2 px-1 rounded-lg
-    focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200 no-spinner"
-                    type="number"
-                    placeholder={String(repsPlaceholder)}
-                    step="1"
-                    value={
-                      workoutCreationRequest.workoutItems[exerciseIndex].sets[
-                        setIndex
-                      ].reps === 0
-                        ? ""
-                        : workoutCreationRequest.workoutItems[exerciseIndex]
-                            .sets[setIndex].reps
-                    }
-                    min={1}
-                    onChange={(e) =>
-                      handleUpdate(
-                        exerciseIndex,
-                        setIndex,
-                        "reps",
-                        e.target.value
-                      )
-                    }
-                    onKeyDown={(e) => {
-                      if (e.key === "." || e.key === "," || e.key === "e") {
-                        e.preventDefault();
-                      }
-                    }}
-                  />
-                  <FaTimes
-                    className="hover:opacity-80 cursor-pointer"
-                    color="red"
-                    onClick={() =>
-                      removeSetFromExercise(exerciseIndex, setIndex)
-                    }
-                  />
-                </div>
-              );
-            }
-          )}
-
-          <button
-            className="w-full flex justify-center items-center border border-blue-500 rounded-xl text-blue-500 gap-2 mt-2 hover:border-blue-400 hover:text-blue-400 cursor-pointer"
-            type="button"
-            onClick={() => addSetToExercise(exerciseIndex)}
-          >
-            <FaPlus />
-            <span>Add Set</span>
-          </button>
-        </div>
-      ))}
-
-      {replacingExerciseId && (
+      {planItemSelectedForDetails && (
         <SelectOptionWindow
-          title={"Replace Exercise"}
-          onClose={() => setReplacingExerciseId(null)}
-          data={exercises}
-          onSelect={(exercise) => {
-            replaceExercise(exercise);
-            setReplacingExerciseId(null);
+          title={"Workout Exercise Options"}
+          onClose={() => setPlanItemSelectedForDetails(null)}
+          data={["View History", "Replace", "Delete"]}
+          onSelect={(item) => {
+            if (item === "View History") {
+              setExerciseHistory(planItemSelectedForDetails);
+            } else if (item === "Replace") {
+              setReplacingExerciseId(planItemSelectedForDetails.exerciseId);
+            } else if (item === "Delete") {
+              removeExercise(planItemSelectedForDetails.exerciseId);
+              toast.success("Exercise removed from workout");
+            }
+            setPlanItemSelectedForDetails(null);
           }}
-          renderItem={(exercise) => (
-            <p key={exercise.exerciseId}>{exercise.name}</p>
+          renderItem={(item) => (
+            <div className="group flex justify-between items-center w-full">
+              <div className="flex items-center gap-4">
+                <div className="size-12 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform bg-blue-500/10 text-blue-400">
+                  {item === "View History" && <FaHistory />}
+                  {item === "Replace" && <FaSync />}
+                  {item === "Delete" && <FaTrashAlt />}
+                </div>
+                <span className="group-hover:text-primary font-semibold">
+                  {item}
+                </span>
+              </div>
+              <FaChevronRight className="group-hover:translate-x-1 group-hover:text-primary transition-all" />
+            </div>
           )}
-          isDataLoading={isExercisesLoading}
-        />
-      )}
-
-      {exerciseHistory && (
-        <WorkoutExerciseHistoryModal
-          planItem={exerciseHistory}
-          onClose={() => setExerciseHistory(null)}
         />
       )}
     </div>

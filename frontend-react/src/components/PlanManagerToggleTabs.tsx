@@ -17,9 +17,9 @@ const PlanManagerToggleTabs = ({
   setIsPredefinedPlansEnabled,
   setIsMyExercisesEnabled,
 }: PlanManagerToggleProps) => {
-  const toggleButtonsCommonStyle = "px-3 rounded-md cursor-pointer";
-  const enabledButtonColor = "bg-blue-500";
-  const disabledButtonColor = "bg-gray-700";
+  const enabledButtonStyle = "border-primary text-white";
+  const disabledButtonStyle =
+    "border-transparent text-gray-500 hover:text-gray-300 hover:border-gray-700";
 
   const disableAllButtons = () => {
     setIsMyPlansEnabled(false);
@@ -28,43 +28,54 @@ const PlanManagerToggleTabs = ({
   };
 
   return (
-    <div className="flex gap-2 mb-2 w-full">
-      <button
-        className={clsx(
-          toggleButtonsCommonStyle,
-          isMyPlansEnabled ? enabledButtonColor : disabledButtonColor
-        )}
-        onClick={() => {
-          disableAllButtons();
-          setIsMyPlansEnabled(true);
-        }}
-      >
-        My Plans
-      </button>
-      <button
-        className={clsx(
-          toggleButtonsCommonStyle,
-          isPredefinedPlansEnabled ? enabledButtonColor : disabledButtonColor
-        )}
-        onClick={() => {
-          disableAllButtons();
-          setIsPredefinedPlansEnabled(true);
-        }}
-      >
-        Predefined Plans
-      </button>
-      <button
-        className={clsx(
-          toggleButtonsCommonStyle,
-          isMyExercisesEnabled ? enabledButtonColor : disabledButtonColor
-        )}
-        onClick={() => {
-          disableAllButtons();
-          setIsMyExercisesEnabled(true);
-        }}
-      >
-        My Exercises
-      </button>
+    <div className="border-b border-border-dark">
+      <div className="flex gap-8">
+        <button
+          className={clsx(
+            "flex flex-col items-center justify-center border-b-2 pb-3 px-1 transition-all",
+            isMyPlansEnabled ? enabledButtonStyle : disabledButtonStyle
+          )}
+          onClick={() => {
+            disableAllButtons();
+            setIsMyPlansEnabled(true);
+          }}
+          type="button"
+        >
+          <span className="text-sm font-bold tracking-wide">My Plans</span>
+        </button>
+
+        <button
+          className={clsx(
+            "flex flex-col items-center justify-center border-b-2 pb-3 px-1 transition-all ",
+            isPredefinedPlansEnabled ? enabledButtonStyle : disabledButtonStyle
+          )}
+          onClick={() => {
+            disableAllButtons();
+            setIsPredefinedPlansEnabled(true);
+          }}
+          type="button"
+        >
+          <span className="text-sm font-medium tracking-wide">
+            Predefined Plans
+          </span>
+        </button>
+
+        <button
+          className={clsx(
+            "flex flex-col items-center justify-center border-b-2 pb-3 px-1 transition-all",
+            isMyExercisesEnabled ? enabledButtonStyle : disabledButtonStyle
+          )}
+          onClick={() => {
+            disableAllButtons();
+            setIsMyExercisesEnabled(true);
+          }}
+          type="button"
+        >
+          <span className="text-sm font-medium tracking-wide">
+            My Exercises
+          </span>
+        </button>
+      </div>
     </div>
   );
 };

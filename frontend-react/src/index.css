@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap");
 @import "tailwindcss";
 @plugin "tailwind-scrollbar";
 
@@ -6,9 +7,51 @@
   --color-subcomponents-main: var(--color-gray-600);
   --color-subcomponents-main-hover: var(--color-gray-500);
   --color-subcomponents-text-main: var(--color-gray-400);
-  --color-background-main: var(--color-gray-800);
   --color-approve-button-main: var(--color-blue-500);
   --color-hover-approve-button-main: var(--color-blue-400);
+  --color-primary: #3780f6;
+  --color-primary-hover: #2563eb;
+  --color-action-blue: #3b82f6;
+  --color-background-light: #f9fafb;
+  --color-background-dark: #121926;
+  --color-background-secondary: #1f2937;
+  --color-card-dark: #182334;
+  --color-input-dark: #101723;
+  --color-border-dark: #304669;
+  --color-text-muted: #8fa6cc;
+  --color-surface-dark: #1f2937;
+  --color-surface-border: #374151;
+  --color-accent-teal: #14b8a6;
+  --color-accent-yellow: #f59e0b;
+
+  /* Fonts */
+  --font-display: "Inter";
+
+  /* Animations */
+  @keyframes pulse-custom {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  @keyframes progress {
+    0% {
+      transform: translateX(-100%);
+    }
+    50% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(300%);
+    }
+  }
+
+  --animate-skeleton: pulse-custom 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-spin-slow: spin 3s linear infinite;
 }
 
 @utility no-spinner {

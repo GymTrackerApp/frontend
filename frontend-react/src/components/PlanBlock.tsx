@@ -1,15 +1,76 @@
+import { useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { FaDumbbell, FaPlay, FaStopwatch } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import type { PlanResponse } from "../services/trainingService";
+import { getWorkouts } from "../services/workoutService";
+import { getRelativeDate } from "../utils/dateUtils";
+import { calculateAverageTrainingTime } from "../utils/plansUtils";
+
 interface PlanBlockProps {
-  title: string;
-  exercises: number;
+  plan: PlanResponse;
 }
 
-const PlanBlock = ({ title, exercises }: PlanBlockProps) => {
+const PlanBlock = ({ plan }: PlanBlockProps) => {
+  const navigate = useNavigate();
+
+  const {
+    data: lastWorkout,
+    isLoading: isLastWorkoutLoading,
+    isError: isLastWorkoutError,
+  } = useQuery({
+    queryFn: () => getWorkouts(null, null, plan.id, 0, 1),
+    queryKey: ["lastWorkout", plan.id],
+    select: (data) =>
+      data.map((workout) => {
+        const createdAt = new Date(workout.createdAt);
+        createdAt.setHours(0, 0, 0, 0);
+        return {
+          ...workout,
+          createdAt: createdAt,
+        };
+      }),
+  });
+
+  const handleWorkoutStart = (trainingPlan: PlanResponse) => {
+    toast.success(`Starting workout: ${trainingPlan.name}`);
+    navigate("/workout?trainingPlanId=" + trainingPlan.id);
+  };
+
   return (
-    <div className="bg-subcomponents-main rounded-xl p-2 my-5 w-full">
-      <h2 className="font-semibold">{title}</h2>
-      <p className="text-subcomponents-text-main">
-        {exercises} {exercises == 1 ? "exercise" : "exercises"}
-      </p>
+    <div className="relative flex flex-col justify-between overflow-hidden rounded-xl bg-white dark:bg-surface-dark p-5 shadow-sm ring-1 ring-gray-900/5 transition-all hover:ring-primary/50 dark:ring-white/10 dark:hover:ring-primary/50">
+      <div className="flex items-start justify-between">
+        <div className="flex flex-col gap-1">
+          <h3 className="font-bold text-gray-900 dark:text-white">
+            {plan.name}
+          </h3>
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            {isLastWorkoutLoading
+              ? "Loading..."
+              : isLastWorkoutError
+              ? "Could not load"
+              : !lastWorkout || lastWorkout?.length === 0
+              ? "Never performed"
+              : `Last done: ${getRelativeDate(lastWorkout[0].createdAt)}`}
+          </p>
+        </div>
+        <button
+          className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-primary hover:text-white dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-primary dark:hover:text-white cursor-pointer"
+          onClick={() => handleWorkoutStart(plan)}
+        >
+          <FaPlay size={20} className="ms-1" />
+        </button>
+      </div>
+      <div className="mt-4 flex items-center gap-2 text-xs text-gray-500">
+        <FaStopwatch size={14} />
+        <span>~{calculateAverageTrainingTime(plan)} min</span>
+        <span className="text-gray-300 dark:text-gray-700">|</span>
+        <FaDumbbell size={14} className="rotate-45" />
+        <span>
+          {plan.planItems.length}{" "}
+          {plan.planItems.length == 1 ? "Exercise" : "Exercises"}
+        </span>
+      </div>
     </div>
   );
 };

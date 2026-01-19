@@ -1,8 +1,17 @@
 import { useMutation } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import { useState } from "react";
+import toast from "react-hot-toast";
+import {
+  FaArrowRight,
+  FaDumbbell,
+  FaEnvelope,
+  FaLock,
+  FaUser,
+} from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import AuthToggleTabs from "../components/AuthToggleTabs";
-import InputForm from "../components/ui/InputForm";
+import Button from "../components/ui/Button";
 import {
   signIn,
   type SignInRequest,
@@ -10,11 +19,8 @@ import {
   signUp,
   type SignUpRequest,
 } from "../services/authService";
-import { type GeneralResponse, type ErrorResponse } from "../types/ApiResponse";
+import { type ErrorResponse, type GeneralResponse } from "../types/ApiResponse";
 import { type SignInForm, type SignUpForm } from "../types/AuthForms";
-import toast from "react-hot-toast";
-import { useNavigate } from "react-router";
-import Button from "../components/ui/Button";
 
 const RegisterLogin = () => {
   const navigate = useNavigate();
@@ -123,61 +129,111 @@ const RegisterLogin = () => {
 
   return (
     <>
-      <div className="bg-background-main text-white min-h-dvh flex justify-center items-center flex-col">
-        <h1 className="text-3xl font-bold">Gym Tracker</h1>
-        <p className="text-gray-400 mb-5">
-          Track your progress, achieve your goals
-        </p>
-        <div className="w-1/2 max-w-xl">
+      <div className="bg-background-light dark:bg-background-dark font-display text-gray-900 dark:text-white antialiased min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
+        <div className="absolute inset-0 bg-grid-pattern bg-size-[40px_40px] pointer-events-none opacity-20"></div>
+        <div className="absolute top-0 left-0 w-full h-full bg-linear-to-b from-transparent via-transparent to-background-dark pointer-events-none"></div>
+        <div className="relative z-10 w-full max-w-115 px-4 py-8">
+          <div className="flex flex-col items-center mb-8">
+            <div className="w-12 h-12 rounded-xl bg-linear-to-tr from-primary to-blue-400 flex items-center justify-center shadow-lg shadow-primary/30 mb-4">
+              <FaDumbbell className="w-7 h-7 rotate-45" />
+            </div>
+            <h1 className="text-2xl font-bold tracking-tight text-white">
+              Gym Tracker
+            </h1>
+            <p className="text-text-muted text-sm mt-1">
+              Track progressive overload with precision.
+            </p>
+          </div>
           <AuthToggleTabs
             isRegister={isRegister}
             setIsRegister={setIsRegister}
           />
           <form
-            className="bg-components-main flex flex-col rounded-b-xl "
+            className="bg-card-dark rounded-2xl rounded-t-none border border-border-dark shadow-2xl overflow-hidden"
             onSubmit={isRegister ? handleSignUp : handleSignIn}
           >
-            <div className="px-2 mt-2">
+            <div className="p-6 pt-8 space-y-5">
               {isRegister && (
-                <InputForm
-                  label="Username"
-                  id="username"
-                  name="username"
-                  type="text"
-                  placeholder="John Doe"
-                  onChange={handleFormChange}
-                  required
-                />
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-white">
+                    Username
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <FaUser className="text-text-muted text-[20px]" />
+                    </div>
+                    <input
+                      className="block w-full rounded-lg border-border-dark bg-input-dark text-white placeholder:text-text-muted/50 focus:border-primary focus:ring-1 focus:outline-none focus:ring-primary sm:text-sm pl-10 h-12 transition-all"
+                      id="username"
+                      name="username"
+                      type="text"
+                      placeholder="John Doe"
+                      value={signUpFormData.username}
+                      onChange={handleFormChange}
+                      required
+                    />
+                  </div>
+                </div>
               )}
 
-              <InputForm
-                label="Email"
-                id="email"
-                name="email"
-                type="email"
-                placeholder="john.doe@domain.com"
-                onChange={handleFormChange}
-                required
-              />
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-white">
+                  Email Address
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <FaEnvelope className="text-text-muted text-[20px]" />
+                  </div>
+                  <input
+                    className="block w-full rounded-lg border-border-dark bg-input-dark text-white placeholder:text-text-muted/50 focus:border-primary focus:ring-1 focus:outline-none focus:ring-primary sm:text-sm pl-10 h-12 transition-all"
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="john.doe@domain.com"
+                    value={signInFormData.email}
+                    onChange={handleFormChange}
+                    required
+                  />
+                </div>
+              </div>
 
-              <InputForm
-                label="Password"
-                id="password"
-                name="password"
-                type="password"
-                placeholder="password"
-                onChange={handleFormChange}
-                required
-              />
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="block text-sm font-medium text-white">
+                    Password
+                  </label>
+                  {!isRegister && (
+                    <span className="text-xs cursor-pointer font-medium text-primary hover:text-primary-hover underline decoration-transparent hover:decoration-primary transition-all">
+                      Forgot Password?
+                    </span>
+                  )}
+                </div>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <FaLock className="text-text-muted text-[20px]" />
+                  </div>
+                  <input
+                    className="block w-full rounded-lg border-border-dark bg-input-dark text-white placeholder:text-text-muted/50 focus:border-primary focus:ring-1 focus:outline-none focus:ring-primary sm:text-sm pl-10 h-12 transition-all"
+                    id="password"
+                    name="password"
+                    type="password"
+                    placeholder="********"
+                    value={signInFormData.password}
+                    onChange={handleFormChange}
+                    required
+                  />
+                </div>
+              </div>
             </div>
 
             <Button
               btnStyle={"approve"}
-              size={"medium"}
-              additionalStyle="rounded-xl mt-3"
+              size={"big"}
+              additionalStyle="w-full font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-[0.98]"
               disabled={signInMutation.isPending || signUpMutation.isPending}
             >
               <span>{isRegister ? "Register" : "Login"}</span>
+              <FaArrowRight className="text-[20px]" />
             </Button>
           </form>
         </div>

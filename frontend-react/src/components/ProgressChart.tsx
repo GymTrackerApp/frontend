@@ -40,9 +40,8 @@ const ProgressChart = ({ historyData, yAxisTitle }: ProgressChartProps) => {
 
   if (processedData.length === 0) {
     return (
-      <div className="text-gray-400 text-center mt-1 pb-3">
+      <div className="flex flex-col text-xl justify-center text-gray-400 dark:text-gray-500 h-full text-center ">
         <span>No workout data for the selected period.</span>
-        <br />
         <span>Go log a workout to see your progress!</span>
       </div>
     );
@@ -52,6 +51,9 @@ const ProgressChart = ({ historyData, yAxisTitle }: ProgressChartProps) => {
     <div className="h-64 min-h-48 outline-none focus:outline-none mt-3">
       <ResponsiveContainer
         width="100%"
+        minWidth={0}
+        minHeight={undefined}
+        aspect={undefined}
         height="100%"
         className="focus:outline-none"
       >
@@ -66,6 +68,7 @@ const ProgressChart = ({ historyData, yAxisTitle }: ProgressChartProps) => {
             label={{
               value: yAxisTitle || "",
               angle: -90,
+              textAnchor: "middle",
               position: "insideLeft",
             }}
           />

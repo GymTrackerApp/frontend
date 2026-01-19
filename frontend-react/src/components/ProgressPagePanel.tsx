@@ -11,6 +11,7 @@ interface ProgressPagePanelProps<T> {
   isActiveWindow: boolean;
   windowTitle: string;
   windowData: T[];
+  windowDataFilterFunction?: (data: readonly T[], keyword: string) => T[];
   isWindowDataLoading: boolean;
   onSelectData: (data: T) => void;
   renderWindowItem: (data: T) => React.ReactNode;
@@ -25,6 +26,7 @@ const ProgressPagePanel = <T,>({
   isActiveWindow,
   windowTitle,
   windowData,
+  windowDataFilterFunction,
   isWindowDataLoading,
   onSelectData,
   renderWindowItem,
@@ -51,6 +53,7 @@ const ProgressPagePanel = <T,>({
           isDataLoading={isWindowDataLoading}
           onSelect={onSelectData}
           renderItem={renderWindowItem}
+          dataFilter={windowDataFilterFunction}
         />
       )}
     </div>

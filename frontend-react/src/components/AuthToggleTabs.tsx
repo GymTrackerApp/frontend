@@ -6,14 +6,15 @@ interface AuthToggleProps {
 }
 
 const AuthToggleTabs = ({ isRegister, setIsRegister }: AuthToggleProps) => {
-  const btnCommonStyle = "w-full rounded-t-md cursor-pointer";
   return (
-    <div className="flex">
+    <div className="flex border-b border-border-dark">
       <button
         type="button"
         className={clsx(
-          btnCommonStyle,
-          isRegister ? "bg-gray-700" : "bg-blue-500"
+          "flex-1 py-4 text-center text-sm font-semibold border-b-2 transition-colors rounded-tl-4xl",
+          isRegister
+            ? "border-transparent text-text-muted"
+            : "border-primary text-white bg-white/5"
         )}
         onClick={() => setIsRegister(false)}
       >
@@ -22,8 +23,10 @@ const AuthToggleTabs = ({ isRegister, setIsRegister }: AuthToggleProps) => {
       <button
         type="button"
         className={clsx(
-          btnCommonStyle,
-          isRegister ? "bg-blue-500" : "bg-gray-700"
+          "flex-1 py-4 text-center text-sm font-semibold text-text-muted hover:text-white border-b-2 transition-colors rounded-tr-4xl",
+          isRegister
+            ? "border-primary bg-white/5"
+            : "border-transparent text-text-muted"
         )}
         onClick={() => setIsRegister(true)}
       >

@@ -1,12 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "react-router";
-import Header from "../components/Header";
+import { useSearchParams } from "react-router-dom";
 import WorkoutForm from "../components/WorkoutForm";
 import {
   getTrainingPlanById,
   type PlanResponse,
 } from "../services/trainingService";
 import type { ErrorResponse } from "../types/ApiResponse";
+import LoadingPage from "./LoadingPage";
+import ErrorPage from "./ErrorPage";
 
 const Workout = () => {
   const [searchParams] = useSearchParams();
@@ -24,15 +25,15 @@ const Workout = () => {
 
   return (
     <>
-      <Header />
-      {isError ? (
-        <p>Failed to fetch training plan.</p>
-      ) : isLoading ? (
-        <p>Loading training plan...</p>
-      ) : !plan ? (
-        <p>Failed to fetch training plan.</p>
+      {!trainingPlanId || isError ? (
+        <ErrorPage />
+      ) : isLoading || !plan ? (
+        <LoadingPage
+          title="Preparing your workout..."
+          description="Loading your personalized plan, please wait."
+        />
       ) : (
-        <WorkoutForm plan={plan!} />
+        <WorkoutForm key={JSON.stringify(plan)} plan={plan} />
       )}
     </>
   );

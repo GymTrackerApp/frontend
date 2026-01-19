@@ -1,7 +1,10 @@
-import { FaTimes } from "react-icons/fa";
+import { format } from "date-fns";
+import { FaChartLine, FaTimes } from "react-icons/fa";
 import type { WorkoutResponse } from "../../services/workoutService";
-import { displayLongFormattedDate } from "../../utils/dateUtils";
-import { calculateWorkoutVolume } from "../../utils/workoutUtils";
+import {
+  calculateTotalSets,
+  calculateWorkoutVolume,
+} from "../../utils/workoutUtils";
 import AbsoluteWindowWrapper from "../ui/AbsoluteWindowWrapper";
 
 interface WorkoutDetailsProps {
@@ -11,59 +14,112 @@ interface WorkoutDetailsProps {
 
 const WorkoutDetails = ({ workout, onClose }: WorkoutDetailsProps) => {
   return (
-    <AbsoluteWindowWrapper isOpen={true} onClose={onClose} windowSize="large">
-      <header className="flex justify-between items-center">
-        <p className="text-2xl font-bold">Workout Details</p>
-        <FaTimes className="cursor-pointer hover:opacity-80" onClick={onClose}/>
-      </header>
-      <section>
-        <p className="text-lg font-bold mt-3">{workout.trainingPlan.name}</p>
-        <div className="flex justify-between gap-2">
-          <div className="bg-subcomponents-main w-full p-2">
-            <p className="text-subcomponents-text-main">Date</p>
-            <p>{displayLongFormattedDate(workout.createdAt)}</p>
+    <AbsoluteWindowWrapper isOpen={true} onClose={onClose}>
+      <div className="flex-1 overflow-y-auto scrollbar-none p-5 space-y-10">
+        <header className="flex items-center justify-between p-6 md:p-2 border-b border-slate-800 bg-slate-900/50">
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2 text-primary">
+              <FaChartLine className="text-2xl" />
+              <span className="text-sm font-bold uppercase tracking-[0.2em]">
+                Workout Details
+              </span>
+            </div>
+            <h1 className="text-3xl md:text-4xl font-black tracking-tight mt-1">
+              {workout.trainingPlan.name}
+            </h1>
+            <p className="text-slate-400 font-medium">
+              {format(workout.createdAt, "iiii, MMMM dd, yyyy")}
+            </p>
           </div>
-          <div className="bg-subcomponents-main w-full p-2">
-            <p className="text-subcomponents-text-main">Volume</p>
-            <p>{calculateWorkoutVolume(workout)} kg</p>
+          <button
+            className="size-10 flex items-center justify-center rounded-full hover:bg-slate-800 transition-colors text-slate-400 hover:text-white cursor-pointer"
+            onClick={onClose}
+          >
+            <FaTimes className="text-3xl" />
+          </button>
+        </header>
+
+        <div className="flex gap-5">
+          <div className="w-full bg-slate-800/50 border border-slate-700/20 rounded-xl p-4">
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">
+              Total Volume
+            </p>
+            <p className="text-2xl font-black">
+              {calculateWorkoutVolume(workout)}{" "}
+              <span className="text-sm font-normal opacity-60">kg</span>
+            </p>
+          </div>
+          <div className="w-full bg-slate-800/50 border border-slate-700/50 rounded-xl p-4">
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">
+              Total Sets
+            </p>
+            <p className="text-2xl font-black">{calculateTotalSets(workout)}</p>
           </div>
         </div>
-      </section>
 
-      <section>
-        <p className="text-lg font-bold mt-3">Exercises</p>
-        {workout.workoutItems.map((workoutItem) => (
-          <div
-            key={workoutItem.exercise.exerciseId}
-            className="bg-subcomponents-main mt-3 p-1 first-of-type:mt-0"
-          >
-            <p className="font-light">{workoutItem.exercise.name}</p>
-            <p className="text-subcomponents-text-main font-thin">
-              Volume:{" "}
-              {workoutItem.sets.reduce(
-                (prev, curr) => prev + curr.reps * curr.weight,
-                0
-              )}{" "}
-              kg
-            </p>
-            <div className="grid grid-cols-3 gap-2 text-sm text-center text-subcomponents-text-main">
-              <span className="text-left">Set</span>
-              <span>Weight (kg)</span>
-              <span>Reps</span>
-            </div>
-            {workoutItem.sets.map((set, setIndex) => (
-              <div
-                className="grid grid-cols-3 gap-2 text-sm text-center"
-                key={setIndex}
-              >
-                <p className="text-left">#{setIndex + 1}</p>
-                <p>{set.weight} kg</p>
-                <p>{set.reps}</p>
+        <div className="space-y-12">
+          {workout.workoutItems.map((workoutItem, workoutItemIndex) => (
+            <section key={workoutItemIndex}>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-4">
+                  <div>
+                    <h2 className="text-xl font-bold text-white">
+                      {workoutItem.exercise.name}
+                    </h2>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-primary font-black text-xl leading-none">
+                    {workoutItem.sets.reduce(
+                      (prev, curr) => prev + curr.reps * curr.weight,
+                      0
+                    )}{" "}
+                    <span className="text-xs font-medium opacity-70">kg</span>
+                  </p>
+                  <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">
+                    Exercise Volume
+                  </p>
+                </div>
               </div>
-            ))}
-          </div>
-        ))}
-      </section>
+              <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/30">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-slate-800/50 text-[10px] uppercase tracking-widest font-bold text-slate-400">
+                      <th className="px-4 py-3 border-b border-slate-800">
+                        Set
+                      </th>
+                      <th className="px-4 py-3 border-b border-slate-800 text-primary text-center">
+                        Weight
+                      </th>
+                      <th className="px-4 py-3 border-b border-slate-800 text-primary text-center">
+                        Reps
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-sm divide-y divide-slate-800/50">
+                    {workoutItem.sets.map((set, setIndex) => (
+                      <tr
+                        className="hover:bg-slate-800/20 transition-colors"
+                        key={setIndex}
+                      >
+                        <td className="px-4 py-3 font-bold text-slate-500">
+                          {setIndex + 1}
+                        </td>
+                        <td className="px-4 py-3 font-black text-white text-base text-center">
+                          {set.weight} kg
+                        </td>
+                        <td className="px-4 py-3 font-black text-white text-base text-center">
+                          {set.reps}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          ))}
+        </div>
+      </div>
     </AbsoluteWindowWrapper>
   );
 };

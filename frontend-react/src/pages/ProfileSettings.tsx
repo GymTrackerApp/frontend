@@ -1,153 +1,157 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import type { AxiosError } from "axios";
-import toast from "react-hot-toast";
+import clsx from "clsx";
+import { format } from "date-fns";
+import { useState } from "react";
 import {
-  FaCalendar,
-  FaEnvelope,
-  FaLock,
-  FaPencilAlt,
-  FaUser,
+  FaBalanceScale,
+  FaMoon,
+  FaRegCalendar,
+  FaUserCircle,
 } from "react-icons/fa";
-import { useNavigate } from "react-router";
-import Header from "../components/Header";
-import Button from "../components/ui/Button";
-import MainPagePanel from "../components/ui/MainPagePanel";
-import { signOut } from "../services/authService";
-import { getUserProfile } from "../services/userService";
-import type { ErrorResponse, GeneralResponse } from "../types/ApiResponse";
-import { displayLongFormattedDate } from "../utils/dateUtils";
+import ProfileSectionLoading from "../components/ProfileSectionLoading";
+import PageWrapper from "../components/ui/PageWrapper";
+import { useUserProfile } from "../hooks/useUserProfile";
 
 const ProfileSettings = () => {
-  const navigate = useNavigate();
-
   const {
     data: userProfile,
     isLoading: isUserProfileLoading,
     isError: isUserProfileError,
-  } = useQuery({
-    queryFn: getUserProfile,
-    queryKey: ["userProfile"],
-  });
+  } = useUserProfile();
 
-  const signOutMutation = useMutation<
-    GeneralResponse,
-    AxiosError<ErrorResponse>,
-    { refreshToken: string }
-  >({
-    mutationFn: signOut,
-    onSuccess: (response) => {
-      toast.success(response.message);
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      navigate("/register-login");
-    },
-    onError: (error) => {
-      if (error.response?.data.message) {
-        toast.error(error.response.data.message);
-      } else {
-        toast.error(error.message);
-      }
-    },
-  });
+  const showUserProfile =
+    !!userProfile && !isUserProfileLoading && !isUserProfileError;
 
-  const handleLogout = () => {
-    if (signOutMutation.isPending) return;
-
-    const refreshToken = localStorage.getItem("refreshToken");
-
-    if (!refreshToken) {
-      toast.error("User is not logged in");
-      navigate("/register-login", { replace: true });
-      return;
-    }
-
-    const data = {
-      refreshToken: refreshToken,
-    };
-
-    signOutMutation.mutate(data);
-  };
+  const [darkModeEnabled, setDarkModeEnabled] = useState<boolean>(true);
+  const [preferredWeightUnits, setPreferredWeightUnits] = useState<
+    "kg" | "lbs"
+  >("kg");
 
   return (
-    <>
-      <Header />
-      <div className="w-full min-h-dvh bg-background-main text-white p-2">
-        <h1 className="text-2xl font-bold">Profile Settings</h1>
-        <p className="text-subcomponents-text-main mb-2">
-          Manage your account and preferences
-        </p>
-        <MainPagePanel title={"Profile information"}>
-          {isUserProfileError ? (
-            <p className="mt-3">Failed to fetch user profile information</p>
-          ) : isUserProfileLoading || !userProfile ? (
-            <p className="mt-3">Loading...</p>
+    <PageWrapper>
+      <div className="p-8 lg:p-12 mx-auto space-y-10">
+        <div className="text-center md:text-left">
+          <h1 className="text-3xl font-black tracking-tight text-gray-900 dark:text-white">
+            Settings
+          </h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">
+            Keep your profile simple and your focus on the gym.
+          </p>
+        </div>
+        <section className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="md:text-lg text-md font-bold tracking-tight px-1 text-gray-400 uppercase">
+              Account Information
+            </h2>
+          </div>
+          {!showUserProfile ? (
+            <ProfileSectionLoading />
           ) : (
-            <div className="flex flex-col gap-3">
-              <div className="mt-3 flex justify-between items-center">
-                <div className="flex gap-2 items-center">
-                  <FaUser />
-                  <div className="flex flex-col">
-                    <span className="text-subcomponents-text-main">
-                      Username
-                    </span>
-                    <span>{userProfile.username}</span>
+            <div className="bg-white dark:bg-card-dark rounded-2xl border border-gray-200 dark:border-border-dark p-8 relative overflow-hidden">
+              <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
+                <FaUserCircle className="w-32 h-32 rounded-2xl bg-cover bg-center shrink-0 shadow-2xl" />
+                <div className="flex-1 space-y-4 text-center md:text-left">
+                  <div className="space-y-1">
+                    <p className="text-3xl font-black text-gray-900 dark:text-white">
+                      {userProfile.username}
+                    </p>
+                    <p className="text-gray-500 font-medium">
+                      {userProfile.email}
+                    </p>
+                    <p className="text-sm text-primary font-semibold flex items-center justify-center md:justify-start gap-1">
+                      <FaRegCalendar className="text-sm" />
+                      Member Since:{" "}
+                      {format(new Date(userProfile.createdAt), "dd MMM yyyy")}
+                    </p>
+                  </div>
+                  <div className="w-full flex lg:flex-col lg:w-3/4 xl:w-1/2 gap-2">
+                    <button className="bg-primary text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-blue-600 transition-colors shadow-lg shadow-primary/20 cursor-pointer">
+                      Edit Profile Details
+                    </button>
+                    <button className="bg-gray-100 dark:bg-border-dark hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white px-6 py-2.5 rounded-xl font-bold text-sm transition-colors flex justify-center items-center gap-2 cursor-pointer">
+                      Change Password
+                    </button>
                   </div>
                 </div>
-                <FaPencilAlt className="cursor-pointer hover:opacity-80" />
               </div>
-              <div className="flex justify-between items-center">
-                <div className="flex items-center gap-3">
-                  <FaEnvelope />
-                  <div className="flex flex-col">
-                    <span className="text-subcomponents-text-main">Email</span>
-                    <span>{userProfile.email}</span>
-                  </div>
-                </div>
-                <FaPencilAlt className="cursor-pointer hover:opacity-80" />
-              </div>
-              <div className="flex items-center gap-3">
-                <FaCalendar />
-                <div className="flex flex-col">
-                  <span className="text-subcomponents-text-main">
-                    Member since
-                  </span>
-                  <span>
-                    {displayLongFormattedDate(new Date(userProfile.createdAt))}
-                  </span>
-                </div>
-              </div>
+              <div className="absolute -right-12 -top-12 size-48 bg-primary/5 rounded-full blur-3xl"></div>
             </div>
           )}
-        </MainPagePanel>
-        <MainPagePanel title={"Security"}>
-          <div className="flex justify-between items-center mt-3">
-            <div className="flex items-center gap-3">
-              <FaLock />
-              <div>
-                <span className="text-subcomponents-text-main">Password</span>
-                <p className="text-sm">********</p>
+        </section>
+        <section className="space-y-4">
+          <h2 className="md:text-lg font-bold tracking-tight px-1 text-gray-400 uppercase text-md">
+            App Preferences
+          </h2>
+          <div className="bg-white dark:bg-card-dark rounded-2xl border border-gray-200 dark:border-border-dark divide-y divide-gray-100 dark:divide-border-dark">
+            <div className="p-6 flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="p-2 bg-primary/10 rounded-lg">
+                  <FaMoon className="text-primary" />
+                </div>
+                <div>
+                  <p className="font-bold">Dark Mode</p>
+                  <p className="text-sm text-gray-500">
+                    Easier on the eyes in the gym.
+                  </p>
+                </div>
+              </div>
+              <button
+                className={clsx(
+                  "relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer",
+                  darkModeEnabled
+                    ? "bg-primary hover:bg-primary/80"
+                    : "bg-subcomponents-main hover:bg-subcomponents-main/80"
+                )}
+                onClick={() => setDarkModeEnabled(!darkModeEnabled)}
+              >
+                <span
+                  className={clsx(
+                    "inline-block h-4 w-4 transform rounded-full bg-white transition shadow-sm",
+                    darkModeEnabled ? "translate-x-6" : "translate-x-1"
+                  )}
+                ></span>
+              </button>
+            </div>
+            <div className="p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="p-2 bg-primary/10 rounded-lg">
+                  <FaBalanceScale className="text-primary" />
+                </div>
+                <div>
+                  <p className="font-bold">Weight Units</p>
+                  <p className="text-sm text-gray-500">
+                    Preferred measurement for your lifts.
+                  </p>
+                </div>
+              </div>
+              <div className="flex bg-gray-100 dark:bg-border-dark p-1 rounded-xl w-full md:w-32">
+                <button
+                  className={clsx(
+                    "flex-1 py-1.5 rounded-lg font-bold text-xs transition-all cursor-pointer",
+                    preferredWeightUnits === "kg"
+                      ? "bg-white dark:bg-card-dark text-primary shadow-sm"
+                      : "text-gray-400 dark:hover:text-white"
+                  )}
+                  onClick={() => setPreferredWeightUnits("kg")}
+                >
+                  KG
+                </button>
+                <button
+                  className={clsx(
+                    "flex-1 py-1.5 rounded-lg font-bold text-xs transition-all text-gray-400 cursor-pointer",
+                    preferredWeightUnits === "lbs"
+                      ? "bg-white dark:bg-gray-800 text-primary shadow-sm"
+                      : "text-gray-400 dark:hover:text-white"
+                  )}
+                  onClick={() => setPreferredWeightUnits("lbs")}
+                >
+                  LBS
+                </button>
               </div>
             </div>
-            <Button
-              btnStyle={"details"}
-              size={"medium"}
-              additionalStyle="rounded-xl"
-            >
-              <span>Change Password</span>
-            </Button>
           </div>
-        </MainPagePanel>
-        <MainPagePanel title={"Account Actions"}>
-          <button
-            className="text-red-400 px-2 rounded-lg border border-red-400 cursor-pointer hover:opacity-80 mt-3"
-            onClick={handleLogout}
-            type="button"
-          >
-            Logout
-          </button>
-        </MainPagePanel>
+        </section>
       </div>
-    </>
+    </PageWrapper>
   );
 };
 
