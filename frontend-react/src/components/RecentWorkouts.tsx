@@ -50,6 +50,15 @@ const RecentWorkouts = () => {
             <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
               {isLoading || isError || !data ? (
                 <WorkoutLogLoading />
+              ) : data.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={4}
+                    className="px-6 py-4 text-center text-gray-500 dark:text-gray-400 font-semibold"
+                  >
+                    No recent workouts found.
+                  </td>
+                </tr>
               ) : (
                 data.map((workout) => (
                   <WorkoutLog
