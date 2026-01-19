@@ -1,3 +1,5 @@
+import { differenceInCalendarDays } from "date-fns";
+
 export const displayShortFormattedDate = (date: Date) => {
   return date.toLocaleDateString("en-US", {
     month: "short",
@@ -18,4 +20,13 @@ export const getCurrentDate = () => {
   const now = new Date();
   now.setHours(0, 0, 0, 0);
   return now;
+};
+
+export const getRelativeDate = (date: Date) => {
+  const diff = differenceInCalendarDays(new Date(), date);
+
+  if (diff === 0) return "Today";
+  if (diff === 1) return "Yesterday";
+
+  return `${diff} days ago`;
 };

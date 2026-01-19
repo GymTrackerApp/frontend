@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
-import { format, subDays, subMonths } from "date-fns";
+import { format, parseISO, subDays, subMonths } from "date-fns";
 import { useState } from "react";
 import {
   FaCalendar,
@@ -97,7 +97,7 @@ const Progress = () => {
   ): Array<DataContent> => {
     if ("trainingId" in data) {
       return data.history.map((snapshot) => ({
-        date: format(snapshot.workoutDate, "yyyy-MM-dd"),
+        date: format(parseISO(snapshot.workoutDate), "yyyy-MM-dd"),
         value: snapshot.sets.reduce(
           (prev, curr) => prev + curr.reps * curr.weight,
           0
@@ -105,7 +105,7 @@ const Progress = () => {
       }));
     } else if ("exerciseId" in data) {
       return data.history.map((snapshot) => ({
-        date: format(snapshot.workoutDate, "yyyy-MM-dd"),
+        date: format(parseISO(snapshot.workoutDate), "yyyy-MM-dd"),
         value:
           snapshot.sets.reduce((prev, curr) => prev + curr.weight, 0) /
           (snapshot.sets.length === 0 ? 1 : snapshot.sets.length),

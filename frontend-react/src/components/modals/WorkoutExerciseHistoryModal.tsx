@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { FaHistory, FaTimes } from "react-icons/fa";
 import type { PlanItemResponse } from "../../services/trainingService";
 import {
@@ -78,12 +78,15 @@ const WorkoutExerciseHistoryModal = ({
                     <div className="flex justify-between items-baseline mb-3">
                       <p className="text-gray-300 text-base font-semibold group-hover:text-white transition-colors leading-tight">
                         {format(
-                          workoutSessionSnapshot.workoutDate,
+                          parseISO(workoutSessionSnapshot.workoutDate),
                           "MMM dd, yyyy"
                         )}
                         <br></br>
                         <span className="text-xs">
-                          {format(workoutSessionSnapshot.workoutDate, "iiii")}
+                          {format(
+                            parseISO(workoutSessionSnapshot.workoutDate),
+                            "iiii"
+                          )}
                         </span>
                       </p>
                     </div>

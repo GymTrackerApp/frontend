@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { formatDistanceToNow } from "date-fns";
+import toast from "react-hot-toast";
 import { FaDumbbell, FaPlay, FaStopwatch } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import type { PlanResponse } from "../services/trainingService";
 import { getWorkouts } from "../services/workoutService";
+import { getRelativeDate } from "../utils/dateUtils";
 import { calculateAverageTrainingTime } from "../utils/plansUtils";
-import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
 
 interface PlanBlockProps {
   plan: PlanResponse;
@@ -51,9 +51,7 @@ const PlanBlock = ({ plan }: PlanBlockProps) => {
               ? "Could not load"
               : !lastWorkout || lastWorkout?.length === 0
               ? "Never performed"
-              : `Last done: ${formatDistanceToNow(
-                  lastWorkout[0].createdAt
-                )} ago`}
+              : `Last done: ${getRelativeDate(lastWorkout[0].createdAt)}`}
           </p>
         </div>
         <button
