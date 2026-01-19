@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { formatDate } from "date-fns";
+import { format } from "date-fns";
 import { FaHistory, FaTimes } from "react-icons/fa";
 import type { PlanItemResponse } from "../../services/trainingService";
 import {
@@ -77,16 +77,13 @@ const WorkoutExerciseHistoryModal = ({
                   <div className="flex flex-col py-5 pl-2 border-t border-gray-700/30 group hover:bg-gray-800/20 rounded-lg transition-colors px-2 -mx-2">
                     <div className="flex justify-between items-baseline mb-3">
                       <p className="text-gray-300 text-base font-semibold group-hover:text-white transition-colors leading-tight">
-                        {formatDate(
+                        {format(
                           workoutSessionSnapshot.workoutDate,
                           "MMM dd, yyyy"
                         )}
                         <br></br>
                         <span className="text-xs">
-                          {formatDate(
-                            workoutSessionSnapshot.workoutDate,
-                            "iiii"
-                          )}
+                          {format(workoutSessionSnapshot.workoutDate, "iiii")}
                         </span>
                       </p>
                     </div>

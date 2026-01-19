@@ -20,10 +20,10 @@ const ConfirmationWindow = ({
 }: ConfirmationWindowProps) => {
   return (
     <AbsoluteWindowWrapper isOpen={true} onClose={onClose}>
-      <div className="w-full bg-white dark:bg-[#18181b] rounded-xl shadow-2xl border border-slate-200 dark:border-zinc-800 overflow-hidden transform scale-100 animate-in fade-in zoom-in duration-300">
+      <div className="w-full bg-white dark:bg-[#18181b] rounded-xl shadow-2xl border border-slate-200 dark:border-zinc-800 overflow-hidden">
         <div className="p-8 flex flex-col items-center text-center">
           <div className="relative mb-6">
-            <div className="size-24 rounded-full bg-primary/10 flex items-center justify-center trophy-glow border border-primary/20">
+            <div className="size-24 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20">
               <FaDumbbell className="text-5xl text-primary" />
             </div>
             <div className="absolute -bottom-2 -right-2 bg-emerald-500 rounded-full p-1 border-4 border-white dark:border-[#18181b]">

@@ -56,7 +56,10 @@ const PlanActionModal = ({
 
       <form
         className="h-full overflow-hidden flex flex-col"
-        onSubmit={handleSubmit}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
       >
         <div className="flex-1 overflow-y-auto scrollbar-none px-4 py-8 md:px-0">
           <div className="mx-auto max-w-2xl px-6 py-12 flex flex-col gap-10">

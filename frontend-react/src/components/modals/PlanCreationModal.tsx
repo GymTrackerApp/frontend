@@ -212,7 +212,7 @@ const PlanCreationModal = ({ exercises, onClose }: NewPlanProps) => {
           <div className="col-span-1 flex justify-center">
             <button
               type="button"
-              className="opacity-0 group-hover:opacity-100 p-0 md:p-2 rounded-lg hover:bg-red-500/10 text-text-muted hover:text-red-400 transition-all cursor-pointer"
+              className="opacity-0 group-hover:opacity-100 focus:opacity-100 p-0 md:p-2 rounded-lg hover:bg-red-500/10 text-text-muted hover:text-red-400 transition-all cursor-pointer"
               onClick={() =>
                 setNewPlanForm({
                   planName: newPlanForm.planName,

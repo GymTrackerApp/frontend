@@ -258,6 +258,8 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
         (workoutItem) => workoutItem.exerciseId !== exerciseId
       ),
     }));
+
+    queryClient.invalidateQueries({ queryKey: ["lastSession"] });
   };
 
   const addExercise = (exercise: ExerciseResponse) => {
@@ -571,11 +573,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
           title={"Replace Exercise"}
           onClose={() => setReplacingExerciseId(null)}
           data={exercises}
-          dataFilter={(data, keyword) =>
-            data.filter((exercise) =>
-              exercise.name.toLowerCase().includes(keyword.toLowerCase())
-            )
-          }
+          dataFilter={exercisesFilter}
           onSelect={(exercise) => {
             replaceExercise(exercise);
             setReplacingExerciseId(null);

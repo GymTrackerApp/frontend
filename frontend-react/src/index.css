@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&;display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap");
 @import "tailwindcss";
 @plugin "tailwind-scrollbar";
 
@@ -25,7 +25,7 @@
   --color-accent-yellow: #f59e0b;
 
   /* Fonts */
-  --font-display: [ "Inter", "sans-serif"];
+  --font-display: "Inter";
 
   /* Animations */
   @keyframes pulse-custom {
