@@ -215,7 +215,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
     if (
       workoutItems.some((item) => item.exerciseId === newExercise.exerciseId)
     ) {
-      toast.error("Exercise already exists in the plan");
+      toast.error("Exercise already exists in the workout");
       return;
     }
 
