@@ -23,18 +23,21 @@ const ProgressChart = ({ historyData, yAxisTitle }: ProgressChartProps) => {
   const processedData = useMemo(() => {
     if (!historyData || historyData.length === 0) return [];
 
-    const bestEntries = historyData.reduce((acc, curr) => {
-      const existingValue = acc[curr.date]?.value ?? -Infinity;
+    const bestEntries = historyData.reduce(
+      (acc, curr) => {
+        const existingValue = acc[curr.date]?.value ?? -Infinity;
 
-      if (curr.value > existingValue) {
-        acc[curr.date] = { ...curr };
-      }
+        if (curr.value > existingValue) {
+          acc[curr.date] = { ...curr };
+        }
 
-      return acc;
-    }, {} as Record<string, DataContent>);
+        return acc;
+      },
+      {} as Record<string, DataContent>,
+    );
 
     return Object.values(bestEntries).sort(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
     );
   }, [historyData]);
 
@@ -58,7 +61,10 @@ const ProgressChart = ({ historyData, yAxisTitle }: ProgressChartProps) => {
         className="focus:outline-none"
       >
         <LineChart data={processedData}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#444" />
+          <CartesianGrid
+            strokeDasharray="3 3"
+            className="stroke-border-light dark:stroke-border-dark"
+          />
 
           <XAxis dataKey="date" stroke="#ccc" fontSize={12} />
 
@@ -73,7 +79,13 @@ const ProgressChart = ({ historyData, yAxisTitle }: ProgressChartProps) => {
             }}
           />
 
-          <Tooltip contentStyle={{ backgroundColor: "#333", border: "none" }} />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: "#333",
+              color: "white",
+              border: "none",
+            }}
+          />
 
           <Line
             type="monotone"

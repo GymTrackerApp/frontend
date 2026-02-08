@@ -7,7 +7,7 @@ interface LoadingPageProps {
 
 const LoadingPage = ({ title, description }: LoadingPageProps) => {
   return (
-    <div className="bg-background-dark font-display text-gray-100 antialiased overflow-hidden">
+    <div className="bg-background-light dark:bg-background-dark font-display text-gray-100 antialiased overflow-hidden">
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#111827]/80 backdrop-blur-sm">
         <div className="max-w-md w-full p-8 flex flex-col items-center text-center space-y-8">
           <div className="relative flex items-center justify-center">

@@ -17,7 +17,7 @@ const TrainingPlanSelectionOption = ({
             "size-12 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform",
             plan.isCustom
               ? "bg-blue-500/10 text-blue-400"
-              : "bg-purple-500/10 text-purple-400"
+              : "bg-purple-500/10 text-purple-400",
           )}
         >
           <FaDumbbell size={20} className="rotate-45" />
@@ -25,16 +25,16 @@ const TrainingPlanSelectionOption = ({
         <div>
           <p
             className={clsx(
-              "font-bold text-white transition-colors",
+              "font-bold transition-colors",
               plan.isCustom
                 ? "group-hover:text-primary"
-                : "group-hover:text-purple-400"
+                : "group-hover:text-purple-400",
             )}
           >
             {plan.name}
           </p>
           <div className="flex items-center gap-2 mt-0.5">
-            <span className="text-xs text-slate-400">
+            <span className="text-xs dark:text-slate-400">
               {plan.planItems.length}{" "}
               {plan.planItems.length === 1 ? "exercise" : "exercises"}
             </span>
@@ -44,7 +44,7 @@ const TrainingPlanSelectionOption = ({
                 "text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded",
                 plan.isCustom
                   ? "text-blue-400 bg-blue-400/10"
-                  : "text-purple-400 bg-purple-400/10"
+                  : "text-purple-400 bg-purple-400/10",
               )}
             >
               {plan.isCustom ? "Your" : "Predefined"}
@@ -57,7 +57,7 @@ const TrainingPlanSelectionOption = ({
           "text-slate-600 group-hover:translate-x-1 transition-all",
           plan.isCustom
             ? "group-hover:text-primary"
-            : "group-hover:text-purple-400"
+            : "group-hover:text-purple-400",
         )}
       />
     </div>

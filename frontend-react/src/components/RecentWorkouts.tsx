@@ -3,7 +3,7 @@ import { useState } from "react";
 import { getWorkouts, type WorkoutResponse } from "../services/workoutService";
 import WorkoutDetails from "./modals/WorkoutDetailsModal";
 import WorkoutLog from "./WorkoutLog";
-import WorkoutLogLoading from "./WorkoutLogLoading";
+import WorkoutLogLoading from "./loaders/WorkoutLogLoading";
 
 const RecentWorkouts = () => {
   const { data, isLoading, isError } = useQuery({
@@ -29,9 +29,9 @@ const RecentWorkouts = () => {
         <h2 className="text-xl font-bold text-gray-900 dark:text-white">
           Recent Workouts
         </h2>
-        <div className="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-surface-dark shadow-sm">
+        <div className="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-card-dark shadow-sm">
           <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
-            <thead className="bg-gray-50 dark:bg-gray-800/50 text-xs uppercase text-gray-700 dark:text-gray-300">
+            <thead className="bg-gray-100 dark:bg-gray-800/50 text-xs uppercase text-gray-700 dark:text-gray-300">
               <tr>
                 <th className="px-6 py-3" scope="col">
                   Workout
@@ -56,7 +56,7 @@ const RecentWorkouts = () => {
                     colSpan={4}
                     className="px-6 py-4 text-center text-gray-500 dark:text-gray-400 font-semibold"
                   >
-                    No recent workouts found.
+                    No recent workouts found
                   </td>
                 </tr>
               ) : (

@@ -17,16 +17,16 @@ const Exercise = ({
   const [isExerciseRemovalWindowOpened, setIsExerciseRemovalWindowOpened] =
     useState<boolean>(false);
   return (
-    <div className="flex flex-col bg-surface-dark rounded-xl border border-border-dark overflow-hidden hover:border-primary/50 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-primary/5">
+    <div className="flex flex-col bg-card-light dark:bg-card-dark rounded-xl border border-border-light dark:border-border-dark overflow-hidden hover:dark:border-primary/50 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-primary/5">
       <div className="p-5 flex flex-col justify-between gap-4 flex-1">
         <div className="flex justify-between items-start">
           <div className="flex items-center justify-between gap-3 w-full">
-            <h3 className="text-white text-lg font-bold leading-tight mb-1">
+            <h3 className="text-lg font-bold leading-tight mb-1">
               {exercise.name}
             </h3>
-            <div className="flex">
+            <div className="flex gap-1">
               <button
-                className="flex items-center justify-center h-7 w-7 rounded-lg border border-border-dark text-gray-400 hover:text-white hover:border-gray-500 transition-colors cursor-pointer"
+                className="flex items-center justify-center h-7 w-7 rounded-lg border border-border-light dark:border-border-dark text-gray-400 hover:text-gray-500 hover:border-gray-500 hover:dark:text-white hover:dark:border-gray-500 transition-colors cursor-pointer"
                 onClick={(e) => {
                   e.stopPropagation();
                   setUpdateExercise(exercise);
@@ -35,7 +35,7 @@ const Exercise = ({
                 <FaPen size={14} />
               </button>
               <button
-                className="flex items-center justify-center h-7 w-7 rounded-lg border border-border-dark text-gray-400 hover:text-red-400 hover:border-red-400 transition-colors cursor-pointer"
+                className="flex items-center justify-center h-7 w-7 rounded-lg border border-border-light dark:border-border-dark text-gray-400 hover:text-red-400 hover:border-red-400 transition-colors cursor-pointer"
                 onClick={() => setIsExerciseRemovalWindowOpened(true)}
               >
                 <FaTrashAlt size={14} />

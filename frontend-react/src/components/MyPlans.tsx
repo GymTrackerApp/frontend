@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import type { PlanResponse } from "../services/trainingService";
 import CreateNewResource from "./CreateNewResource";
 import PlanBlock from "./PlanBlock";
-import PlanBlockLoading from "./PlanBlockLoading";
+import PlanBlockLoading from "./loaders/PlanBlockLoading";
 
 interface MyPlansProps {
   userPlans: Array<PlanResponse> | undefined;

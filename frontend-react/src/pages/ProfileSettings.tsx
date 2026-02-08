@@ -7,7 +7,7 @@ import {
   FaRegCalendar,
   FaUserCircle,
 } from "react-icons/fa";
-import ProfileSectionLoading from "../components/ProfileSectionLoading";
+import ProfileSectionLoading from "../components/loaders/ProfileSectionLoading";
 import PageWrapper from "../components/ui/PageWrapper";
 import { useUserProfile } from "../hooks/useUserProfile";
 
@@ -48,7 +48,7 @@ const ProfileSettings = () => {
           ) : (
             <div className="bg-white dark:bg-card-dark rounded-2xl border border-gray-200 dark:border-border-dark p-8 relative overflow-hidden">
               <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
-                <FaUserCircle className="w-32 h-32 rounded-2xl bg-cover bg-center shrink-0 shadow-2xl" />
+                <FaUserCircle className="w-32 h-32 rounded-2xl bg-cover bg-center shrink-0" />
                 <div className="flex-1 space-y-4 text-center md:text-left">
                   <div className="space-y-1">
                     <p className="text-3xl font-black text-gray-900 dark:text-white">
@@ -99,14 +99,14 @@ const ProfileSettings = () => {
                   "relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer",
                   darkModeEnabled
                     ? "bg-primary hover:bg-primary/80"
-                    : "bg-subcomponents-main hover:bg-subcomponents-main/80"
+                    : "bg-subcomponents-main hover:bg-subcomponents-main/80",
                 )}
                 onClick={() => setDarkModeEnabled(!darkModeEnabled)}
               >
                 <span
                   className={clsx(
                     "inline-block h-4 w-4 transform rounded-full bg-white transition shadow-sm",
-                    darkModeEnabled ? "translate-x-6" : "translate-x-1"
+                    darkModeEnabled ? "translate-x-6" : "translate-x-1",
                   )}
                 ></span>
               </button>
@@ -129,7 +129,7 @@ const ProfileSettings = () => {
                     "flex-1 py-1.5 rounded-lg font-bold text-xs transition-all cursor-pointer",
                     preferredWeightUnits === "kg"
                       ? "bg-white dark:bg-card-dark text-primary shadow-sm"
-                      : "text-gray-400 dark:hover:text-white"
+                      : "text-gray-400 dark:hover:text-white",
                   )}
                   onClick={() => setPreferredWeightUnits("kg")}
                 >
@@ -140,7 +140,7 @@ const ProfileSettings = () => {
                     "flex-1 py-1.5 rounded-lg font-bold text-xs transition-all text-gray-400 cursor-pointer",
                     preferredWeightUnits === "lbs"
                       ? "bg-white dark:bg-gray-800 text-primary shadow-sm"
-                      : "text-gray-400 dark:hover:text-white"
+                      : "text-gray-400 dark:hover:text-white",
                   )}
                   onClick={() => setPreferredWeightUnits("lbs")}
                 >

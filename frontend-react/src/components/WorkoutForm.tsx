@@ -61,21 +61,21 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
   const [isCancelWorkoutWindowOpen, setIsCancelWorkoutWindowOpen] =
     useState<boolean>(false);
   const [replacingExerciseId, setReplacingExerciseId] = useState<number | null>(
-    null
+    null,
   );
   const [isAddExerciseWindowEnabled, setIsAddExerciseWindowEnabled] =
     useState<boolean>(false);
   const [lastWorkoutEnabled, setLastWorkoutEnabled] = useState<boolean>(false);
   const [selectTimerEnabled, setSelectTimerEnabled] = useState<boolean>(false);
   const [selectedTimerOption, setSelectedTimerOption] = useState<number | null>(
-    null
+    null,
   );
   const [selectedCustomRestTime, setSelectedCustomRestTime] = useState<
     number | null
   >(null);
 
   const [workoutItems, setWorkoutItems] = useState<Array<PlanItemResponse>>(
-    plan.planItems
+    plan.planItems,
   );
 
   const [workoutCreationRequest, setWorkoutCreationRequest] =
@@ -157,7 +157,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
     exerciseIndex: number,
     setIndex: number,
     field: keyof ExerciseSet,
-    newValue: string
+    newValue: string,
   ) => {
     newValue = newValue.replace(",", ".");
     const numericValue = newValue === "" ? 0 : parseFloat(newValue);
@@ -226,7 +226,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
             exerciseId: newExercise.exerciseId,
             exerciseName: newExercise.name,
           }
-        : { ...item }
+        : { ...item },
     );
 
     setWorkoutItems(updatedItems);
@@ -240,14 +240,14 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
               exerciseId: newExercise.exerciseId,
               sets: workoutItem.sets.map(() => ({ reps: 0, weight: 0 })),
             }
-          : workoutItem
+          : workoutItem,
       ),
     }));
   };
 
   const removeExercise = (exerciseId: number) => {
     const updatedItems = workoutItems.filter(
-      (item) => item.exerciseId !== exerciseId
+      (item) => item.exerciseId !== exerciseId,
     );
 
     setWorkoutItems(updatedItems);
@@ -255,7 +255,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
     setWorkoutCreationRequest((prev) => ({
       ...prev,
       workoutItems: prev.workoutItems.filter(
-        (workoutItem) => workoutItem.exerciseId !== exerciseId
+        (workoutItem) => workoutItem.exerciseId !== exerciseId,
       ),
     }));
 
@@ -299,32 +299,30 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
   };
 
   return (
-    <div className="bg-background-dark text-white font-display antialiased overflow-x-hidden min-h-screen flex flex-col relative selection:bg-primary/30 pb-8">
-      <header className="sticky top-0 z-50 w-full backdrop-blur-xl bg-background-dark/90 border-b border-input-dark">
+    <div className="bg-background-light dark:bg-background-dark dark:text-white font-display antialiased overflow-x-hidden min-h-screen flex flex-col relative selection:bg-primary/30 pb-8">
+      <header className="sticky top-0 z-50 w-full backdrop-blur-xl bg-background-light/90 dark:bg-background-dark/90 border-b border-input-light dark:border-input-dark">
         <div className="max-w-7xl mx-auto px-4 md:px-6 h-20 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <button
-              className="p-2 -ml-2 rounded-full hover:bg-white/5 text-gray-400 hover:text-white transition-colors cursor-pointer"
+              className="p-2 -ml-2 rounded-full hover:bg-gray-200 hover:dark:bg-white/5 text-gray-400 hover:text-gray-500 hover:dark:text-white transition-colors cursor-pointer"
               onClick={() => setIsCancelWorkoutWindowOpen(true)}
             >
               <FaArrowLeft />
             </button>
             <div className="hidden md:flex flex-col">
-              <h1 className="text-base font-bold text-white leading-tight">
-                {plan.name}
-              </h1>
+              <h1 className="text-base font-bold leading-tight">{plan.name}</h1>
             </div>
           </div>
           <AutoWorkoutTimer />
           <div className="flex items-center gap-3">
             <button
-              className="hidden md:flex h-10 px-5 items-center justify-center rounded-xl bg-[#223149]/50 hover:bg-[#223149] border border-[#223149] text-gray-300 hover:text-white text-sm font-semibold transition-all cursor-pointer"
+              className="hidden md:flex h-10 px-5 items-center justify-center rounded-xl bg-[#223149]/50 hover:bg-gray-500 hover:dark:bg-[#223149] border border-input-light dark:border-[#223149] text-gray-100 dark:text-gray-300 hover:text-white text-sm font-semibold transition-all cursor-pointer"
               onClick={() => setIsFinishedWorkoutWindowOpen(true)}
             >
               Finish
             </button>
             <button
-              className="hidden md:flex items-center gap-2 h-10 pl-3 pr-4 rounded-xl bg-accent-yellow hover:bg-[#D97706] text-input-dark transition-all shadow-[0_0_20px_rgba(245,158,11,0.2)] group cursor-pointer"
+              className="hidden md:flex items-center gap-2 h-10 pl-3 pr-4 rounded-xl bg-[#fbac23] hover:bg-[#f59e0b] hover:dark:bg-[#D97706] text-input-dark transition-all shadow-[0_0_20px_rgba(245,158,11,0.2)] group cursor-pointer"
               onClick={() => {
                 setSelectedTimerOption(null);
                 setSelectTimerEnabled(true);
@@ -348,14 +346,14 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
 
       <div className="flex flex-col gap-3">
         <button
-          className="md:hidden w-full flex py-1 px-2 items-center justify-center bg-[#223149]/50 hover:bg-[#223149] text-gray-300 hover:text-white text-sm font-semibold transition-all cursor-pointer"
+          className="md:hidden w-full flex py-1 px-2 items-center justify-center bg-[#223149]/50 hover:bg-gray-500 hover:dark:bg-[#223149] border border-input-light dark:border-[#223149] text-gray-100 dark:text-gray-300 hover:text-white text-sm font-semibold transition-all cursor-pointer"
           onClick={() => setIsFinishedWorkoutWindowOpen(true)}
         >
           Finish
         </button>
 
         <button
-          className="md:hidden w-full flex justify-center items-center gap-2 py-1 pl-3 pr-4 bg-accent-yellow hover:bg-[#D97706] text-input-dark transition-all shadow-[0_0_20px_rgba(245,158,11,0.2)] group cursor-pointer"
+          className="md:hidden w-full flex justify-center items-center gap-2 py-1 pl-3 pr-4 bg-[#fbac23] hover:bg-[#f59e0b] hover:dark:bg-[#D97706] text-input-dark transition-all shadow-[0_0_20px_rgba(245,158,11,0.2)] group cursor-pointer"
           onClick={() => {
             setSelectedTimerOption(null);
             setSelectTimerEnabled(true);
@@ -375,8 +373,8 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
         </button>
 
         <button
-          className="bg-blue-900 text-sm font-bold px-2 py-1 w-full border border-gray-700 cursor-pointer hover:bg-blue-950 transition-colors
-                   disabled:bg-gray-800 disabled:border-gray-900 disabled:text-gray-500 
+          className="bg-blue-500 text-white dark:bg-blue-900 text-sm font-bold px-2 py-1 w-full border dark:border-gray-700 cursor-pointer hover:bg-blue-600 hover:dark:bg-blue-950 transition-colors
+                   disabled:bg-gray-800 disabled:border-gray-900 disabled:text-gray-400 disabled:dark:text-gray-500 
                      disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:bg-gray-800"
           onClick={() => setLastWorkoutEnabled(true)}
           disabled={
@@ -395,22 +393,22 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
           {workoutItems.map((planItem, exerciseIndex) => (
             <article
               key={planItem.exerciseId}
-              className="flex flex-col bg-card-dark rounded-2xl border border-border-dark overflow-hidden shadow-xl shadow-black/20 group hover:border-primary/30 transition-colors duration-300"
+              className="flex flex-col bg-card-light dark:bg-card-dark rounded-2xl border border-border-light dark:border-border-dark overflow-hidden shadow-xl shadow-black/20 group hover:border-primary/30 transition-colors duration-300"
             >
-              <div className="flex items-center justify-between p-5 border-b border-border-dark bg-[#1A2436]">
+              <div className="flex items-center justify-between p-5 border-b border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-input-dark border border-border-dark flex items-center justify-center text-primary shadow-inner">
+                  <div className="w-12 h-12 rounded-xl bg-input-light dark:bg-input-dark border border-border-light dark:border-border-dark flex items-center justify-center text-primary shadow-inner">
                     <FaDumbbell size={25} className="rotate-45" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-white tracking-tight">
+                    <h3 className="text-lg font-bold tracking-tight">
                       {planItem.exerciseName}
                     </h3>
                     <p className="text-xs text-gray-400 mt-0.5 font-medium">
                       {
                         exercises.find(
                           (exercise) =>
-                            planItem.exerciseId === exercise.exerciseId
+                            planItem.exerciseId === exercise.exerciseId,
                         )?.category
                       }
                     </p>
@@ -457,13 +455,13 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                       return (
                         <tr key={setIndex} className="group/row">
                           <td className="pl-3 py-2">
-                            <div className="w-8 h-8 rounded-full bg-[#1F2D42] text-gray-400 flex items-center justify-center text-sm font-bold font-mono">
+                            <div className="w-8 h-8 rounded-full bg-input-light dark:bg-input-dark text-gray-500 dark:text-gray-400 flex items-center justify-center text-sm font-bold font-mono">
                               {setIndex + 1}
                             </div>
                           </td>
                           <td className="px-2 py-2">
                             <input
-                              className="w-full h-12 bg-input-dark border border-border-dark focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none rounded-lg text-center text-white font-bold text-lg placeholder-gray-600 transition-all no-spinner"
+                              className="w-full h-12 bg-input-light dark:bg-input-dark border border-border-light dark:border-border-dark focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none rounded-lg text-center font-bold text-lg placeholder-gray-400 dark:placeholder-gray-600 transition-all no-spinner"
                               type="number"
                               step="any"
                               inputMode="decimal"
@@ -484,14 +482,14 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                                   exerciseIndex,
                                   setIndex,
                                   "weight",
-                                  e.target.value
+                                  e.target.value,
                                 )
                               }
                             />
                           </td>
                           <td className="px-2 py-2">
                             <input
-                              className="w-full h-12 bg-input-dark border border-border-dark focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none rounded-lg text-center text-white font-bold text-lg placeholder-gray-600 transition-all no-spinner"
+                              className="w-full h-12 bg-input-light dark:bg-input-dark border border-border-light dark:border-border-dark focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none rounded-lg text-center font-bold text-lg placeholder-gray-400 dark:placeholder-gray-600 transition-all no-spinner"
                               type="number"
                               placeholder={String(repsPlaceholder)}
                               step="1"
@@ -510,7 +508,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                                   exerciseIndex,
                                   setIndex,
                                   "reps",
-                                  e.target.value
+                                  e.target.value,
                                 )
                               }
                               onKeyDown={(e) => {
@@ -551,13 +549,19 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
         </div>
       </main>
 
-      <footer className="w-full px-4 md:px-6 relative pointer-events-auto">
+      <footer className="w-full flex flex-col gap-5 justify-center px-4 md:px-6 relative pointer-events-auto">
         <button
-          className="h-14 px-8 rounded-2xl bg-primary hover:bg-blue-600 text-white shadow-lg shadow-primary/25 border border-white/10 flex justify-center items-center gap-3 transition-all hover:scale-105 active:scale-95 cursor-pointer mx-auto"
+          className="h-14 px-8 w-53.75 rounded-2xl bg-primary hover:bg-blue-600 text-white shadow-lg shadow-primary/25 border border-white/10 flex justify-center items-center gap-3 transition-all hover:scale-105 active:scale-95 cursor-pointer mx-auto"
           onClick={() => setIsAddExerciseWindowEnabled(true)}
         >
           <FaPlus />
           <span className="font-bold text-lg tracking-wide">Add Exercise</span>
+        </button>
+        <button
+          className="h-14 px-8 w-53.75 mx-auto flex justify-center items-center rounded-2xl bg-[#223149]/50 hover:bg-gray-500 hover:dark:bg-[#223149] border border-input-light dark:border-[#223149] text-gray-100 dark:text-gray-300 hover:text-white font-semibold transition-all hover:scale-105 active:scale-95 cursor-pointer"
+          onClick={() => setIsFinishedWorkoutWindowOpen(true)}
+        >
+          Finish
         </button>
       </footer>
 
@@ -668,7 +672,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                         selectedCustomRestTime > 3600
                       ) {
                         toast.error(
-                          "Custom time must be between 1 and 3600 sec"
+                          "Custom time must be between 1 and 3600 sec",
                         );
                         return;
                       }
@@ -688,7 +692,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                         selectedCustomRestTime > 3600
                       ) {
                         toast.error(
-                          "Custom time must be between 1 and 3600 sec"
+                          "Custom time must be between 1 and 3600 sec",
                         );
                         return;
                       }

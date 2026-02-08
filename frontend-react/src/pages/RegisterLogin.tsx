@@ -75,14 +75,14 @@ const RegisterLogin = () => {
         toast.error(errorMessage);
       } else {
         toast.error(
-          `Sign in failed: ${error.message}. Something went wrong, please try again.`
+          `Sign in failed: ${error.message}. Something went wrong, please try again.`,
         );
       }
     },
   });
 
   const handleFormChange = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ): void => {
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
@@ -130,16 +130,14 @@ const RegisterLogin = () => {
   return (
     <>
       <div className="bg-background-light dark:bg-background-dark font-display text-gray-900 dark:text-white antialiased min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-grid-pattern bg-size-[40px_40px] pointer-events-none opacity-20"></div>
-        <div className="absolute top-0 left-0 w-full h-full bg-linear-to-b from-transparent via-transparent to-background-dark pointer-events-none"></div>
+        <div className="absolute inset-0 bg-light-grid-pattern dark:bg-dark-grid-pattern bg-size-[40px_40px] pointer-events-none opacity-20"></div>
+        <div className="absolute top-0 left-0 w-full h-full bg-linear-to-b from-transparent via-transparent to-background-light dark:to-background-dark pointer-events-none"></div>
         <div className="relative z-10 w-full max-w-115 px-4 py-8">
           <div className="flex flex-col items-center mb-8">
             <div className="w-12 h-12 rounded-xl bg-linear-to-tr from-primary to-blue-400 flex items-center justify-center shadow-lg shadow-primary/30 mb-4">
-              <FaDumbbell className="w-7 h-7 rotate-45" />
+              <FaDumbbell className="w-7 h-7 rotate-45 text-white dark:text-black" />
             </div>
-            <h1 className="text-2xl font-bold tracking-tight text-white">
-              Gym Tracker
-            </h1>
+            <h1 className="text-2xl font-bold tracking-tight">Gym Tracker</h1>
             <p className="text-text-muted text-sm mt-1">
               Track progressive overload with precision.
             </p>
@@ -149,21 +147,19 @@ const RegisterLogin = () => {
             setIsRegister={setIsRegister}
           />
           <form
-            className="bg-card-dark rounded-2xl rounded-t-none border border-border-dark shadow-2xl overflow-hidden"
+            className="bg-card-light dark:bg-card-dark border dark:border-border-dark border-border-light rounded-2xl rounded-t-none shadow-2xl overflow-hidden"
             onSubmit={isRegister ? handleSignUp : handleSignIn}
           >
             <div className="p-6 pt-8 space-y-5">
               {isRegister && (
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-white">
-                    Username
-                  </label>
+                  <label className="block text-sm font-medium">Username</label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                       <FaUser className="text-text-muted text-[20px]" />
                     </div>
                     <input
-                      className="block w-full rounded-lg border-border-dark bg-input-dark text-white placeholder:text-text-muted/50 focus:border-primary focus:ring-1 focus:outline-none focus:ring-primary sm:text-sm pl-10 h-12 transition-all"
+                      className="block w-full rounded-lg bg-input-light dark:bg-input-dark border-border-light dark:border-border-dark text-black dark:text-white placeholder:text-text-muted dark:placeholder:text-text-muted/80 focus:border-primary focus:ring-1 focus:outline-none focus:ring-primary sm:text-sm pl-10 h-12 transition-all"
                       id="username"
                       name="username"
                       type="text"
@@ -177,7 +173,7 @@ const RegisterLogin = () => {
               )}
 
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-white">
+                <label className="block text-sm font-medium">
                   Email Address
                 </label>
                 <div className="relative">
@@ -185,7 +181,7 @@ const RegisterLogin = () => {
                     <FaEnvelope className="text-text-muted text-[20px]" />
                   </div>
                   <input
-                    className="block w-full rounded-lg border-border-dark bg-input-dark text-white placeholder:text-text-muted/50 focus:border-primary focus:ring-1 focus:outline-none focus:ring-primary sm:text-sm pl-10 h-12 transition-all"
+                    className="block w-full rounded-lg bg-input-light dark:bg-input-dark border-border-light dark:border-border-dark text-black dark:text-white placeholder:text-text-muted dark:placeholder:text-text-muted/80 focus:border-primary focus:ring-1 focus:outline-none focus:ring-primary sm:text-sm pl-10 h-12 transition-all"
                     id="email"
                     name="email"
                     type="email"
@@ -199,9 +195,7 @@ const RegisterLogin = () => {
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="block text-sm font-medium text-white">
-                    Password
-                  </label>
+                  <label className="block text-sm font-medium">Password</label>
                   {!isRegister && (
                     <span className="text-xs cursor-pointer font-medium text-primary hover:text-primary-hover underline decoration-transparent hover:decoration-primary transition-all">
                       Forgot Password?
@@ -213,7 +207,7 @@ const RegisterLogin = () => {
                     <FaLock className="text-text-muted text-[20px]" />
                   </div>
                   <input
-                    className="block w-full rounded-lg border-border-dark bg-input-dark text-white placeholder:text-text-muted/50 focus:border-primary focus:ring-1 focus:outline-none focus:ring-primary sm:text-sm pl-10 h-12 transition-all"
+                    className="block w-full rounded-lg bg-input-light dark:bg-input-dark border-border-light dark:border-border-dark text-black dark:text-white placeholder:text-text-muted dark:placeholder:text-text-muted/80 focus:border-primary focus:ring-1 focus:outline-none focus:ring-primary sm:text-sm pl-10 h-12 transition-all"
                     id="password"
                     name="password"
                     type="password"

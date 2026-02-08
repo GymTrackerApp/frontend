@@ -91,7 +91,7 @@ const CreateNewExerciseForm = ({ onClose }: CreateNewExerciseProps) => {
             Exercise Name
           </label>
           <input
-            className="w-full bg-transparent text-3xl md:text-4xl font-bold text-white placeholder-text-muted/20 border-0 border-b-2 border-surface-border focus:border-primary focus:outline-none focus:ring-0 px-0 pb-4 transition-colors"
+            className="w-full bg-transparent text-3xl md:text-4xl font-bold placeholder-text-muted/20 border-0 border-b-2 border-border-light dark:border-border-dark focus:border-primary focus:outline-none focus:ring-0 px-0 pb-4 transition-colors"
             name="exerciseName"
             placeholder="e.g. Benchpress"
             type="text"
@@ -106,7 +106,7 @@ const CreateNewExerciseForm = ({ onClose }: CreateNewExerciseProps) => {
               Exercise Category
             </label>
             <button
-              className="w-full flex justify-between items-center bg-surface-dark border border-surface-border rounded-xl px-4 py-3 text-white focus:ring-1 focus:ring-primary focus:border-primary transition-all cursor-pointer"
+              className="w-full flex justify-between items-center border border-border-light dark:border-border-dark rounded-xl px-4 py-3 focus:ring-1 focus:ring-primary focus:border-primary transition-all cursor-pointer"
               onClick={(e) => {
                 e.preventDefault();
                 setCategorySelection(true);
@@ -121,7 +121,7 @@ const CreateNewExerciseForm = ({ onClose }: CreateNewExerciseProps) => {
             </button>
           </div>
         </div>
-        <div className="flex items-center gap-3 p-4 rounded-xl bg-surface-dark/30 border border-surface-border/50">
+        <div className="flex items-center gap-3 p-4 rounded-xl bg-surface-dark/30 border border-border-light/50 dark:border-border-dark/50">
           <FaInfoCircle className="text-primary/60" size={25} />
           <p className="text-xs text-text-muted leading-relaxed">
             This exercise will be added to your personal library and can be used
@@ -147,7 +147,7 @@ const CreateNewExerciseForm = ({ onClose }: CreateNewExerciseProps) => {
           )}
           dataFilter={(data, keyword) =>
             data.filter((exerciseCategory) =>
-              exerciseCategory.toLowerCase().includes(keyword.toLowerCase())
+              exerciseCategory.toLowerCase().includes(keyword.toLowerCase()),
             )
           }
         />

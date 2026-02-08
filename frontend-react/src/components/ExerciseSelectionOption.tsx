@@ -17,7 +17,7 @@ const ExerciseSelectionOption = ({
             "size-12 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform",
             exercise.isCustom
               ? "bg-blue-500/10 text-blue-400"
-              : "bg-purple-500/10 text-purple-400"
+              : "bg-purple-500/10 text-purple-400",
           )}
         >
           <FaDumbbell size={20} className="rotate-45" />
@@ -25,10 +25,10 @@ const ExerciseSelectionOption = ({
         <div>
           <p
             className={clsx(
-              "font-bold text-white transition-colors",
+              "font-bold transition-colors",
               exercise.isCustom
                 ? "group-hover:text-primary"
-                : "group-hover:text-purple-400"
+                : "group-hover:text-purple-400",
             )}
           >
             {exercise.name}
@@ -41,7 +41,7 @@ const ExerciseSelectionOption = ({
                 "text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded",
                 exercise.isCustom
                   ? "text-blue-400 bg-blue-400/10"
-                  : "text-purple-400 bg-purple-400/10"
+                  : "text-purple-400 bg-purple-400/10",
               )}
             >
               {exercise.isCustom ? "Your" : "Predefined"}
@@ -54,7 +54,7 @@ const ExerciseSelectionOption = ({
           "text-slate-600 group-hover:translate-x-1 transition-all",
           exercise.isCustom
             ? "group-hover:text-primary"
-            : "group-hover:text-purple-400"
+            : "group-hover:text-purple-400",
         )}
       />
     </div>

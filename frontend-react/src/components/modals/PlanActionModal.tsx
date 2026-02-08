@@ -1,16 +1,12 @@
 import { useState } from "react";
-import {
-  FaEdit,
-  FaListAlt,
-  FaPlusCircle,
-  FaSave,
-  FaTimes,
-} from "react-icons/fa";
+import { FaEdit, FaListAlt, FaPlusCircle } from "react-icons/fa";
 import type { ExerciseResponse } from "../../services/exerciseService";
+import { exercisesFilter } from "../../utils/exerciseUtils";
 import ExerciseSelectionOption from "../ExerciseSelectionOption";
 import AbsoluteWindowWrapper from "../ui/AbsoluteWindowWrapper";
+import CancelCreateButtons from "../ui/CancelCreateButtons";
+import CloseModalButton from "../ui/CloseModalButton";
 import SelectOptionWindow from "../ui/SelectOptionWindow";
-import { exercisesFilter } from "../../utils/exerciseUtils";
 
 interface PlanActionModalProps {
   exercises: Array<ExerciseResponse>;
@@ -37,21 +33,14 @@ const PlanActionModal = ({
 
   return (
     <AbsoluteWindowWrapper isOpen={true} onClose={onClose}>
-      <header className="flex-none flex items-center justify-between border-b border-surface-border px-6 py-4 z-20">
+      <header className="flex-none flex items-center justify-between border-b border-border-light dark:border-border-dark px-6 py-4 z-20">
         <div className="flex items-center gap-3">
           <div className="size-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
             <FaEdit className="text-lg" />
           </div>
-          <h2 className="text-white text-lg font-bold tracking-tight">
-            {title}
-          </h2>
+          <h2 className="text-lg font-bold tracking-tight">{title}</h2>
         </div>
-        <button
-          className="group flex size-9 cursor-pointer items-center justify-center rounded-full hover:bg-surface-border text-text-muted hover:text-white transition-colors"
-          onClick={onClose}
-        >
-          <FaTimes size={18} />
-        </button>
+        <CloseModalButton onClose={onClose} />
       </header>
 
       <form
@@ -72,8 +61,8 @@ const PlanActionModal = ({
                   Plan Exercises
                 </h3>
               </div>
-              <div className="flex flex-col gap-px bg-surface-border/30 rounded-xl overflow-hidden border border-surface-border">
-                <div className="grid grid-cols-12 gap-4 px-5 py-3 bg-surface-dark/50 text-[10px] font-bold text-text-muted uppercase tracking-widest border-b border-surface-border">
+              <div className="flex flex-col dark:bg-surface-border/30 rounded-xl overflow-hidden border border-border-light dark:border-border-dark">
+                <div className="grid grid-cols-12 gap-4 px-5 py-3 bg-surface-dark/50 text-[10px] font-bold text-text-muted uppercase tracking-widest border-b border-border-light dark:border-border-dark">
                   <div className="col-span-8 md:col-span-9 my-auto">
                     Exercise
                   </div>
@@ -84,7 +73,7 @@ const PlanActionModal = ({
                 </div>
                 {planItems}
                 <button
-                  className="flex w-full items-center justify-center gap-2 bg-surface-dark/40 py-5 text-sm font-semibold text-primary hover:bg-primary/10 transition-all group border-t border-surface-border/50"
+                  className="flex w-full items-center justify-center gap-2 dark:bg-surface-dark/40 py-5 text-sm font-semibold text-primary hover:dark:bg-primary/10 transition-all group border-t border-border-light dark:border-border-dark/50"
                   onClick={(e) => {
                     e.preventDefault();
                     setAddExerciseEnabled(true);
@@ -97,23 +86,11 @@ const PlanActionModal = ({
             </div>
           </div>
         </div>
-        <footer className="flex-none border-t border-surface-border bg-background-dark p-6 z-30">
-          <div className="mx-auto max-w-2xl flex items-center justify-between">
-            <button
-              className="px-4 py-2 text-sm font-medium text-text-muted hover:text-white transition-colors cursor-pointer"
-              type="button"
-              onClick={onClose}
-            >
-              Cancel
-            </button>
-            <button
-              className="flex items-center gap-2 rounded-xl bg-primary px-8 py-3 text-sm font-bold text-white shadow-lg shadow-primary/25 hover:bg-primary-dark hover:-translate-y-px transition-all active:translate-y-0 active:scale-95 cursor-pointer"
-              type="submit"
-            >
-              <FaSave className="text-xl" />
-              {saveButtonText}
-            </button>
-          </div>
+        <footer className="flex-none border-t border-border-light dark:border-border-dark dark:bg-background-dark p-6 z-30">
+          <CancelCreateButtons
+            onClose={onClose}
+            createButtonTitle={saveButtonText}
+          />
         </footer>
       </form>
 

@@ -33,8 +33,8 @@ const QuickStart = ({
 
   return (
     <>
-      <div className="col-span-3 lg:col-span-2 relative rounded-2xl bg-white dark:bg-surface-dark p-6 md:p-8 shadow-sm ring-1 ring-gray-900/5 dark:ring-white/10">
-        <div className="absolute right-0 top-0 -mt-10 -mr-10 h-64 w-64 rounded-full bg-primary/10 blur-3xl"></div>
+      <div className="col-span-3 lg:col-span-2 relative rounded-2xl bg-white dark:bg-card-dark p-6 md:p-8 shadow-sm ring-1 ring-gray-900/5 dark:ring-white/10">
+        <div className="absolute right-0 top-0 -mt-10 -mr-10 h-64 w-64 rounded-full dark:bg-primary/10 blur-3xl"></div>
         <div className="relative z-10 flex h-full flex-col justify-between gap-6">
           <div className="flex flex-col gap-2">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -85,7 +85,7 @@ const QuickStart = ({
           isDataLoading={isLoading}
           dataFilter={(data, keyword) =>
             data.filter((plan) =>
-              plan.name.toLowerCase().includes(keyword.toLowerCase())
+              plan.name.toLowerCase().includes(keyword.toLowerCase()),
             )
           }
           onSelect={(item) => handleWorkoutStart(item)}
