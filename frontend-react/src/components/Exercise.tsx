@@ -17,7 +17,7 @@ const Exercise = ({
   const [isExerciseRemovalWindowOpened, setIsExerciseRemovalWindowOpened] =
     useState<boolean>(false);
   return (
-    <div className="flex flex-col bg-card-light dark:bg-card-dark rounded-xl border border-border-light dark:border-border-dark overflow-hidden hover:dark:border-primary/50 transition-all duration-300 shadow-lg ring ring-border-light/10 hover:ring-border-light hover:shadow-xl dark:hover:ring-primary/50 dark:ring-white/10 dark:hover:shadow-primary/5">
+    <div className="flex flex-col group bg-card-light dark:bg-card-dark rounded-xl border border-border-light dark:border-border-dark overflow-hidden transition-all duration-300 ring ring-border-light/10 hover:ring-border-light shadow-lg hover:shadow-xl dark:hover:shadow-primary/5 dark:ring dark:ring-white/10 dark:hover:ring-primary/50">
       <div className="p-5 flex flex-col justify-between gap-4 flex-1">
         <div className="flex justify-between items-start">
           <div className="flex items-center justify-between gap-3 w-full">
