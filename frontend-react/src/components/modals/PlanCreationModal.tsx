@@ -141,7 +141,7 @@ const PlanCreationModal = ({ exercises, onClose }: NewPlanProps) => {
           className="group grid grid-cols-12 gap-4 px-5 py-4 bg-surface-dark items-center transition-colors hover:bg-surface-dark/80"
         >
           <div className="col-span-8 md:col-span-9 flex items-center gap-4">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-input-light dark:bg-background-dark border border-border-light dark:border-border-dark text-primary">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-input-light dark:bg-background-dark border border-border-light/50 dark:border-border-dark text-primary">
               <FaDumbbell className="text-xl rotate-45" />
             </div>
             <div className="min-w-0">

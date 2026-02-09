@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FaEdit, FaListAlt, FaPlusCircle } from "react-icons/fa";
 import type { ExerciseResponse } from "../../services/exerciseService";
 import { exercisesFilter } from "../../utils/exerciseUtils";
-import ExerciseSelectionOption from "../ExerciseSelectionOption";
+import ExerciseSelectionOption from "../selections/ExerciseSelectionOption";
 import AbsoluteWindowWrapper from "../ui/AbsoluteWindowWrapper";
 import CancelCreateButtons from "../ui/CancelCreateButtons";
 import CloseModalButton from "../ui/CloseModalButton";

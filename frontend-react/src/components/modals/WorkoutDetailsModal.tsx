@@ -36,7 +36,7 @@ const WorkoutDetails = ({ workout, onClose }: WorkoutDetailsProps) => {
         </header>
 
         <div className="flex gap-5">
-          <div className="w-full dark:bg-slate-800/50 border border-border-light dark:border-slate-700/20 rounded-xl p-4">
+          <div className="w-full bg-gray-200 dark:bg-slate-800/50 border border-border-light dark:border-slate-700/20 rounded-xl p-4">
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">
               Total Volume
             </p>
@@ -45,7 +45,7 @@ const WorkoutDetails = ({ workout, onClose }: WorkoutDetailsProps) => {
               <span className="text-sm font-normal opacity-60">kg</span>
             </p>
           </div>
-          <div className="w-full dark:bg-slate-800/50 border border-border-light dark:border-slate-700/20 rounded-xl p-4">
+          <div className="w-full bg-gray-200 dark:bg-slate-800/50 border border-border-light dark:border-slate-700/20 rounded-xl p-4">
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">
               Total Sets
             </p>
@@ -80,7 +80,7 @@ const WorkoutDetails = ({ workout, onClose }: WorkoutDetailsProps) => {
               <div className="overflow-x-auto rounded-xl border border-border-light dark:border-slate-800 dark:bg-slate-900/30">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="bg-input-light dark:bg-slate-800/50 text-[10px] uppercase tracking-widest font-bold text-slate-400">
+                    <tr className="bg-gray-200 dark:bg-slate-800/50 text-[10px] uppercase tracking-widest font-bold text-slate-400">
                       <th className="px-4 py-3 border-b border-border-light dark:border-slate-800">
                         Set
                       </th>

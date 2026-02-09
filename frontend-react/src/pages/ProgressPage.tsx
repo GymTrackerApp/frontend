@@ -10,10 +10,10 @@ import {
   FaRegCalendar,
 } from "react-icons/fa";
 import AnalysisPlaceholder from "../components/AnalysisPlaceholder";
-import ExerciseSelectionOption from "../components/ExerciseSelectionOption";
+import ExerciseSelectionOption from "../components/selections/ExerciseSelectionOption";
 import PageWrapper from "../components/ui/PageWrapper";
 import ProgressChart, { type DataContent } from "../components/ProgressChart";
-import TrainingPlanSelectionOption from "../components/TrainingPlanSelectionOption";
+import TrainingPlanSelectionOption from "../components/selections/TrainingPlanSelectionOption";
 import SelectOptionWindow from "../components/ui/SelectOptionWindow";
 import {
   useAvailableExercises,
@@ -209,8 +209,8 @@ const Progress = () => {
                   className={clsx(
                     "w-full px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer",
                     selectedMetricType === metricOption.value
-                      ? "bg-white dark:bg-background-dark text-primary shadow-sm"
-                      : "bg-gray-50 dark:bg-card-dark dark:hover:bg-gray-700/50 hover:bg-gray-100 text-gray-500 dark:text-gray-400",
+                      ? "bg-gray-50 dark:bg-background-dark text-primary shadow-sm"
+                      : "bg-white dark:bg-card-dark dark:hover:bg-gray-700/50 hover:bg-gray-50 text-gray-500 dark:text-gray-400",
                   )}
                   onClick={() => handleMetricChange(metricOption.value)}
                 >

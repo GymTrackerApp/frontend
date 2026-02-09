@@ -62,7 +62,7 @@ const Plan = ({ plan, exercises, updatable, removable }: PlanProps) => {
 
   return (
     <>
-      <div className="flex flex-col group bg-card-light dark:bg-card-dark rounded-xl border border-border-light dark:border-border-dark overflow-hidden transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-primary/5">
+      <div className="flex flex-col group bg-card-light dark:bg-card-dark rounded-xl border border-border-light dark:border-border-dark overflow-hidden transition-all duration-300 ring ring-border-light/10 hover:ring-border-light shadow-lg hover:shadow-xl hover:dark:shadow-primary/5 dark:ring dark:ring-white/10 hover:dark:ring-primary/50">
         <div className="p-5 flex flex-col gap-4 flex-1">
           <div className="flex justify-between items-start">
             <div>

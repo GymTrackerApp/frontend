@@ -36,7 +36,7 @@ import {
 import type { ErrorResponse, GeneralResponse } from "../types/ApiResponse";
 import { preventForbiddenInputNumberKeys } from "../utils/inputUtils";
 import AutoWorkoutTimer from "./AutoWorkoutTimer";
-import ExerciseSelectionOption from "./ExerciseSelectionOption";
+import ExerciseSelectionOption from "./selections/ExerciseSelectionOption";
 import WorkoutDetails from "./modals/WorkoutDetailsModal";
 import WorkoutExerciseHistoryModal from "./modals/WorkoutExerciseHistoryModal";
 import RestTimer from "./RestTimer";
@@ -374,8 +374,8 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
 
         <button
           className="bg-blue-500 text-white dark:bg-blue-900 text-sm font-bold px-2 py-1 w-full border dark:border-gray-700 cursor-pointer hover:bg-blue-600 hover:dark:bg-blue-950 transition-colors
-                   disabled:bg-gray-800 disabled:border-gray-900 disabled:text-gray-400 disabled:dark:text-gray-500 
-                     disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:bg-gray-800"
+                   disabled:bg-gray-200 disabled:border-gray-300 disabled:text-gray-400 disabled:dark:text-gray-500 
+                     disabled:cursor-not-allowed disabled:opacity-70"
           onClick={() => setLastWorkoutEnabled(true)}
           disabled={
             isLastWorkoutLoading ||
@@ -397,7 +397,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
             >
               <div className="flex items-center justify-between p-5 border-b border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-input-light dark:bg-input-dark border border-border-light dark:border-border-dark flex items-center justify-center text-primary shadow-inner">
+                  <div className="w-12 h-12 rounded-xl bg-input-light/90 dark:bg-input-dark border-none dark:border-border-dark flex items-center justify-center text-primary shadow-inner">
                     <FaDumbbell size={25} className="rotate-45" />
                   </div>
                   <div>
@@ -461,7 +461,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                           </td>
                           <td className="px-2 py-2">
                             <input
-                              className="w-full h-12 bg-input-light dark:bg-input-dark border border-border-light dark:border-border-dark focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none rounded-lg text-center font-bold text-lg placeholder-gray-400 dark:placeholder-gray-600 transition-all no-spinner"
+                              className="w-full h-12 bg-input-light/50 dark:bg-input-dark border border-border-light/50 dark:border-border-dark focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none rounded-lg text-center font-bold text-lg placeholder-gray-400 dark:placeholder-gray-600 transition-all no-spinner"
                               type="number"
                               step="any"
                               inputMode="decimal"
@@ -489,7 +489,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                           </td>
                           <td className="px-2 py-2">
                             <input
-                              className="w-full h-12 bg-input-light dark:bg-input-dark border border-border-light dark:border-border-dark focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none rounded-lg text-center font-bold text-lg placeholder-gray-400 dark:placeholder-gray-600 transition-all no-spinner"
+                              className="w-full h-12 bg-input-light/50 dark:bg-input-dark border border-border-light/50 dark:border-border-dark focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none rounded-lg text-center font-bold text-lg placeholder-gray-400 dark:placeholder-gray-600 transition-all no-spinner"
                               type="number"
                               placeholder={String(repsPlaceholder)}
                               step="1"
@@ -682,7 +682,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                     }
                   }}
                 />
-                <div className="cursor-pointer hover:bg-slate-700 p-1 rounded-md transition-color group-hover:text-primary">
+                <div className="cursor-pointer hover:bg-gray-300 hover:dark:bg-slate-700 p-1 rounded-md transition-color group-hover:text-primary">
                   <FaCheck
                     size={20}
                     onClick={() => {

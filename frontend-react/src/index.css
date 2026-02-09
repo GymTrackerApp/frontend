@@ -26,7 +26,9 @@
   /* light mode */
   --color-background-light: #f5f7fa;
   --color-card-light: #ffffff;
-  --color-input-light: #f1f3f6;
+  --color-input-light: #f6f8fc;
+  --color-selection-light: #f0f4f9;
+  --color-input-light-hover: #e8ecf1;
   --color-border-light: #cbd5e0;
 
   --background-image-light-grid-pattern:
@@ -78,3 +80,5 @@
     -moz-appearance: textfield;
   }
 }
+
+@custom-variant dark (&:where(.dark, .dark *));

@@ -1,21 +1,21 @@
 import clsx from "clsx";
 import { FaChevronRight, FaDumbbell } from "react-icons/fa";
-import type { PlanResponse } from "../services/trainingService";
+import type { ExerciseResponse } from "../../services/exerciseService";
 
-interface TrainingPlanSelectionOptionProps {
-  plan: PlanResponse;
+interface ExerciseSelectionOptionProps {
+  exercise: ExerciseResponse;
 }
 
-const TrainingPlanSelectionOption = ({
-  plan,
-}: TrainingPlanSelectionOptionProps) => {
+const ExerciseSelectionOption = ({
+  exercise,
+}: ExerciseSelectionOptionProps) => {
   return (
     <div className="w-full flex items-center justify-between">
       <div className="flex items-center gap-4">
         <div
           className={clsx(
             "size-12 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform",
-            plan.isCustom
+            exercise.isCustom
               ? "bg-blue-500/10 text-blue-400"
               : "bg-purple-500/10 text-purple-400",
           )}
@@ -26,28 +26,25 @@ const TrainingPlanSelectionOption = ({
           <p
             className={clsx(
               "font-bold transition-colors",
-              plan.isCustom
+              exercise.isCustom
                 ? "group-hover:text-primary"
                 : "group-hover:text-purple-400",
             )}
           >
-            {plan.name}
+            {exercise.name}
           </p>
           <div className="flex items-center gap-2 mt-0.5">
-            <span className="text-xs dark:text-slate-400">
-              {plan.planItems.length}{" "}
-              {plan.planItems.length === 1 ? "exercise" : "exercises"}
-            </span>
+            <span className="text-xs text-slate-400">{exercise.category}</span>
             <span className="size-1 rounded-full bg-slate-600"></span>
             <span
               className={clsx(
                 "text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded",
-                plan.isCustom
+                exercise.isCustom
                   ? "text-blue-400 bg-blue-400/10"
                   : "text-purple-400 bg-purple-400/10",
               )}
             >
-              {plan.isCustom ? "Your" : "Predefined"}
+              {exercise.isCustom ? "Your" : "Predefined"}
             </span>
           </div>
         </div>
@@ -55,7 +52,7 @@ const TrainingPlanSelectionOption = ({
       <FaChevronRight
         className={clsx(
           "text-slate-600 group-hover:translate-x-1 transition-all",
-          plan.isCustom
+          exercise.isCustom
             ? "group-hover:text-primary"
             : "group-hover:text-purple-400",
         )}
@@ -64,4 +61,4 @@ const TrainingPlanSelectionOption = ({
   );
 };
 
-export default TrainingPlanSelectionOption;
+export default ExerciseSelectionOption;

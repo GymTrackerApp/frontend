@@ -21,10 +21,24 @@ const ProfileSettings = () => {
   const showUserProfile =
     !!userProfile && !isUserProfileLoading && !isUserProfileError;
 
-  const [darkModeEnabled, setDarkModeEnabled] = useState<boolean>(true);
+  const [darkModeEnabled, setDarkModeEnabled] = useState<boolean>(
+    !localStorage.getItem("theme") || localStorage.getItem("theme") === "dark",
+  );
   const [preferredWeightUnits, setPreferredWeightUnits] = useState<
     "kg" | "lbs"
   >("kg");
+
+  const toggleTheme = () => {
+    const html = document.documentElement;
+    if (darkModeEnabled) {
+      html.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    } else {
+      html.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    }
+    setDarkModeEnabled(!darkModeEnabled);
+  };
 
   return (
     <PageWrapper>
@@ -101,7 +115,7 @@ const ProfileSettings = () => {
                     ? "bg-primary hover:bg-primary/80"
                     : "bg-subcomponents-main hover:bg-subcomponents-main/80",
                 )}
-                onClick={() => setDarkModeEnabled(!darkModeEnabled)}
+                onClick={toggleTheme}
               >
                 <span
                   className={clsx(

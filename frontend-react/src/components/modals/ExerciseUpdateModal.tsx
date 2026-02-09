@@ -12,7 +12,7 @@ import {
 import type { ErrorResponse } from "../../types/ApiResponse";
 import SelectOptionWindow from "../ui/SelectOptionWindow";
 import ExerciseActionModal from "./ExerciseActionModal";
-import CategorySelectionOption from "../CategorySelectionOption";
+import CategorySelectionOption from "../selections/CategorySelectionOption";
 
 interface ExerciseUpdateProps {
   onClose: () => void;

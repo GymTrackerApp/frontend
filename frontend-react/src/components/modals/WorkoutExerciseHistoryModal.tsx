@@ -70,7 +70,7 @@ const WorkoutExerciseHistoryModal = ({
                   <div className="flex flex-col items-center pt-2">
                     <div className="flex items-center justify-center w-3 h-3 rounded-full bg-gray-200 dark:bg-gray-700 mt-5 z-10 ring-4 ring-gray-200 dark:ring-gray-800"></div>
                   </div>
-                  <div className="flex flex-col py-5 pl-2 border-border-light dark:border-t dark:border-gray-700/30 group hover:bg-gray-100 hover:dark:bg-gray-800/20 rounded-lg transition-colors px-2 -mx-2">
+                  <div className="flex flex-col py-5 pl-2 border-border-light dark:border-t dark:border-gray-700/30 group hover:dark:bg-gray-800/20 rounded-lg transition-colors px-2 -mx-2">
                     <div className="flex justify-between items-baseline mb-3">
                       <p className="dark:text-gray-300 text-base font-semibold group-hover:dark:text-white transition-colors leading-tight">
                         {format(
@@ -78,7 +78,7 @@ const WorkoutExerciseHistoryModal = ({
                           "MMM dd, yyyy",
                         )}
                         <br></br>
-                        <span className="text-xs">
+                        <span className="text-xs font-normal">
                           {format(
                             parseISO(workoutSessionSnapshot.workoutDate),
                             "iiii",
@@ -95,7 +95,7 @@ const WorkoutExerciseHistoryModal = ({
                           <span className="font-bold">{set.weight}</span>
                           <span className="text-[10px] text-gray-500">KG</span>
                           <span className="text-gray-600">|</span>{" "}
-                          <span>{set.reps}</span>
+                          <span className="font-bold">{set.reps}</span>
                         </div>
                       ))}
                     </div>

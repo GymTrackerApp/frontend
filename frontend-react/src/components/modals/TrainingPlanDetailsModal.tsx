@@ -42,7 +42,7 @@ const TrainingPlanDetailsModal = ({
         {plan.planItems.map((planItem) => (
           <div
             key={planItem.exerciseId}
-            className="bg-input-light/20 dark:bg-gray-800/40 border border-border-light dark:border-border-dark rounded-xl p-5 hover:bg-input-light/50 hover:dark:bg-gray-800/60 transition-colors group"
+            className="bg-input-light dark:bg-gray-800/40 border border-border-light dark:border-border-dark rounded-xl p-5 hover:bg-input-light/50 hover:dark:bg-gray-800/60 transition-colors group"
           >
             <div className="flex justify-between items-start mb-4">
               <div>
@@ -56,7 +56,7 @@ const TrainingPlanDetailsModal = ({
                 </span>
               </div>
             </div>
-            <div className="flex items-center gap-4 bg-input-light dark:bg-black/20 rounded-lg p-4 border border-border-light dark:border-border-dark">
+            <div className="flex items-center gap-4 bg-selection-light dark:bg-black/20 rounded-lg p-4 border border-border-light dark:border-border-dark">
               <div className="flex-1">
                 <p className="text-[10px] text-gray-500 uppercase font-bold tracking-tighter mb-1">
                   Volume Protocol

@@ -14,7 +14,7 @@ const SearchBar = ({ value, setSearchQuery }: SearchBarProps) => {
       <input
         type="text"
         aria-label="Search"
-        className="w-full bg-input-light dark:bg-slate-800/50 border border-input-light dark:border-slate-700/50 rounded-xl py-3 pl-11 pr-4 text-sm focus:ring-1 focus:ring-border-light focus:dark:ring-primary/50 focus:dark:border-primary/50 outline-none transition-all placeholder:text-slate-500"
+        className="w-full bg-selection-light dark:bg-slate-800/50 border border-border-light/50 dark:border-slate-700/50 rounded-xl py-3 pl-11 pr-4 text-sm focus:ring-1 focus:ring-border-light focus:dark:ring-primary/50 focus:dark:border-primary/50 outline-none transition-all placeholder:text-slate-500"
         placeholder="Search..."
         onChange={(e) => setSearchQuery(e.target.value)}
         value={value}

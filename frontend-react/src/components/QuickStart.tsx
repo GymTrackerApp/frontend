@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { FaPlay } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { type PlanResponse } from "../services/trainingService";
-import TrainingPlanSelectionOption from "./TrainingPlanSelectionOption";
+import TrainingPlanSelectionOption from "./selections/TrainingPlanSelectionOption";
 import SelectOptionWindow from "./ui/SelectOptionWindow";
 
 interface QuickStartProps {
