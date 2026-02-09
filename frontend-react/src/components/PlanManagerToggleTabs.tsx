@@ -41,7 +41,7 @@ const PlanManagerToggleTabs = ({
           }}
           type="button"
         >
-          <span className="text-sm font-bold tracking-wide">My Plans</span>
+          <span className="text-sm font-medium tracking-wide">My Plans</span>
         </button>
 
         <button

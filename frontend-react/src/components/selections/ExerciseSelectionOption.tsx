@@ -34,8 +34,10 @@ const ExerciseSelectionOption = ({
             {exercise.name}
           </p>
           <div className="flex items-center gap-2 mt-0.5">
-            <span className="text-xs text-slate-400">{exercise.category}</span>
-            <span className="size-1 rounded-full bg-slate-600"></span>
+            <span className="text-xs text-slate-600 dark:text-slate-400">
+              {exercise.category}
+            </span>
+            <span className="size-1 rounded-full bg-slate-300 dark:bg-slate-600"></span>
             <span
               className={clsx(
                 "text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded",

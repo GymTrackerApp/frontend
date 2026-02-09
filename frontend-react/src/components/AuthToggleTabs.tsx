@@ -7,7 +7,7 @@ interface AuthToggleProps {
 
 const AuthToggleTabs = ({ isRegister, setIsRegister }: AuthToggleProps) => {
   return (
-    <div className="rounded-t-4xl flex border border-border-light bg-gray-50 dark:bg-card-dark dark:border-border-dark">
+    <div className="rounded-t-4xl flex border border-border-light bg-card-light dark:bg-card-dark dark:border-border-dark">
       <button
         type="button"
         className={clsx(

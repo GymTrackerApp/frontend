@@ -95,7 +95,7 @@ const WorkoutDetails = ({ workout, onClose }: WorkoutDetailsProps) => {
                   <tbody className="text-sm divide-y divide-border-light dark:divide-slate-800/50">
                     {workoutItem.sets.map((set, setIndex) => (
                       <tr
-                        className="hover:bg-gray-100 hover:dark:bg-slate-800/20 transition-colors"
+                        className="hover:bg-gray-100 dark:hover:bg-slate-800/20 transition-colors"
                         key={setIndex}
                       >
                         <td className="px-4 py-3 font-bold text-slate-500">

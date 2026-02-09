@@ -106,7 +106,7 @@ const CreateNewExerciseForm = ({ onClose }: CreateNewExerciseProps) => {
               Exercise Category
             </label>
             <button
-              className="w-full flex justify-between items-center border border-border-light dark:border-border-dark rounded-xl px-4 py-3 focus:ring-1 focus:ring-primary focus:border-primary transition-all cursor-pointer"
+              className="w-full flex justify-between items-center bg-card-light/50 dark:bg-card-dark border border-border-light dark:border-border-dark rounded-xl px-4 py-3 focus:ring-1 focus:ring-primary focus:border-primary transition-all cursor-pointer"
               onClick={(e) => {
                 e.preventDefault();
                 setCategorySelection(true);
@@ -121,9 +121,9 @@ const CreateNewExerciseForm = ({ onClose }: CreateNewExerciseProps) => {
             </button>
           </div>
         </div>
-        <div className="flex items-center gap-3 p-4 rounded-xl bg-surface-dark/30 border border-border-light/50 dark:border-border-dark/50">
+        <div className="flex items-center gap-3 p-4 rounded-xl bg-card-light/50 dark:bg-card-dark border border-border-light/50 dark:border-border-dark/50">
           <FaInfoCircle className="text-primary/60" size={25} />
-          <p className="text-xs text-text-muted leading-relaxed">
+          <p className="text-xs text-gray-500 dark:text-text-muted leading-relaxed">
             This exercise will be added to your personal library and can be used
             in any of your training plans.
           </p>

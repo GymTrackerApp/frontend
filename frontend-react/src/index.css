@@ -21,7 +21,7 @@
   --color-background-dark: #121926;
   --color-card-dark: #182334;
   --color-input-dark: #101723;
-  --color-border-dark: #374151;
+  --color-border-dark: #314158;
 
   /* light mode */
   --color-background-light: #f5f7fa;
@@ -36,8 +36,8 @@
     linear-gradient(to bottom, #cbd5e099 1px, transparent 1px);
 
   --background-image-dark-grid-pattern:
-    linear-gradient(to right, #9b25e099 1px, transparent 1px),
-    linear-gradient(to bottom, #9b25e099 1px, transparent 1px);
+    linear-gradient(to right, #314158 1px, transparent 1px),
+    linear-gradient(to bottom, #314158 1px, transparent 1px);
 
   /* Fonts */
   --font-display: "Inter";

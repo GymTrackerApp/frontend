@@ -110,7 +110,7 @@ const ExerciseUpdateModal = ({ onClose, exercise }: ExerciseUpdateProps) => {
             </label>
             <button
               type="button"
-              className="w-full flex justify-between items-center bg-surface-dark border border-border-light dark:border-border-dark rounded-xl px-4 py-3 focus:ring-1 focus:ring-primary focus:border-primary transition-all cursor-pointer"
+              className="w-full flex justify-between items-center bg-card-light/50 dark:bg-card-dark border border-border-light dark:border-border-dark rounded-xl px-4 py-3 focus:ring-1 focus:ring-primary focus:border-primary transition-all cursor-pointer"
               onClick={(e) => {
                 e.preventDefault();
                 setCategorySelection(true);

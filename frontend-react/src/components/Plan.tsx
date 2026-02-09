@@ -102,7 +102,7 @@ const Plan = ({ plan, exercises, updatable, removable }: PlanProps) => {
             </button>
             {updatable && (
               <button
-                className="flex items-center justify-center h-9 w-9 rounded-lg border-border-light/40 dark:border-border-dark bg-background-light hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 transition-colors cursor-pointer"
+                className="flex items-center justify-center h-9 w-9 rounded-lg bg-background-light hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 transition-colors cursor-pointer"
                 onClick={(e) => {
                   e.stopPropagation();
                   setUpdatePlan(plan);

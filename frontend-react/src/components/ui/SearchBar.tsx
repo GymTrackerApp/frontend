@@ -8,7 +8,7 @@ interface SearchBarProps {
 const SearchBar = ({ value, setSearchQuery }: SearchBarProps) => {
   return (
     <div className="relative group">
-      <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-slate-500 group-focus-within:dark:text-primary transition-colors">
+      <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-slate-500 group-focus-within:text-gray-600 group-focus-within:dark:text-primary transition-colors">
         <FaSearch className="text-xl" size={16} />
       </div>
       <input

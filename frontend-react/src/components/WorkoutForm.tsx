@@ -316,7 +316,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
           <AutoWorkoutTimer />
           <div className="flex items-center gap-3">
             <button
-              className="hidden md:flex h-10 px-5 items-center justify-center rounded-xl bg-[#223149]/50 hover:bg-gray-500 hover:dark:bg-[#223149] border border-input-light dark:border-[#223149] text-gray-100 dark:text-gray-300 hover:text-white text-sm font-semibold transition-all cursor-pointer"
+              className="hidden md:flex h-10 px-5 items-center justify-center rounded-xl bg-[#223149]/50 hover:bg-gray-500 dark:hover:bg-[#223149] border border-input-light dark:border-[#223149] text-white dark:text-gray-300 hover:text-white text-sm font-semibold transition-all cursor-pointer"
               onClick={() => setIsFinishedWorkoutWindowOpen(true)}
             >
               Finish
@@ -346,7 +346,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
 
       <div className="flex flex-col gap-3">
         <button
-          className="md:hidden w-full flex py-1 px-2 items-center justify-center bg-[#223149]/50 hover:bg-gray-500 hover:dark:bg-[#223149] border border-input-light dark:border-[#223149] text-gray-100 dark:text-gray-300 hover:text-white text-sm font-semibold transition-all cursor-pointer"
+          className="md:hidden w-full flex py-1 px-2 items-center justify-center bg-[#223149]/50 hover:bg-gray-500 hover:dark:bg-[#223149] border border-input-light dark:border-[#223149] text-white dark:text-gray-300 hover:text-white text-sm font-semibold transition-all cursor-pointer"
           onClick={() => setIsFinishedWorkoutWindowOpen(true)}
         >
           Finish
@@ -536,7 +536,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                 </table>
                 <div className="mt-4 px-2">
                   <button
-                    className="w-full py-3 rounded-xl border border-dashed border-border-dark text-gray-400 hover:text-primary hover:border-primary hover:bg-primary/5 text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer"
+                    className="w-full py-3 rounded-xl border border-dashed border-border-light dark:border-border-dark text-gray-400 hover:text-primary hover:border-primary hover:bg-primary/5 text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer"
                     onClick={() => addSetToExercise(exerciseIndex)}
                   >
                     <FaPlus size={18} />
@@ -558,7 +558,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
           <span className="font-bold text-lg tracking-wide">Add Exercise</span>
         </button>
         <button
-          className="h-14 px-8 w-53.75 mx-auto flex justify-center items-center rounded-2xl bg-[#223149]/50 hover:bg-gray-500 hover:dark:bg-[#223149] border border-input-light dark:border-[#223149] text-gray-100 dark:text-gray-300 hover:text-white font-semibold transition-all hover:scale-105 active:scale-95 cursor-pointer"
+          className="h-14 px-8 w-53.75 mx-auto flex justify-center items-center rounded-2xl bg-[#223149]/50 hover:bg-gray-500 hover:dark:bg-[#223149] border border-input-light dark:border-[#223149] text-white dark:text-gray-300 hover:text-white font-semibold transition-all hover:scale-105 active:scale-95 cursor-pointer"
           onClick={() => setIsFinishedWorkoutWindowOpen(true)}
         >
           Finish

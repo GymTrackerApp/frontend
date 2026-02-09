@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { format, parseISO } from "date-fns";
 import { FaHistory } from "react-icons/fa";
-import { Fragment } from "react/jsx-runtime";
+import { Fragment } from "react";
 import type { PlanItemResponse } from "../../services/trainingService";
 import {
   getWorkoutExerciseHistory,
@@ -70,7 +70,7 @@ const WorkoutExerciseHistoryModal = ({
                   <div className="flex flex-col items-center pt-2">
                     <div className="flex items-center justify-center w-3 h-3 rounded-full bg-gray-200 dark:bg-gray-700 mt-5 z-10 ring-4 ring-gray-200 dark:ring-gray-800"></div>
                   </div>
-                  <div className="flex flex-col py-5 pl-2 border-border-light dark:border-t dark:border-gray-700/30 group hover:dark:bg-gray-800/20 rounded-lg transition-colors px-2 -mx-2">
+                  <div className="flex flex-col py-5 pl-2 dark:border-t dark:border-gray-700/30 group hover:dark:bg-gray-800/20 rounded-lg transition-colors px-2 -mx-2">
                     <div className="flex justify-between items-baseline mb-3">
                       <p className="dark:text-gray-300 text-base font-semibold group-hover:dark:text-white transition-colors leading-tight">
                         {format(

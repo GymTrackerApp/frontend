@@ -272,10 +272,10 @@ const Progress = () => {
                 />
                 <span>
                   {selectedDateRange
-                    ? DATE_RANGE_OPTIONS.filter(
+                    ? (DATE_RANGE_OPTIONS.find(
                         (dataRangeOption) =>
                           dataRangeOption.value === selectedDateRange,
-                      )[0].label
+                      )?.label ?? "Select Date Range")
                     : "Select Date Range"}
                 </span>
                 <FaChevronDown size={16} className="text-gray-400" />

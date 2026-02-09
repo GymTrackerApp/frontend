@@ -42,11 +42,11 @@ const SelectOptionWindow = <T,>({
       <div className="flex-1 overflow-y-auto scrollbar-none p-6 pt-2">
         <div className="grid grid-cols-1 gap-3">
           {isDataLoading ? (
-            <div className="flex items-center justify-between p-4 bg-selection-light dark:bg-slate-800/40 rounded-xl border border-border-light/20 dark:border-slate-700/30 text-left font-semibold">
+            <div className="flex items-center justify-between p-4 bg-selection-light dark:bg-card-dark rounded-xl border border-border-light/20 dark:border-border-dark/30 text-left font-semibold">
               <p>Loading data...</p>
             </div>
           ) : filteredData.length === 0 ? (
-            <div className="flex items-center justify-between p-4 bg-selection-light dark:bg-slate-800/40 rounded-xl border border-border-light/20 dark:border-slate-700/30 text-left font-semibold">
+            <div className="flex items-center justify-between p-4 bg-selection-light dark:bg-card-dark rounded-xl border border-border-light/20 dark:border-border-dark/30 text-left font-semibold">
               <p>
                 {emptyDataMessage ||
                   (dataFilter ? "No matches found" : "No options available")}
@@ -58,7 +58,7 @@ const SelectOptionWindow = <T,>({
                 <button
                   key={index}
                   onClick={() => onSelect(item)}
-                  className="group flex items-center justify-between p-4 bg-selection-light dark:bg-slate-800/40 rounded-xl border border-border-light/20 dark:border-slate-700/30 hover:bg-input-light-hover hover:dark:bg-slate-800/80 transition-all text-left cursor-pointer"
+                  className="group flex items-center justify-between p-4 bg-selection-light dark:bg-card-dark rounded-xl border border-border-light/20 dark:border-border-dark/30 hover:bg-input-light-hover hover:dark:bg-slate-800/80 transition-all text-left cursor-pointer"
                 >
                   {renderItem(item)}
                 </button>

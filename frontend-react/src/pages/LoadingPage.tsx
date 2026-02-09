@@ -10,7 +10,7 @@ const LoadingPage = ({ title, description }: LoadingPageProps) => {
     <div className="relative min-h-screen bg-background-light dark:bg-background-dark font-display text-black dark:text-white antialiased overflow-hidden">
       <div className="absolute inset-0 bg-light-grid-pattern dark:bg-dark-grid-pattern bg-size-[40px_40px] pointer-events-none opacity-60"></div>
       <div className="absolute top-0 left-0 w-full h-full bg-linear-to-b from-transparent via-transparent to-background-light dark:to-background-dark pointer-events-none"></div>
-      <div className="fixed inset-0 z-50 flex items-center justify-center dark:bg-[#111827]/80 backdrop-blur-sm">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-background-light/80 dark:bg-background-dark/80">
         <div className="max-w-md w-full p-8 flex flex-col items-center text-center space-y-8">
           <div className="relative flex items-center justify-center">
             <div className="absolute inset-0 rounded-full bg-action-blue/20 pulse-effect"></div>

@@ -6,15 +6,15 @@ const ExerciseLoading = () => {
           <div className="flex items-center justify-between w-full">
             <div className="h-6 w-3/5 bg-input-light dark:bg-gray-700 rounded-md mb-1"></div>
             <div className="flex gap-1">
-              <div className="h-7 w-7 rounded-lg bg-input-light dark:bg-gray-700/50 border border-border-light dark:border-border-dark"></div>
-              <div className="h-7 w-7 rounded-lg bg-input-light dark:bg-gray-700/50 border border-border-light dark:border-border-dark"></div>
+              <div className="h-7 w-7 rounded-lg bg-input-light dark:bg-gray-700 border border-border-light dark:border-border-dark"></div>
+              <div className="h-7 w-7 rounded-lg bg-input-light dark:bg-gray-700 border border-border-light dark:border-border-dark"></div>
             </div>
           </div>
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <div className="h-4 w-4 rounded bg-input-light dark:bg-gray-700/50"></div>
-            <div className="h-3 w-20 bg-input-light dark:bg-gray-800 rounded"></div>
+            <div className="h-4 w-4 rounded bg-input-light dark:bg-gray-700"></div>
+            <div className="h-3 w-20 bg-input-light dark:bg-gray-700 rounded"></div>
           </div>
         </div>
       </div>

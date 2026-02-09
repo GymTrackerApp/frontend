@@ -26,6 +26,9 @@ const RegisterLogin = () => {
   const navigate = useNavigate();
   const [isRegister, setIsRegister] = useState<boolean>(false);
 
+  const inputStyling =
+    "block w-full rounded-lg bg-input-light dark:bg-input-dark border border-border-light/30 dark:border-border-dark text-black dark:text-white placeholder:text-text-muted dark:placeholder:text-text-muted/80 focus:border-primary focus:ring-1 focus:outline-none focus:ring-primary sm:text-sm pl-10 h-12 transition-all";
+
   const [signInFormData, setSignInFormData] = useState<SignInForm>({
     email: "",
     password: "",
@@ -159,7 +162,7 @@ const RegisterLogin = () => {
                       <FaUser className="text-text-muted text-[20px]" />
                     </div>
                     <input
-                      className="block w-full rounded-lg bg-input-light dark:bg-input-dark border-border-light dark:border-border-dark text-black dark:text-white placeholder:text-text-muted dark:placeholder:text-text-muted/80 focus:border-primary focus:ring-1 focus:outline-none focus:ring-primary sm:text-sm pl-10 h-12 transition-all"
+                      className={inputStyling}
                       id="username"
                       name="username"
                       type="text"
@@ -181,7 +184,7 @@ const RegisterLogin = () => {
                     <FaEnvelope className="text-text-muted text-[20px]" />
                   </div>
                   <input
-                    className="block w-full rounded-lg bg-input-light dark:bg-input-dark border-border-light dark:border-border-dark text-black dark:text-white placeholder:text-text-muted dark:placeholder:text-text-muted/80 focus:border-primary focus:ring-1 focus:outline-none focus:ring-primary sm:text-sm pl-10 h-12 transition-all"
+                    className={inputStyling}
                     id="email"
                     name="email"
                     type="email"
@@ -207,7 +210,7 @@ const RegisterLogin = () => {
                     <FaLock className="text-text-muted text-[20px]" />
                   </div>
                   <input
-                    className="block w-full rounded-lg bg-input-light dark:bg-input-dark border-border-light dark:border-border-dark text-black dark:text-white placeholder:text-text-muted dark:placeholder:text-text-muted/80 focus:border-primary focus:ring-1 focus:outline-none focus:ring-primary sm:text-sm pl-10 h-12 transition-all"
+                    className={inputStyling}
                     id="password"
                     name="password"
                     type="password"

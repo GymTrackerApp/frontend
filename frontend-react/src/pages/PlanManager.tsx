@@ -25,6 +25,7 @@ import {
   type PlanResponse,
 } from "../services/trainingService";
 import type { ErrorResponse, GeneralResponse } from "../types/ApiResponse";
+import LoadingFailed from "../components/ui/LoadingFailed";
 
 const PlanManager = () => {
   const [newPlanModalEnabled, setNewPlanModalEnabled] =
@@ -152,24 +153,28 @@ const PlanManager = () => {
 
           {isMyPlansEnabled && (
             <>
-              {isMyPlansLoading || isMyPlansError || !myPlans ? (
+              {isMyPlansLoading ? (
                 <PlanLoading />
+              ) : isMyPlansError || !myPlans ? (
+                <LoadingFailed message="Failed to load plans" />
               ) : (
-                myPlans.map((plan) => (
-                  <Plan
-                    key={plan.id}
-                    plan={plan}
-                    updatable={true}
-                    removable={true}
-                    exercises={allUserAvailableExercises}
+                <>
+                  {myPlans.map((plan) => (
+                    <Plan
+                      key={plan.id}
+                      plan={plan}
+                      updatable={true}
+                      removable={true}
+                      exercises={allUserAvailableExercises}
+                    />
+                  ))}
+                  <CreateNewResource
+                    creationText={"Create Custom Plan"}
+                    descriptionText="Design a new routine from scratch tailored to your goals"
+                    onNewResourceCreated={() => setNewPlanModalEnabled(true)}
                   />
-                ))
+                </>
               )}
-              <CreateNewResource
-                creationText={"Create Custom Plan"}
-                descriptionText="Design a new routine from scratch tailored to your goals"
-                onNewResourceCreated={() => setNewPlanModalEnabled(true)}
-              />
             </>
           )}
 
@@ -183,23 +188,29 @@ const PlanManager = () => {
 
           {isMyExercisesEnabled && (
             <>
-              {isMyExercisesLoading || isMyExercisesError || !myExercises ? (
+              {isMyExercisesLoading ? (
                 <ExerciseLoading />
+              ) : isMyExercisesError || !myExercises ? (
+                <LoadingFailed message="Failed to load exercises" />
               ) : (
-                myExercises?.map((exercise) => (
-                  <Exercise
-                    key={exercise.exerciseId}
-                    exercise={exercise}
-                    setUpdateExercise={setUpdateExercise}
-                    handleRemoveExercise={handleRemoveExercise}
+                <>
+                  {myExercises.map((exercise) => (
+                    <Exercise
+                      key={exercise.exerciseId}
+                      exercise={exercise}
+                      setUpdateExercise={setUpdateExercise}
+                      handleRemoveExercise={handleRemoveExercise}
+                    />
+                  ))}
+                  <CreateNewResource
+                    creationText={"Create New Exercise"}
+                    descriptionText="Expand your library with custom exercises"
+                    onNewResourceCreated={() =>
+                      setNewExerciseModalEnabled(true)
+                    }
                   />
-                ))
+                </>
               )}
-              <CreateNewResource
-                creationText={"Create New Exercise"}
-                descriptionText="Expand your library with custom exercises"
-                onNewResourceCreated={() => setNewExerciseModalEnabled(true)}
-              />
             </>
           )}
 
@@ -214,10 +225,10 @@ const PlanManager = () => {
 
           {isPredefinedPlansEnabled && (
             <>
-              {isPredefinedPlansLoading ||
-              isPredefinedPlansError ||
-              !predefinedPlans ? (
+              {isPredefinedPlansLoading ? (
                 <PlanLoading />
+              ) : isPredefinedPlansError || !predefinedPlans ? (
+                <LoadingFailed message="Failed to load predefined plans" />
               ) : (
                 predefinedPlans.map((plan) => (
                   <Plan
