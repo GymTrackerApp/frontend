@@ -1,8 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap");
-/* biome-ignore lint: ignore the whole file */
 @import "tailwindcss";
-...
-@plugin "tailwind-scrollbar";
+@plugin 'tailwind-scrollbar';
 
 @theme {
   --color-components-main: var(--color-gray-700);
