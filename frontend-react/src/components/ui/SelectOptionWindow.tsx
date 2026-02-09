@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { FaTimes } from "react-icons/fa";
 import AbsoluteWindowWrapper from "./AbsoluteWindowWrapper";
-import SearchBar from "./SearchBar";
 import CloseModalButton from "./CloseModalButton";
+import SearchBar from "./SearchBar";
 
 interface SelectOptionWindowProps<T> {
   title: string;
