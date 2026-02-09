@@ -48,11 +48,11 @@ const LoadingPage = ({ title, description }: LoadingPageProps) => {
           </div>
           <div className="space-y-3">
             <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
-            <p className="text-gray-400 text-base max-w-70 mx-auto leading-relaxed">
+            <p className="text-gray-600 dark:text-gray-400 text-base max-w-70 mx-auto leading-relaxed">
               {description}
             </p>
           </div>
-          <div className="w-64 h-1 bg-gray-800 rounded-full overflow-hidden">
+          <div className="w-64 h-1 bg-gray-300 dark:bg-gray-800 rounded-full overflow-hidden">
             <div className="h-full bg-action-blue w-1/3 rounded-full animate-[progress_2s_ease-in-out_infinite]"></div>
           </div>
         </div>

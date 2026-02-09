@@ -11,10 +11,10 @@ const AuthToggleTabs = ({ isRegister, setIsRegister }: AuthToggleProps) => {
       <button
         type="button"
         className={clsx(
-          "flex-1 py-4 text-center text-sm font-semibold border-b-2 transition-colors",
+          "rounded-tl-4xl flex-1 py-4 text-center text-sm font-semibold border-b-2 transition-colors",
           isRegister
             ? "border-transparent text-text-muted hover:opacity-80"
-            : "text-primary border-primary dark:text-white bg-white/5",
+            : "text-primary border-primary dark:text-white bg-primary/5 dark:bg-white/5",
         )}
         onClick={() => setIsRegister(false)}
       >
@@ -23,9 +23,9 @@ const AuthToggleTabs = ({ isRegister, setIsRegister }: AuthToggleProps) => {
       <button
         type="button"
         className={clsx(
-          "flex-1 py-4 text-center text-sm font-semibold border-b-2 transition-colors",
+          "rounded-tr-4xl flex-1 py-4 text-center text-sm font-semibold border-b-2 transition-colors",
           isRegister
-            ? "text-primary dark:text-white border-primary bg-white/5"
+            ? "text-primary dark:text-white border-primary bg-primary/5 dark:bg-white/5"
             : "border-transparent text-text-muted hover:opacity-80",
         )}
         onClick={() => setIsRegister(true)}

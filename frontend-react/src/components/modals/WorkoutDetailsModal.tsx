@@ -17,7 +17,7 @@ const WorkoutDetails = ({ workout, onClose }: WorkoutDetailsProps) => {
   return (
     <AbsoluteWindowWrapper isOpen={true} onClose={onClose}>
       <div className="flex-1 overflow-y-auto scrollbar-none p-5 space-y-10">
-        <header className="flex items-center justify-between p-6 md:p-2 border-b border-border-light dark:border-slate-800 bg-background-light dark:bg-slate-900/50">
+        <header className="flex items-center justify-between p-6 md:p-2 border-b border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark">
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2 text-primary">
               <FaChartLine className="text-2xl" />
@@ -36,7 +36,7 @@ const WorkoutDetails = ({ workout, onClose }: WorkoutDetailsProps) => {
         </header>
 
         <div className="flex gap-5">
-          <div className="w-full bg-gray-200 dark:bg-slate-800/50 border border-border-light dark:border-slate-700/20 rounded-xl p-4">
+          <div className="w-full bg-gray-200 dark:bg-card-dark border border-border-light dark:border-border-dark rounded-xl p-4">
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">
               Total Volume
             </p>
@@ -45,7 +45,7 @@ const WorkoutDetails = ({ workout, onClose }: WorkoutDetailsProps) => {
               <span className="text-sm font-normal opacity-60">kg</span>
             </p>
           </div>
-          <div className="w-full bg-gray-200 dark:bg-slate-800/50 border border-border-light dark:border-slate-700/20 rounded-xl p-4">
+          <div className="w-full bg-gray-200 dark:bg-card-dark border border-border-light dark:border-border-dark rounded-xl p-4">
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">
               Total Sets
             </p>
@@ -77,25 +77,25 @@ const WorkoutDetails = ({ workout, onClose }: WorkoutDetailsProps) => {
                   </p>
                 </div>
               </div>
-              <div className="overflow-x-auto rounded-xl border border-border-light dark:border-slate-800 dark:bg-slate-900/30">
+              <div className="overflow-x-auto rounded-xl border border-border-light dark:border-border-dark dark:bg-background-dark">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="bg-gray-200 dark:bg-slate-800/50 text-[10px] uppercase tracking-widest font-bold text-slate-400">
-                      <th className="px-4 py-3 border-b border-border-light dark:border-slate-800">
+                    <tr className="bg-gray-200 dark:bg-card-dark text-[10px] uppercase tracking-widest font-bold text-slate-400">
+                      <th className="px-4 py-3 border-b border-border-light dark:border-border-dark">
                         Set
                       </th>
-                      <th className="px-4 py-3 border-b border-border-light dark:border-slate-800 text-primary text-center">
+                      <th className="px-4 py-3 border-b border-border-light dark:border-border-dark text-primary text-center">
                         Weight
                       </th>
-                      <th className="px-4 py-3 border-b border-border-light dark:border-slate-800 text-primary text-center">
+                      <th className="px-4 py-3 border-b border-border-light dark:border-border-dark text-primary text-center">
                         Reps
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="text-sm divide-y divide-border-light dark:divide-slate-800/50">
+                  <tbody className="text-sm divide-y divide-border-light dark:divide-border-dark/50">
                     {workoutItem.sets.map((set, setIndex) => (
                       <tr
-                        className="hover:bg-gray-100 dark:hover:bg-slate-800/20 transition-colors"
+                        className="hover:bg-gray-100 dark:hover:bg-card-dark/30 transition-colors"
                         key={setIndex}
                       >
                         <td className="px-4 py-3 font-bold text-slate-500">

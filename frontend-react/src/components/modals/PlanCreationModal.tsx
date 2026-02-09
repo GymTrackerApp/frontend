@@ -159,7 +159,7 @@ const PlanCreationModal = ({ exercises, onClose }: NewPlanProps) => {
             <div className="flex items-center bg-input-light dark:bg-background-dark rounded-lg border border-border-light dark:border-border-dark overflow-hidden">
               <button
                 type="button"
-                className="w-8 h-8 flex items-center justify-center hover:bg-border-light hover:dark:bg-surface-border transition-colors text-text-muted"
+                className="w-8 h-8 flex items-center justify-center hover:bg-border-light dark:hover:bg-surface-border transition-colors text-text-muted"
                 onClick={(e) => {
                   e.preventDefault();
                   setNewPlanForm((prev) => {
@@ -188,7 +188,7 @@ const PlanCreationModal = ({ exercises, onClose }: NewPlanProps) => {
 
               <button
                 type="button"
-                className="w-8 h-8 flex items-center justify-center hover:bg-border-light hover:dark:bg-border-dark transition-colors text-text-muted"
+                className="w-8 h-8 flex items-center justify-center hover:bg-border-light dark:hover:bg-border-dark transition-colors text-text-muted"
                 onClick={(e) => {
                   e.preventDefault();
                   setNewPlanForm((prev) => {

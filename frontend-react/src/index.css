@@ -1,5 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap");
+/* biome-ignore lint: ignore the whole file */
 @import "tailwindcss";
+...
 @plugin "tailwind-scrollbar";
 
 @theme {
@@ -21,7 +23,7 @@
   --color-background-dark: #121926;
   --color-card-dark: #182334;
   --color-input-dark: #101723;
-  --color-border-dark: #314158;
+  --color-border-dark: #1d293d;
 
   /* light mode */
   --color-background-light: #f5f7fa;

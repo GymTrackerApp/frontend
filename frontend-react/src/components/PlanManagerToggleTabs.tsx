@@ -19,7 +19,7 @@ const PlanManagerToggleTabs = ({
 }: PlanManagerToggleProps) => {
   const enabledButtonStyle = "border-primary text-primary";
   const disabledButtonStyle =
-    "border-transparent text-gray-400 dark:text-gray-300 hover:text-gray-600 hover:dark:text-gray-300 hover:border-gray-300 hover:dark:border-gray-700";
+    "border-transparent text-gray-400 dark:text-gray-300 hover:text-gray-600 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700";
 
   const disableAllButtons = () => {
     setIsMyPlansEnabled(false);
