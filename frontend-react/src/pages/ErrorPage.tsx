@@ -14,7 +14,7 @@ function ErrorPage() {
             </div>
             <div className="relative z-10 p-12 bg-white/5 backdrop-blur-sm rounded-full border border-gray-200 dark:border-border-dark inline-flex items-center justify-center shadow-2xl">
               <FaMapMarkedAlt className="text-8xl text-primary" />
-              <div className="absolute -bottom-2 -right-2 bg-red-500 text-white rounded-full p-2 border-4 border-background-dark">
+              <div className="absolute -bottom-2 -right-2 bg-red-500 text-white rounded-full p-2 border-4 border-background-light dark:border-background-dark">
                 <FaHeartBroken className="text-2xl" />
               </div>
             </div>

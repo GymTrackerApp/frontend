@@ -10,10 +10,10 @@ import {
   FaRegCalendar,
 } from "react-icons/fa";
 import AnalysisPlaceholder from "../components/AnalysisPlaceholder";
-import ExerciseSelectionOption from "../components/ExerciseSelectionOption";
+import ExerciseSelectionOption from "../components/selections/ExerciseSelectionOption";
 import PageWrapper from "../components/ui/PageWrapper";
 import ProgressChart, { type DataContent } from "../components/ProgressChart";
-import TrainingPlanSelectionOption from "../components/TrainingPlanSelectionOption";
+import TrainingPlanSelectionOption from "../components/selections/TrainingPlanSelectionOption";
 import SelectOptionWindow from "../components/ui/SelectOptionWindow";
 import {
   useAvailableExercises,
@@ -66,7 +66,7 @@ const Progress = () => {
   const [selectedExercise, setSelectedExercise] =
     useState<ExerciseResponse | null>(null);
   const [selectedTraining, setSelectedTraining] = useState<PlanResponse | null>(
-    null
+    null,
   );
   const [selectedDateRange, setSelectedDateRange] =
     useState<DateRangeType>("7d");
@@ -93,14 +93,14 @@ const Progress = () => {
   };
 
   const prepareChartData = (
-    data: WorkoutExerciseHistoryResponse | WorkoutTrainingHistoryResponse
+    data: WorkoutExerciseHistoryResponse | WorkoutTrainingHistoryResponse,
   ): Array<DataContent> => {
     if ("trainingId" in data) {
       return data.history.map((snapshot) => ({
         date: format(parseISO(snapshot.workoutDate), "yyyy-MM-dd"),
         value: snapshot.sets.reduce(
           (prev, curr) => prev + curr.reps * curr.weight,
-          0
+          0,
         ),
       }));
     } else if ("exerciseId" in data) {
@@ -124,7 +124,7 @@ const Progress = () => {
       getWorkoutExerciseHistoryByWorkoutInPeriod(
         selectedExercise!.exerciseId,
         getStartDate(selectedDateRange),
-        currentDate
+        currentDate,
       ),
     queryKey: [
       "exerciseHistory",
@@ -147,7 +147,7 @@ const Progress = () => {
       getWorkoutTrainingHistoryByWorkoutInPeriod(
         selectedTraining!.id,
         getStartDate(selectedDateRange),
-        currentDate
+        currentDate,
       ),
     queryKey: [
       "trainingHistory",
@@ -195,22 +195,22 @@ const Progress = () => {
             <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
               Progress Analysis
             </h2>
-            <p className="text-gray-500 dark:text-text-secondary text-lg max-w-xl">
+            <p className="text-gray-500 text-lg max-w-xl">
               Detailed breakdown of your strength gains and volume distribution
               over time.
             </p>
           </div>
 
-          <div className="flex gap-4 bg-white dark:bg-surface-dark px-2 py-2 rounded-xl border border-gray-200 dark:border-border-dark shadow-sm">
+          <div className="flex gap-4 bg-white dark:bg-card-dark px-2 py-2 rounded-xl border border-gray-200 dark:border-border-dark shadow-sm">
             <div className="flex flex-col lg:flex-row flex-1 justify-center bg-gray-100 dark:bg-gray-800">
               {METRIC_OPTIONS.map((metricOption, index) => (
                 <button
                   key={index}
                   className={clsx(
-                    "w-full px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 cursor-pointer",
+                    "w-full px-4 py-2 text-sm font-medium transition-all duration-200 cursor-pointer",
                     selectedMetricType === metricOption.value
-                      ? "bg-white dark:bg-background-dark text-primary shadow-sm"
-                      : "text-gray-500 dark:text-gray-400 dark:hover:text-gray-200"
+                      ? "bg-gray-50 dark:bg-background-dark text-primary shadow-sm"
+                      : "bg-white dark:bg-card-dark dark:hover:bg-gray-700/50 hover:bg-gray-50 text-gray-500 dark:text-gray-400",
                   )}
                   onClick={() => handleMetricChange(metricOption.value)}
                 >
@@ -272,10 +272,10 @@ const Progress = () => {
                 />
                 <span>
                   {selectedDateRange
-                    ? DATE_RANGE_OPTIONS.filter(
+                    ? (DATE_RANGE_OPTIONS.find(
                         (dataRangeOption) =>
-                          dataRangeOption.value === selectedDateRange
-                      )[0].label
+                          dataRangeOption.value === selectedDateRange,
+                      )?.label ?? "Select Date Range")
                     : "Select Date Range"}
                 </span>
                 <FaChevronDown size={16} className="text-gray-400" />
@@ -285,17 +285,17 @@ const Progress = () => {
         </header>
 
         <section className="">
-          <div className="bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-border-dark p-6 shadow-sm h-110 flex flex-col relative overflow-hidden group">
+          <div className="bg-white dark:bg-card-dark rounded-2xl border border-gray-200 dark:border-border-dark p-6 shadow-sm h-110 flex flex-col relative overflow-hidden group">
             <div className="flex justify-between items-start mb-8 z-10 relative">
               <div>
-                <h3 className="text-lg text-gray-500 dark:text-text-secondary uppercase tracking-tight font-bold">
+                <h3 className="text-lg text-gray-500 uppercase tracking-tight font-bold">
                   {selectedMetricType === "training"
                     ? selectedTraining
                       ? `"${selectedTraining.name}" Volume`
                       : "No training plan selected"
                     : selectedExercise
-                    ? `"${selectedExercise.name}" Progress`
-                    : "No exercise selected"}
+                      ? `"${selectedExercise.name}" Progress`
+                      : "No exercise selected"}
                 </h3>
                 {selectedMetricType === "training" && trainingHistoryData ? (
                   selectedTraining ? (
@@ -417,7 +417,7 @@ const Progress = () => {
               )}
               dataFilter={(data, keyword) =>
                 data.filter((plan) =>
-                  plan.name.toLowerCase().includes(keyword.toLowerCase())
+                  plan.name.toLowerCase().includes(keyword.toLowerCase()),
                 )
               }
             />
@@ -446,7 +446,7 @@ const Progress = () => {
                     <div>
                       <p
                         className={
-                          "font-bold group-hover:text-primary text-white transition-colors"
+                          "font-bold group-hover:text-primary transition-colors"
                         }
                       >
                         {item.label}

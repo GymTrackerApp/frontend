@@ -16,7 +16,8 @@ const Button = ({
   ...props
 }: ButtonProps) => {
   const typeStyle = {
-    approve: "bg-primary hover:bg-primary-hover transition-colors",
+    approve:
+      "bg-primary text-white dark:text-black hover:bg-primary-hover transition-colors",
     details:
       "border border-blue-400 text-blue-400 hover:border-blue-300 hover:text-blue-300 transition-colors",
     cancel:
@@ -36,7 +37,7 @@ const Button = ({
     "flex justify-center items-center gap-2 cursor-pointer",
     typeStyle,
     additionalStyle,
-    sizeStyle
+    sizeStyle,
   );
 
   return (

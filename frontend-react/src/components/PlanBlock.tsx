@@ -38,7 +38,7 @@ const PlanBlock = ({ plan }: PlanBlockProps) => {
   };
 
   return (
-    <div className="relative flex flex-col justify-between overflow-hidden rounded-xl bg-white dark:bg-surface-dark p-5 shadow-sm ring-1 ring-gray-900/5 transition-all hover:ring-primary/50 dark:ring-white/10 dark:hover:ring-primary/50">
+    <div className="relative flex flex-col justify-between overflow-hidden rounded-xl bg-white dark:bg-card-dark p-5 shadow-sm ring ring-border-light/10 hover:ring-border-light hover:shadow-md transition-all dark:ring-white/10 hover:dark:ring-primary/50 hover:dark:shadow-none">
       <div className="flex items-start justify-between">
         <div className="flex flex-col gap-1">
           <h3 className="font-bold text-gray-900 dark:text-white">
@@ -48,10 +48,10 @@ const PlanBlock = ({ plan }: PlanBlockProps) => {
             {isLastWorkoutLoading
               ? "Loading..."
               : isLastWorkoutError
-              ? "Could not load"
-              : !lastWorkout || lastWorkout?.length === 0
-              ? "Never performed"
-              : `Last done: ${getRelativeDate(lastWorkout[0].createdAt)}`}
+                ? "Could not load"
+                : !lastWorkout || lastWorkout?.length === 0
+                  ? "Never performed"
+                  : `Last done: ${getRelativeDate(lastWorkout[0].createdAt)}`}
           </p>
         </div>
         <button

@@ -26,7 +26,7 @@ const ConfirmationWindow = ({
             <div className="size-24 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20">
               <FaDumbbell className="text-5xl text-primary" />
             </div>
-            <div className="absolute -bottom-2 -right-2 bg-emerald-500 rounded-full p-1 border-4 border-white dark:border-[#18181b]">
+            <div className="absolute -bottom-2 -right-2 bg-emerald-500 rounded-full p-1 border-4 border-emerald-500 dark:border-[#18181b]">
               <FaCheck className="text-white text-base block font-bold" />
             </div>
           </div>

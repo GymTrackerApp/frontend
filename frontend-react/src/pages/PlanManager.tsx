@@ -5,13 +5,13 @@ import toast from "react-hot-toast";
 import { FaPlus } from "react-icons/fa";
 import CreateNewResource from "../components/CreateNewResource";
 import Exercise from "../components/Exercise";
-import ExerciseLoading from "../components/ExerciseLoading";
+import ExerciseLoading from "../components/loaders/ExerciseLoading";
 import NewExerciseModal from "../components/modals/ExerciseCreationModal";
 import ExerciseUpdateModal from "../components/modals/ExerciseUpdateModal";
 import PlanCreationModal from "../components/modals/PlanCreationModal";
 import PageWrapper from "../components/ui/PageWrapper";
 import Plan from "../components/Plan";
-import PlanLoading from "../components/PlanLoading";
+import PlanLoading from "../components/loaders/PlanLoading";
 import PlanManagerToggleTabs from "../components/PlanManagerToggleTabs";
 import { useAvailableExercises } from "../hooks/useWorkoutFlow";
 import {
@@ -25,6 +25,7 @@ import {
   type PlanResponse,
 } from "../services/trainingService";
 import type { ErrorResponse, GeneralResponse } from "../types/ApiResponse";
+import LoadingFailed from "../components/ui/LoadingFailed";
 
 const PlanManager = () => {
   const [newPlanModalEnabled, setNewPlanModalEnabled] =
@@ -32,7 +33,7 @@ const PlanManager = () => {
   const [newExerciseModalEnabled, setNewExerciseModalEnabled] =
     useState<boolean>(false);
   const [updateExercise, setUpdateExercise] = useState<ExerciseResponse | null>(
-    null
+    null,
   );
 
   const [isMyPlansEnabled, setIsMyPlansEnabled] = useState<boolean>(true);
@@ -103,10 +104,8 @@ const PlanManager = () => {
       <div className="w-full max-w-300 mx-auto px-6 py-8 flex flex-col gap-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div className="flex flex-col gap-2">
-            <h1 className="text-white text-3xl font-black tracking-tight">
-              Plan Manager
-            </h1>
-            <p className="text-gray-400 text-base font-normal max-w-lg">
+            <h1 className="text-3xl font-black tracking-tight">Plan Manager</h1>
+            <p className="text-gray-500 text-base font-normal max-w-lg">
               Manage your workout routines, customize schedules, and track your
               exercise library
             </p>
@@ -152,27 +151,31 @@ const PlanManager = () => {
             />
           )}
 
-          {isMyPlansLoading || isMyPlansError || !myPlans ? (
-            <PlanLoading />
-          ) : (
-            isMyPlansEnabled && (
-              <>
-                {myPlans.map((plan) => (
-                  <Plan
-                    key={plan.id}
-                    plan={plan}
-                    updatable={true}
-                    removable={true}
-                    exercises={allUserAvailableExercises}
+          {isMyPlansEnabled && (
+            <>
+              {isMyPlansLoading ? (
+                <PlanLoading />
+              ) : isMyPlansError || !myPlans ? (
+                <LoadingFailed message="Failed to load plans" />
+              ) : (
+                <>
+                  {myPlans.map((plan) => (
+                    <Plan
+                      key={plan.id}
+                      plan={plan}
+                      updatable={true}
+                      removable={true}
+                      exercises={allUserAvailableExercises}
+                    />
+                  ))}
+                  <CreateNewResource
+                    creationText={"Create Custom Plan"}
+                    descriptionText="Design a new routine from scratch tailored to your goals"
+                    onNewResourceCreated={() => setNewPlanModalEnabled(true)}
                   />
-                ))}
-                <CreateNewResource
-                  creationText={"Create Custom Plan"}
-                  descriptionText="Design a new routine from scratch tailored to your goals"
-                  onNewResourceCreated={() => setNewPlanModalEnabled(true)}
-                />
-              </>
-            )
+                </>
+              )}
+            </>
           )}
 
           {/* My Exercises */}
@@ -183,26 +186,32 @@ const PlanManager = () => {
             />
           )}
 
-          {isMyExercisesLoading || isMyExercisesError || !myExercises ? (
-            <ExerciseLoading />
-          ) : (
-            isMyExercisesEnabled && (
-              <>
-                {myExercises?.map((exercise) => (
-                  <Exercise
-                    key={exercise.exerciseId}
-                    exercise={exercise}
-                    setUpdateExercise={setUpdateExercise}
-                    handleRemoveExercise={handleRemoveExercise}
+          {isMyExercisesEnabled && (
+            <>
+              {isMyExercisesLoading ? (
+                <ExerciseLoading />
+              ) : isMyExercisesError || !myExercises ? (
+                <LoadingFailed message="Failed to load exercises" />
+              ) : (
+                <>
+                  {myExercises.map((exercise) => (
+                    <Exercise
+                      key={exercise.exerciseId}
+                      exercise={exercise}
+                      setUpdateExercise={setUpdateExercise}
+                      handleRemoveExercise={handleRemoveExercise}
+                    />
+                  ))}
+                  <CreateNewResource
+                    creationText={"Create New Exercise"}
+                    descriptionText="Expand your library with custom exercises"
+                    onNewResourceCreated={() =>
+                      setNewExerciseModalEnabled(true)
+                    }
                   />
-                ))}
-                <CreateNewResource
-                  creationText={"Create New Exercise"}
-                  descriptionText="Expand your library with custom exercises"
-                  onNewResourceCreated={() => setNewExerciseModalEnabled(true)}
-                />
-              </>
-            )
+                </>
+              )}
+            </>
           )}
 
           {updateExercise && (
@@ -214,21 +223,24 @@ const PlanManager = () => {
 
           {/* Predefined Plans */}
 
-          {isPredefinedPlansLoading ||
-          isPredefinedPlansError ||
-          !predefinedPlans ? (
-            <PlanLoading />
-          ) : (
-            isPredefinedPlansEnabled &&
-            predefinedPlans.map((plan) => (
-              <Plan
-                key={plan.id}
-                plan={plan}
-                updatable={false}
-                removable={false}
-                exercises={allUserAvailableExercises}
-              />
-            ))
+          {isPredefinedPlansEnabled && (
+            <>
+              {isPredefinedPlansLoading ? (
+                <PlanLoading />
+              ) : isPredefinedPlansError || !predefinedPlans ? (
+                <LoadingFailed message="Failed to load predefined plans" />
+              ) : (
+                predefinedPlans.map((plan) => (
+                  <Plan
+                    key={plan.id}
+                    plan={plan}
+                    updatable={false}
+                    removable={false}
+                    exercises={allUserAvailableExercises}
+                  />
+                ))
+              )}
+            </>
           )}
         </div>
       </div>

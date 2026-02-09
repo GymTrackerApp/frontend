@@ -62,11 +62,11 @@ const Plan = ({ plan, exercises, updatable, removable }: PlanProps) => {
 
   return (
     <>
-      <div className="flex flex-col group bg-surface-dark rounded-xl border border-border-dark overflow-hidden hover:border-primary/50 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-primary/5">
+      <div className="flex flex-col group bg-card-light dark:bg-card-dark rounded-xl border border-border-light dark:border-border-dark overflow-hidden transition-all duration-300 ring ring-border-light/10 hover:ring-border-light shadow-lg hover:shadow-xl dark:hover:shadow-primary/5 dark:ring dark:ring-white/10 dark:hover:ring-primary/50">
         <div className="p-5 flex flex-col gap-4 flex-1">
           <div className="flex justify-between items-start">
             <div>
-              <h3 className="text-white text-lg font-bold leading-tight mb-1">
+              <h3 className="text-lg font-bold leading-tight mb-1">
                 {plan.name}
               </h3>
             </div>
@@ -92,9 +92,9 @@ const Plan = ({ plan, exercises, updatable, removable }: PlanProps) => {
               <span>~{calculateAverageTrainingTime(plan)} mins</span>
             </div>
           </div>
-          <div className="mt-auto pt-4 border-t border-border-dark flex gap-3">
+          <div className="mt-auto pt-4 border-t border-border-light dark:border-border-dark flex gap-3">
             <button
-              className="flex-1 flex items-center justify-center gap-2 h-9 rounded-lg bg-white/5 hover:bg-white/10 text-white text-sm font-medium transition-colors cursor-pointer"
+              className="flex-1 flex items-center justify-center gap-2 h-9 rounded-lg bg-background-light hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 text-sm font-medium transition-colors cursor-pointer"
               onClick={() => setIsPlanExpanded(!isPlanExpanded)}
             >
               <FaEye size={18} />
@@ -102,7 +102,7 @@ const Plan = ({ plan, exercises, updatable, removable }: PlanProps) => {
             </button>
             {updatable && (
               <button
-                className="flex items-center justify-center h-9 w-9 rounded-lg border border-border-dark text-gray-400 hover:text-white hover:border-gray-500 transition-colors cursor-pointer"
+                className="flex items-center justify-center h-9 w-9 rounded-lg bg-background-light hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 transition-colors cursor-pointer"
                 onClick={(e) => {
                   e.stopPropagation();
                   setUpdatePlan(plan);

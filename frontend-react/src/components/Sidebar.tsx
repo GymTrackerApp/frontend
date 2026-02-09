@@ -28,7 +28,7 @@ const Sidebar = ({ username, isOpen }: SidebarProps) => {
       "flex items-center gap-3 rounded-lg px-4 py-3 transition-colors",
       isActive
         ? "bg-primary/10 text-primary"
-        : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+        : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800",
     );
 
   const signOutMutation = useMutation<
@@ -76,7 +76,7 @@ const Sidebar = ({ username, isOpen }: SidebarProps) => {
     <aside
       className={clsx(
         "fixed inset-y-0 w-72 z-11 flex flex-col justify-between border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-[#111827] p-6 transition-transform duration-300 md:translate-x-0 md:static",
-        isOpen ? "translate-x-0" : "-translate-x-full"
+        isOpen ? "translate-x-0" : "-translate-x-full",
       )}
       onClick={(e) => e.stopPropagation()}
     >

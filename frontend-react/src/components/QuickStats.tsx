@@ -13,7 +13,7 @@ const QuickStats = ({
   isWorkoutsThisWeekError,
 }: QuickStatsProps) => {
   return (
-    <div className="relative flex flex-col col-span-3 lg:col-span-1 justify-between rounded-2xl bg-white dark:bg-surface-dark p-6 shadow-sm ring-1 ring-gray-900/5 dark:ring-white/10">
+    <div className="relative flex flex-col col-span-3 lg:col-span-1 justify-between rounded-2xl bg-white dark:bg-card-dark p-6 shadow-sm ring-1 ring-gray-900/5 dark:ring-white/10">
       <div className="flex items-start justify-between">
         <div className="flex flex-col gap-1">
           <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
@@ -24,11 +24,11 @@ const QuickStats = ({
               {isWorkoutsThisWeekLoading
                 ? "Loading..."
                 : isWorkoutsThisWeekError || !workoutsThisWeek
-                ? "--"
-                : workoutsThisWeek.reduce(
-                    (a, b) => a + calculateWorkoutVolume(b),
-                    0
-                  )}
+                  ? "--"
+                  : workoutsThisWeek.reduce(
+                      (a, b) => a + calculateWorkoutVolume(b),
+                      0,
+                    )}
             </span>
             {!isWorkoutsThisWeekLoading && (
               <span className="text-sm font-medium text-gray-500">kg</span>

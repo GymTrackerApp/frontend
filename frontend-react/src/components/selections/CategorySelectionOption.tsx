@@ -11,7 +11,7 @@ const CategorySelectionOption = ({
     <div className="w-full flex items-center justify-between">
       <div className="flex items-center gap-4">
         <div>
-          <p className="font-bold group-hover:text-primary text-white transition-colors capitalize">
+          <p className="font-bold group-hover:text-primary transition-colors capitalize">
             {exerciseCategory.toLowerCase()}
           </p>
         </div>

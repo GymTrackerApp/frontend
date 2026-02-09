@@ -12,7 +12,7 @@ import {
 import type { ErrorResponse } from "../../types/ApiResponse";
 import SelectOptionWindow from "../ui/SelectOptionWindow";
 import ExerciseActionModal from "./ExerciseActionModal";
-import CategorySelectionOption from "../CategorySelectionOption";
+import CategorySelectionOption from "../selections/CategorySelectionOption";
 
 interface ExerciseUpdateProps {
   onClose: () => void;
@@ -94,7 +94,7 @@ const ExerciseUpdateModal = ({ onClose, exercise }: ExerciseUpdateProps) => {
             Exercise Name
           </label>
           <input
-            className="w-full bg-transparent text-3xl md:text-4xl font-bold text-white placeholder-text-muted/20 border-0 border-b-2 border-surface-border focus:border-primary focus:outline-none focus:ring-0 px-0 pb-4 transition-colors"
+            className="w-full bg-transparent text-3xl md:text-4xl font-bold placeholder-text-muted/20 border-0 border-b-2 border-border-light dark:border-border-dark focus:border-primary focus:outline-none focus:ring-0 px-0 pb-4 transition-colors"
             name="exerciseName"
             placeholder="e.g. Benchpress"
             type="text"
@@ -110,7 +110,7 @@ const ExerciseUpdateModal = ({ onClose, exercise }: ExerciseUpdateProps) => {
             </label>
             <button
               type="button"
-              className="w-full flex justify-between items-center bg-surface-dark border border-surface-border rounded-xl px-4 py-3 text-white focus:ring-1 focus:ring-primary focus:border-primary transition-all cursor-pointer"
+              className="w-full flex justify-between items-center bg-card-light/50 dark:bg-card-dark border border-border-light dark:border-border-dark rounded-xl px-4 py-3 focus:ring-1 focus:ring-primary focus:border-primary transition-all cursor-pointer"
               onClick={(e) => {
                 e.preventDefault();
                 setCategorySelection(true);
@@ -144,7 +144,7 @@ const ExerciseUpdateModal = ({ onClose, exercise }: ExerciseUpdateProps) => {
           )}
           dataFilter={(data, keyword) =>
             data.filter((exerciseCategory) =>
-              exerciseCategory.toLowerCase().includes(keyword.toLowerCase())
+              exerciseCategory.toLowerCase().includes(keyword.toLowerCase()),
             )
           }
         />
