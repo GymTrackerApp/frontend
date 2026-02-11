@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { FaDumbbell, FaPlay, FaStopwatch } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
+import { FaListUl, FaPlay, FaStopwatch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import type { PlanResponse } from "../services/trainingService";
 import { getWorkouts } from "../services/workoutService";
@@ -13,6 +14,7 @@ interface PlanBlockProps {
 
 const PlanBlock = ({ plan }: PlanBlockProps) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const {
     data: lastWorkout,
@@ -46,12 +48,12 @@ const PlanBlock = ({ plan }: PlanBlockProps) => {
           </h3>
           <p className="text-xs text-gray-500 dark:text-gray-400">
             {isLastWorkoutLoading
-              ? "Loading..."
+              ? t("lastWorkoutLoading")
               : isLastWorkoutError
                 ? "Could not load"
                 : !lastWorkout || lastWorkout?.length === 0
-                  ? "Never performed"
-                  : `Last done: ${getRelativeDate(lastWorkout[0].createdAt)}`}
+                  ? t("neverPerfomed")
+                  : `${t("lastDone")}: ${getRelativeDate(lastWorkout[0].createdAt)}`}
           </p>
         </div>
         <button
@@ -62,13 +64,12 @@ const PlanBlock = ({ plan }: PlanBlockProps) => {
         </button>
       </div>
       <div className="mt-4 flex items-center gap-2 text-xs text-gray-500">
-        <FaStopwatch size={14} />
-        <span>~{calculateAverageTrainingTime(plan)} min</span>
+        <FaListUl size={14} />
+        <span>{t("exercisesAmount", { count: plan.planItems.length })}</span>
         <span className="text-gray-300 dark:text-gray-700">|</span>
-        <FaDumbbell size={14} className="rotate-45" />
+        <FaStopwatch size={14} />
         <span>
-          {plan.planItems.length}{" "}
-          {plan.planItems.length == 1 ? "Exercise" : "Exercises"}
+          {t("nMinutes", { count: calculateAverageTrainingTime(plan) })}
         </span>
       </div>
     </div>

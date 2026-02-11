@@ -13,6 +13,7 @@ import Workout from "./pages/Workout.tsx";
 import ProgressPage from "./pages/ProgressPage.tsx";
 import AxiosInterceptor from "./AxiosInterceptor.tsx";
 import ProfileSettings from "./pages/ProfileSettings.tsx";
+import "./utils/i18n";
 
 const queryClient = new QueryClient();
 
@@ -35,5 +36,5 @@ createRoot(document.getElementById("root")!).render(
       <ReactQueryDevtools initialIsOpen={false} />
       <Toaster />
     </QueryClientProvider>
-  </StrictMode>
+  </StrictMode>,
 );

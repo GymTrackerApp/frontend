@@ -19,6 +19,7 @@ import { calculateAverageTrainingTime } from "../utils/plansUtils";
 import PlanUpdateModal from "./modals/PlanUpdateModal";
 import TrainingPlanDetailsModal from "./modals/TrainingPlanDetailsModal";
 import ConfirmationWindow from "./ui/ConfirmationWindow";
+import { useTranslation } from "react-i18next";
 
 interface PlanProps {
   plan: PlanResponse;
@@ -29,6 +30,7 @@ interface PlanProps {
 
 const Plan = ({ plan, exercises, updatable, removable }: PlanProps) => {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   const [isPlanExpanded, setIsPlanExpanded] = useState<boolean>(false);
   const [isPlanRemovalWindowOpened, setIsPlanRemovalWindowOpened] =
@@ -79,17 +81,17 @@ const Plan = ({ plan, exercises, updatable, removable }: PlanProps) => {
               </button>
             )}
           </div>
-          <div className="flex items-center gap-4 text-xs text-gray-400 font-medium">
+          <div className="flex items-center gap-2 text-xs text-gray-400 font-medium">
             <div className="flex items-center gap-1.5">
               <FaListUl size={16} />
-              <span>
-                {plan.planItems.length}{" "}
-                {plan.planItems.length === 1 ? "exercise" : "exercises"}
-              </span>
+              <span>{t("nExercises", { count: plan.planItems.length })}</span>
             </div>
+            <span className="text-gray-300 dark:text-gray-700">|</span>
             <div className="flex items-center gap-1.5">
               <FaStopwatch size={16} />
-              <span>~{calculateAverageTrainingTime(plan)} mins</span>
+              <span>
+                {t("nMinutes", { count: calculateAverageTrainingTime(plan) })}
+              </span>
             </div>
           </div>
           <div className="mt-auto pt-4 border-t border-border-light dark:border-border-dark flex gap-3">
@@ -98,7 +100,7 @@ const Plan = ({ plan, exercises, updatable, removable }: PlanProps) => {
               onClick={() => setIsPlanExpanded(!isPlanExpanded)}
             >
               <FaEye size={18} />
-              View
+              {t("view")}
             </button>
             {updatable && (
               <button
@@ -137,12 +139,10 @@ const Plan = ({ plan, exercises, updatable, removable }: PlanProps) => {
             handleRemovePlan();
           }}
           onClose={() => setIsPlanRemovalWindowOpened(false)}
-          confirmButtonText={"Yes, Remove Plan"}
-          cancelButtonText={"No, Keep Plan"}
-          windowTitle={"Remove Training Plan"}
-          windowDescription={
-            "Are you sure you want to remove this training plan? This action cannot be undone."
-          }
+          confirmButtonText={t("deletePlanConfirmButtonText")}
+          cancelButtonText={t("deletePlanCancelButtonText")}
+          windowTitle={t("deletePlanTitle")}
+          windowDescription={t("deletePlanDescription")}
         />
       )}
     </>

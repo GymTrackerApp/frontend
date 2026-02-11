@@ -1,8 +1,9 @@
 import clsx from "clsx";
-import { format } from "date-fns";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   FaBalanceScale,
+  FaLanguage,
   FaMoon,
   FaRegCalendar,
   FaUserCircle,
@@ -10,8 +11,11 @@ import {
 import ProfileSectionLoading from "../components/loaders/ProfileSectionLoading";
 import PageWrapper from "../components/ui/PageWrapper";
 import { useUserProfile } from "../hooks/useUserProfile";
+import type { SupportedLanguage } from "../utils/i18n";
 
 const ProfileSettings = () => {
+  const { t, i18n } = useTranslation();
+
   const {
     data: userProfile,
     isLoading: isUserProfileLoading,
@@ -27,6 +31,11 @@ const ProfileSettings = () => {
   const [preferredWeightUnits, setPreferredWeightUnits] = useState<
     "kg" | "lbs"
   >("kg");
+  const [preferredLanguage, setPreferredLanguage] = useState<SupportedLanguage>(
+    localStorage.getItem("language")
+      ? (localStorage.getItem("language") as SupportedLanguage)
+      : "en",
+  );
 
   const toggleTheme = () => {
     const html = document.documentElement;
@@ -40,21 +49,28 @@ const ProfileSettings = () => {
     setDarkModeEnabled(!darkModeEnabled);
   };
 
+  const toggleLanguage = (newLng: "pl" | "en") => {
+    if (preferredLanguage === newLng) return;
+    setPreferredLanguage(newLng);
+    i18n.changeLanguage(newLng);
+    localStorage.setItem("language", newLng);
+  };
+
   return (
     <PageWrapper>
       <div className="p-8 lg:p-12 mx-auto space-y-10">
         <div className="text-center md:text-left">
           <h1 className="text-3xl font-black tracking-tight text-gray-900 dark:text-white">
-            Settings
+            {t("settingsTitle")}
           </h1>
           <p className="text-gray-500 dark:text-gray-400 mt-1">
-            Keep your profile simple and your focus on the gym.
+            {t("settingsDescription")}
           </p>
         </div>
         <section className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="md:text-lg text-md font-bold tracking-tight px-1 text-gray-400 uppercase">
-              Account Information
+              {t("accountInformation")}
             </h2>
           </div>
           {!showUserProfile ? (
@@ -73,16 +89,17 @@ const ProfileSettings = () => {
                     </p>
                     <p className="text-sm text-primary font-semibold flex items-center justify-center md:justify-start gap-1">
                       <FaRegCalendar className="text-sm" />
-                      Member Since:{" "}
-                      {format(new Date(userProfile.createdAt), "dd MMM yyyy")}
+                      {t("memberSince", {
+                        date: new Date(userProfile.createdAt),
+                      })}
                     </p>
                   </div>
                   <div className="w-full flex lg:flex-col lg:w-3/4 xl:w-1/2 gap-2">
                     <button className="bg-primary text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-blue-600 transition-colors shadow-lg shadow-primary/20 cursor-pointer">
-                      Edit Profile Details
+                      {t("editProfile")}
                     </button>
                     <button className="bg-gray-100 dark:bg-border-dark hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white px-6 py-2.5 rounded-xl font-bold text-sm transition-colors flex justify-center items-center gap-2 cursor-pointer">
-                      Change Password
+                      {t("changePassword")}
                     </button>
                   </div>
                 </div>
@@ -93,7 +110,7 @@ const ProfileSettings = () => {
         </section>
         <section className="space-y-4">
           <h2 className="md:text-lg font-bold tracking-tight px-1 text-gray-400 uppercase text-md">
-            App Preferences
+            {t("appPreferences")}
           </h2>
           <div className="bg-white dark:bg-card-dark rounded-2xl border border-gray-200 dark:border-border-dark divide-y divide-gray-100 dark:divide-border-dark">
             <div className="p-6 flex items-center justify-between">
@@ -102,9 +119,9 @@ const ProfileSettings = () => {
                   <FaMoon className="text-primary" />
                 </div>
                 <div>
-                  <p className="font-bold">Dark Mode</p>
+                  <p className="font-bold">{t("darkMode")}</p>
                   <p className="text-sm text-gray-500">
-                    Easier on the eyes in the gym.
+                    {t("darkModeDescription")}
                   </p>
                 </div>
               </div>
@@ -131,9 +148,9 @@ const ProfileSettings = () => {
                   <FaBalanceScale className="text-primary" />
                 </div>
                 <div>
-                  <p className="font-bold">Weight Units</p>
+                  <p className="font-bold">{t("weightUnits")}</p>
                   <p className="text-sm text-gray-500">
-                    Preferred measurement for your lifts.
+                    {t("weightUnitsDescription")}
                   </p>
                 </div>
               </div>
@@ -153,12 +170,49 @@ const ProfileSettings = () => {
                   className={clsx(
                     "flex-1 py-1.5 rounded-lg font-bold text-xs transition-all text-gray-400 cursor-pointer",
                     preferredWeightUnits === "lbs"
-                      ? "bg-white dark:bg-gray-800 text-primary shadow-sm"
+                      ? "bg-white dark:bg-card-dark text-primary shadow-sm"
                       : "text-gray-400 dark:hover:text-white",
                   )}
                   onClick={() => setPreferredWeightUnits("lbs")}
                 >
                   LBS
+                </button>
+              </div>
+            </div>
+            <div className="p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="p-2 bg-primary/10 rounded-lg">
+                  <FaLanguage className="text-primary" />
+                </div>
+                <div>
+                  <p className="font-bold">{t("language")}</p>
+                  <p className="text-sm text-gray-500">
+                    {t("languageDescription")}
+                  </p>
+                </div>
+              </div>
+              <div className="flex bg-gray-100 dark:bg-border-dark p-1 rounded-xl w-full md:w-32">
+                <button
+                  className={clsx(
+                    "flex-1 py-1.5 rounded-lg font-bold text-xs transition-all cursor-pointer",
+                    preferredLanguage === "en"
+                      ? "bg-white dark:bg-card-dark text-primary shadow-sm"
+                      : "text-gray-400 dark:hover:text-white",
+                  )}
+                  onClick={() => toggleLanguage("en")}
+                >
+                  ENG
+                </button>
+                <button
+                  className={clsx(
+                    "flex-1 py-1.5 rounded-lg font-bold text-xs transition-all cursor-pointer",
+                    preferredLanguage === "pl"
+                      ? "bg-white dark:bg-card-dark text-primary shadow-sm"
+                      : "text-gray-400 dark:hover:text-white",
+                  )}
+                  onClick={() => toggleLanguage("pl")}
+                >
+                  PL
                 </button>
               </div>
             </div>

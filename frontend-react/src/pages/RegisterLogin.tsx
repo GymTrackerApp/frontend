@@ -21,9 +21,11 @@ import {
 } from "../services/authService";
 import { type ErrorResponse, type GeneralResponse } from "../types/ApiResponse";
 import { type SignInForm, type SignUpForm } from "../types/AuthForms";
+import { useTranslation } from "react-i18next";
 
 const RegisterLogin = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [isRegister, setIsRegister] = useState<boolean>(false);
 
   const inputStyling =
@@ -47,7 +49,7 @@ const RegisterLogin = () => {
   >({
     mutationFn: signUp,
     onSuccess: () => {
-      toast.success("Sign up successful. Please log in.");
+      toast.success(t("toastMessages.signUpSuccessful"));
       setIsRegister(false);
     },
     onError: (error: AxiosError<ErrorResponse>) => {
@@ -55,7 +57,9 @@ const RegisterLogin = () => {
         toast.error(error.response.data.message);
         console.log(error);
       } else {
-        toast.error(`Sign up failed: ${error.message}`);
+        toast.error(
+          t("toastMessages.signUpFailed", { errorMessage: error.message }),
+        );
       }
     },
   });
@@ -67,7 +71,7 @@ const RegisterLogin = () => {
   >({
     mutationFn: signIn,
     onSuccess: (response) => {
-      toast.success("Sign in successful");
+      toast.success(t("toastMessages.signInSuccessful"));
       localStorage.setItem("accessToken", response.accessToken);
       localStorage.setItem("refreshToken", response.refreshToken);
       navigate("/", { replace: true });
@@ -78,7 +82,7 @@ const RegisterLogin = () => {
         toast.error(errorMessage);
       } else {
         toast.error(
-          `Sign in failed: ${error.message}. Something went wrong, please try again.`,
+          t("toastMessages.signInFailed", { errorMessage: error.message }),
         );
       }
     },
@@ -138,11 +142,11 @@ const RegisterLogin = () => {
         <div className="relative z-10 w-full max-w-115 px-4 py-8">
           <div className="flex flex-col items-center mb-8">
             <div className="w-12 h-12 rounded-xl bg-linear-to-tr from-primary to-blue-400 flex items-center justify-center shadow-lg shadow-primary/30 mb-4">
-              <FaDumbbell className="w-7 h-7 rotate-45 text-white dark:text-black" />
+              <FaDumbbell className="w-7 h-7 rotate-45 text-white dark:text-white" />
             </div>
             <h1 className="text-2xl font-bold tracking-tight">Gym Tracker</h1>
             <p className="text-text-muted text-sm mt-1">
-              Track progressive overload with precision.
+              {t("registerLoginPageTitle")}
             </p>
           </div>
           <AuthToggleTabs
@@ -156,7 +160,9 @@ const RegisterLogin = () => {
             <div className="p-6 pt-8 space-y-5">
               {isRegister && (
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium">Username</label>
+                  <label className="block text-sm font-medium">
+                    {t("usernameLabel")}
+                  </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                       <FaUser className="text-text-muted text-[20px]" />
@@ -166,7 +172,7 @@ const RegisterLogin = () => {
                       id="username"
                       name="username"
                       type="text"
-                      placeholder="John Doe"
+                      placeholder={t("usernamePlaceholder")}
                       value={signUpFormData.username}
                       onChange={handleFormChange}
                       required
@@ -177,7 +183,7 @@ const RegisterLogin = () => {
 
               <div className="space-y-2">
                 <label className="block text-sm font-medium">
-                  Email Address
+                  {t("emailAddressLabel")}
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -188,7 +194,7 @@ const RegisterLogin = () => {
                     id="email"
                     name="email"
                     type="email"
-                    placeholder="john.doe@domain.com"
+                    placeholder={t("emailAddressPlaceholder")}
                     value={signInFormData.email}
                     onChange={handleFormChange}
                     required
@@ -198,10 +204,12 @@ const RegisterLogin = () => {
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="block text-sm font-medium">Password</label>
+                  <label className="block text-sm font-medium">
+                    {t("passwordLabel")}
+                  </label>
                   {!isRegister && (
                     <span className="text-xs cursor-pointer font-medium text-primary hover:text-primary-hover underline decoration-transparent hover:decoration-primary transition-all">
-                      Forgot Password?
+                      {t("forgotPasswordLabel")}
                     </span>
                   )}
                 </div>
@@ -226,10 +234,10 @@ const RegisterLogin = () => {
             <Button
               btnStyle={"approve"}
               size={"big"}
-              additionalStyle="w-full font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-[0.98]"
+              additionalStyle="dark:text-white! w-full font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-[0.98]"
               disabled={signInMutation.isPending || signUpMutation.isPending}
             >
-              <span>{isRegister ? "Register" : "Login"}</span>
+              <span>{isRegister ? t("signUpButton") : t("signInButton")}</span>
               <FaArrowRight className="text-[20px]" />
             </Button>
           </form>

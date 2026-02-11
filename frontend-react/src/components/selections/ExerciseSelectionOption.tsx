@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { FaChevronRight, FaDumbbell } from "react-icons/fa";
 import type { ExerciseResponse } from "../../services/exerciseService";
+import { useTranslation } from "react-i18next";
 
 interface ExerciseSelectionOptionProps {
   exercise: ExerciseResponse;
@@ -9,6 +10,8 @@ interface ExerciseSelectionOptionProps {
 const ExerciseSelectionOption = ({
   exercise,
 }: ExerciseSelectionOptionProps) => {
+  const { t } = useTranslation();
+
   return (
     <div className="w-full flex items-center justify-between">
       <div className="flex items-center gap-4">
@@ -46,7 +49,7 @@ const ExerciseSelectionOption = ({
                   : "text-purple-400 bg-purple-400/10",
               )}
             >
-              {exercise.isCustom ? "Your" : "Predefined"}
+              {exercise.isCustom ? t("your") : t("predefined")}
             </span>
           </div>
         </div>

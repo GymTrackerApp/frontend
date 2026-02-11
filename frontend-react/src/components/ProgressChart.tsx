@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { Trans } from "react-i18next";
 import {
   CartesianGrid,
   Line,
@@ -44,8 +45,7 @@ const ProgressChart = ({ historyData, yAxisTitle }: ProgressChartProps) => {
   if (processedData.length === 0) {
     return (
       <div className="flex flex-col text-xl justify-center text-gray-400 dark:text-gray-500 h-full text-center ">
-        <span>No workout data for the selected period.</span>
-        <span>Go log a workout to see your progress!</span>
+        <Trans i18nKey="noProgressChartData" />
       </div>
     );
   }

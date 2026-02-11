@@ -14,6 +14,7 @@ import {
 import { NavLink, useNavigate } from "react-router-dom";
 import { signOut } from "../services/authService";
 import type { ErrorResponse, GeneralResponse } from "../types/ApiResponse";
+import { useTranslation } from "react-i18next";
 
 interface SidebarProps {
   username: string | undefined;
@@ -21,6 +22,7 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ username, isOpen }: SidebarProps) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const linkStyles = ({ isActive }: { isActive: boolean }) =>
@@ -94,15 +96,15 @@ const Sidebar = ({ username, isOpen }: SidebarProps) => {
         <nav className="flex flex-col gap-2">
           <NavLink className={linkStyles} to="/">
             <FaThLarge size={24} />
-            <span className="text-sm font-medium">Dashboard</span>
+            <span className="text-sm font-medium">{t("navDashboard")}</span>
           </NavLink>
           <NavLink className={linkStyles} to="/plan-manager">
             <FaListAlt size={24} />
-            <span className="text-sm font-medium">Plans</span>
+            <span className="text-sm font-medium">{t("navPlans")}</span>
           </NavLink>
           <NavLink className={linkStyles} to="/progress">
             <FaChartLine size={24} />
-            <span className="text-sm font-medium">Progress</span>
+            <span className="text-sm font-medium">{t("navProgress")}</span>
           </NavLink>
         </nav>
       </div>
@@ -110,14 +112,16 @@ const Sidebar = ({ username, isOpen }: SidebarProps) => {
       <div className="flex flex-col gap-4 border-t border-gray-200 dark:border-gray-800 pt-6">
         <NavLink className={linkStyles} to="/profile">
           <FaCog size={20} />
-          <span className="text-sm font-medium">Settings</span>
+          <span className="text-sm font-medium">{t("navSettings")}</span>
         </NavLink>
         <button
           className="flex items-center gap-3 rounded-lg px-4 py-3 transition-colors text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
           onClick={handleLogout}
         >
           <FaSignOutAlt size={20} className="text-red-400" />
-          <span className="text-sm font-medium text-red-400">Logout</span>
+          <span className="text-sm font-medium text-red-400">
+            {t("navLogout")}
+          </span>
         </button>
         <div className="flex items-center gap-3 rounded-xl bg-gray-50 dark:bg-gray-800/50 p-3">
           <div className="h-10 w-10 overflow-hidden rounded-full bg-gray-200">

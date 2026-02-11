@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { FaChartLine, FaPlus } from "react-icons/fa";
 
 interface AnalysisPlaceholderProps {
@@ -5,6 +6,8 @@ interface AnalysisPlaceholderProps {
 }
 
 const AnalysisPlaceholder = ({ type }: AnalysisPlaceholderProps) => {
+  const { t } = useTranslation();
+
   return (
     <div className="flex-1 flex flex-col items-center justify-center text-center p-8 space-y-6">
       <div className="relative">
@@ -18,14 +21,10 @@ const AnalysisPlaceholder = ({ type }: AnalysisPlaceholderProps) => {
       </div>
       <div className="max-w-md space-y-3">
         <h4 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Start your analysis
+          {t("startYourAnalysis")}
         </h4>
         <p className="text-gray-500 dark:text-gray-400">
-          Choose{" "}
-          {type === "exercise"
-            ? "an exercise from the 'Select Exercise'"
-            : "a training from the 'Select Plan'"}{" "}
-          dropdown above to visualize your stats and training progress.
+          {type === "exercise" ? t("chooseExercise") : t("choosePlan")}
         </p>
       </div>
     </div>

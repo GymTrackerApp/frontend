@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { type PlanResponse } from "../services/trainingService";
 import TrainingPlanSelectionOption from "./selections/TrainingPlanSelectionOption";
 import SelectOptionWindow from "./ui/SelectOptionWindow";
+import { Trans, useTranslation } from "react-i18next";
 
 interface QuickStartProps {
   plans: Array<PlanResponse>;
@@ -21,6 +22,8 @@ const QuickStart = ({
   isWorkoutsThisWeekLoading,
   isWorkoutsThisWeekError,
 }: QuickStartProps) => {
+  const { t } = useTranslation();
+
   const [selectWorkoutEnabled, setSelectWorkoutEnabled] =
     useState<boolean>(false);
 
@@ -38,30 +41,21 @@ const QuickStart = ({
         <div className="relative z-10 flex h-full flex-col justify-between gap-6">
           <div className="flex flex-col gap-2">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-              Ready to crush it?
+              {t("quickStartTitle")}
             </h2>
             <p className="max-w-md text-gray-500 dark:text-gray-400">
               {isWorkoutsThisWeekError ? (
-                <span>Failed to fetch workouts</span>
+                <span>{t("fetchingWorkoutsFailed")}</span>
               ) : isWorkoutsThisWeekLoading || workoutsThisWeek == null ? (
-                <span>Loading workouts...</span>
-              ) : workoutsThisWeek > 0 ? (
-                <>
-                  You've completed{" "}
-                  <span className="text-primary font-bold">
-                    {workoutsThisWeek}{" "}
-                    {workoutsThisWeek == 1 ? "session" : "sessions"}
-                  </span>{" "}
-                  this week. One more to stay ahead of your goals!
-                </>
+                <span>{t("workoutsLoading")}</span>
               ) : (
-                <>
-                  You haven't logged any sessions yet this week.
-                  <span className="text-primary font-bold">
-                    {" "}
-                    Ready to start your first one?
-                  </span>
-                </>
+                <Trans
+                  i18nKey="quickStartDescription"
+                  values={{ count: workoutsThisWeek }}
+                  components={{
+                    1: <span className="text-primary font-bold" />,
+                  }}
+                />
               )}
             </p>
           </div>
@@ -71,7 +65,7 @@ const QuickStart = ({
               onClick={() => setSelectWorkoutEnabled(true)}
             >
               <FaPlay />
-              Start Your Workout
+              {t("startWorkoutButton")}
             </button>
           </div>
         </div>
@@ -79,7 +73,7 @@ const QuickStart = ({
 
       {selectWorkoutEnabled && (
         <SelectOptionWindow
-          title={"Select a Plan"}
+          title={t("selectPlan")}
           onClose={() => setSelectWorkoutEnabled(false)}
           data={data}
           isDataLoading={isLoading}

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { type WorkoutResponse } from "../services/workoutService";
 import { calculateWorkoutVolume } from "../utils/workoutUtils";
 
@@ -12,12 +13,14 @@ const QuickStats = ({
   isWorkoutsThisWeekLoading,
   isWorkoutsThisWeekError,
 }: QuickStatsProps) => {
+  const { t } = useTranslation();
+
   return (
     <div className="relative flex flex-col col-span-3 lg:col-span-1 justify-between rounded-2xl bg-white dark:bg-card-dark p-6 shadow-sm ring-1 ring-gray-900/5 dark:ring-white/10">
       <div className="flex items-start justify-between">
         <div className="flex flex-col gap-1">
           <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
-            Weekly Volume
+            {t("quickStatsTitle")}
           </h3>
           <div className="flex items-baseline gap-2">
             <span className="text-3xl font-bold text-gray-900 dark:text-white">
@@ -71,7 +74,7 @@ const QuickStats = ({
           ></path>
         </svg>
       </div>
-      <p className="mt-2 text-xs text-gray-400">Total volume moved this week</p>
+      <p className="mt-2 text-xs text-gray-400">{t("quickStatsDescription")}</p>
     </div>
   );
 };

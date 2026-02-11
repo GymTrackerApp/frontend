@@ -43,6 +43,7 @@ import RestTimer from "./RestTimer";
 import ConfirmationWindow from "./ui/ConfirmationWindow";
 import SelectOptionWindow from "./ui/SelectOptionWindow";
 import { exercisesFilter } from "../utils/exerciseUtils";
+import { useTranslation } from "react-i18next";
 
 interface WorkoutFormProps {
   plan: PlanResponse;
@@ -51,6 +52,7 @@ interface WorkoutFormProps {
 const WorkoutForm = ({ plan }: WorkoutFormProps) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   const [planItemSelectedForDetails, setPlanItemSelectedForDetails] =
     useState<PlanItemResponse | null>(null);
@@ -92,13 +94,13 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
     });
 
   const TIMER_OPTIONS = [
-    { label: "30 seconds", value: 30 },
-    { label: "1 minute", value: 60 },
-    { label: "2 minutes", value: 120 },
-    { label: "3 minutes", value: 180 },
-    { label: "4 minutes", value: 240 },
-    { label: "5 minutes", value: 300 },
-    { label: "Custom Time (sec)", value: -1 },
+    { label: t("nSeconds", { count: 30 }), value: 30 },
+    { label: t("nMinutes", { count: 1 }), value: 60 },
+    { label: t("nMinutes", { count: 2 }), value: 120 },
+    { label: t("nMinutes", { count: 3 }), value: 180 },
+    { label: t("nMinutes", { count: 4 }), value: 240 },
+    { label: t("nMinutes", { count: 5 }), value: 300 },
+    { label: t("customTime"), value: -1 },
   ];
 
   const { exercises, isLoading: isExercisesLoading } = useAvailableExercises();
@@ -319,7 +321,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
               className="hidden md:flex h-10 px-5 items-center justify-center rounded-xl bg-[#223149]/50 hover:bg-gray-500 dark:hover:bg-[#223149] border border-input-light dark:border-[#223149] text-white dark:text-gray-300 hover:text-white text-sm font-semibold transition-all cursor-pointer"
               onClick={() => setIsFinishedWorkoutWindowOpen(true)}
             >
-              Finish
+              {t("finish")}
             </button>
             <button
               className="hidden md:flex items-center gap-2 h-10 pl-3 pr-4 rounded-xl bg-[#fbac23] hover:bg-[#f59e0b] hover:dark:bg-[#D97706] text-input-dark transition-all shadow-[0_0_20px_rgba(245,158,11,0.2)] group cursor-pointer"
@@ -336,7 +338,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                     disableTimer={() => setSelectedTimerOption(null)}
                   />
                 ) : (
-                  "Rest Timer"
+                  t("restTimer")
                 )}
               </span>
             </button>
@@ -349,7 +351,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
           className="md:hidden w-full flex py-1 px-2 items-center justify-center bg-[#223149]/50 hover:bg-gray-500 hover:dark:bg-[#223149] border border-input-light dark:border-[#223149] text-white dark:text-gray-300 hover:text-white text-sm font-semibold transition-all cursor-pointer"
           onClick={() => setIsFinishedWorkoutWindowOpen(true)}
         >
-          Finish
+          {t("finish")}
         </button>
 
         <button
@@ -367,7 +369,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                 disableTimer={() => setSelectedTimerOption(null)}
               />
             ) : (
-              "Rest Timer"
+              t("restTimer")
             )}
           </span>
         </button>
@@ -384,7 +386,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
             lastWorkout.length === 0
           }
         >
-          Show Last Workout
+          {t("showLastWorkout")}
         </button>
       </div>
 
@@ -425,9 +427,9 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                 <table className="w-full border-collapse">
                   <thead>
                     <tr className="text-xs uppercase tracking-wider text-gray-500 font-semibold text-left">
-                      <th className="pl-3 py-3 w-16">Set</th>
+                      <th className="pl-3 py-3 w-16">{t("set")}</th>
                       <th className="px-2 py-3">kg</th>
-                      <th className="px-2 py-3">Reps</th>
+                      <th className="px-2 py-3">{t("reps")}</th>
                       <th className="pr-3 py-3 w-14 text-center"></th>
                     </tr>
                   </thead>
@@ -540,7 +542,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                     onClick={() => addSetToExercise(exerciseIndex)}
                   >
                     <FaPlus size={18} />
-                    Add Set
+                    {t("addSet")}
                   </button>
                 </div>
               </div>
@@ -555,13 +557,15 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
           onClick={() => setIsAddExerciseWindowEnabled(true)}
         >
           <FaPlus />
-          <span className="font-bold text-lg tracking-wide">Add Exercise</span>
+          <span className="font-bold text-lg tracking-wide">
+            {t("addExercise")}
+          </span>
         </button>
         <button
           className="h-14 px-8 w-53.75 mx-auto flex justify-center items-center rounded-2xl bg-[#223149]/50 hover:bg-gray-500 hover:dark:bg-[#223149] border border-input-light dark:border-[#223149] text-white dark:text-gray-300 hover:text-white font-semibold transition-all hover:scale-105 active:scale-95 cursor-pointer"
           onClick={() => setIsFinishedWorkoutWindowOpen(true)}
         >
-          Finish
+          {t("finish")}
         </button>
       </footer>
 
@@ -574,7 +578,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
 
       {replacingExerciseId && (
         <SelectOptionWindow
-          title={"Replace Exercise"}
+          title={t("replaceExercise")}
           onClose={() => setReplacingExerciseId(null)}
           data={exercises}
           dataFilter={exercisesFilter}
@@ -591,7 +595,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
 
       {isAddExerciseWindowEnabled && (
         <SelectOptionWindow
-          title={"Add Exercise"}
+          title={t("addExercise")}
           onClose={() => setIsAddExerciseWindowEnabled(false)}
           data={exercises}
           dataFilter={exercisesFilter}
@@ -614,34 +618,30 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
         <ConfirmationWindow
           onConfirm={handleFormSubmit}
           onClose={() => setIsFinishedWorkoutWindowOpen(false)}
-          confirmButtonText={"Finish Workout"}
-          cancelButtonText={"Keep Training"}
-          windowTitle={"Finish Workout?"}
-          windowDescription={
-            "All your work will be saved to your progress history"
-          }
+          confirmButtonText={t("finishWorkout")}
+          cancelButtonText={t("keepTraining")}
+          windowTitle={`${t("finishWorkout")}?`}
+          windowDescription={t("finishWorkoutDescription")}
         />
       )}
 
       {isCancelWorkoutWindowOpen && (
         <ConfirmationWindow
           onConfirm={() => {
-            toast.success("Workout discarded");
+            toast.success(t("toastMessages.workoutDiscarded"));
             navigate("/");
           }}
           onClose={() => setIsCancelWorkoutWindowOpen(false)}
-          confirmButtonText={"Confirm"}
-          cancelButtonText={"Keep Training"}
-          windowTitle={"Discard Workout?"}
-          windowDescription={
-            "All your progress will be lost. Are you sure you want to discard this workout?"
-          }
+          confirmButtonText={t("confirm")}
+          cancelButtonText={t("keepTraining")}
+          windowTitle={`${t("discardWorkout")}?`}
+          windowDescription={t("discardWorkoutDescription")}
         />
       )}
 
       {selectTimerEnabled && (
         <SelectOptionWindow
-          title={"Select Timer"}
+          title={t("selectTimer")}
           onClose={() => setSelectTimerEnabled(false)}
           data={TIMER_OPTIONS}
           onSelect={(timerOption) => {
@@ -720,15 +720,15 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
 
       {planItemSelectedForDetails && (
         <SelectOptionWindow
-          title={"Workout Exercise Options"}
+          title={t("workoutExerciseOptions")}
           onClose={() => setPlanItemSelectedForDetails(null)}
-          data={["View History", "Replace", "Delete"]}
+          data={[t("viewHistory"), t("replace"), t("delete")]}
           onSelect={(item) => {
-            if (item === "View History") {
+            if (item === t("viewHistory")) {
               setExerciseHistory(planItemSelectedForDetails);
-            } else if (item === "Replace") {
+            } else if (item === t("replace")) {
               setReplacingExerciseId(planItemSelectedForDetails.exerciseId);
-            } else if (item === "Delete") {
+            } else if (item === t("delete")) {
               removeExercise(planItemSelectedForDetails.exerciseId);
               toast.success("Exercise removed from workout");
             }
@@ -738,9 +738,9 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
             <div className="group flex justify-between items-center w-full">
               <div className="flex items-center gap-4">
                 <div className="size-12 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform bg-blue-500/10 text-blue-400">
-                  {item === "View History" && <FaHistory />}
-                  {item === "Replace" && <FaSync />}
-                  {item === "Delete" && <FaTrashAlt />}
+                  {item === t("viewHistory") && <FaHistory />}
+                  {item === t("replace") && <FaSync />}
+                  {item === t("delete") && <FaTrashAlt />}
                 </div>
                 <span className="group-hover:text-primary font-semibold">
                   {item}

@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { useTranslation } from "react-i18next";
 import { FaChartLine } from "react-icons/fa";
 import type { WorkoutResponse } from "../../services/workoutService";
 import {
@@ -14,6 +14,8 @@ interface WorkoutDetailsProps {
 }
 
 const WorkoutDetails = ({ workout, onClose }: WorkoutDetailsProps) => {
+  const { t } = useTranslation();
+
   return (
     <AbsoluteWindowWrapper isOpen={true} onClose={onClose}>
       <div className="flex-1 overflow-y-auto scrollbar-none p-5 space-y-10">
@@ -22,14 +24,16 @@ const WorkoutDetails = ({ workout, onClose }: WorkoutDetailsProps) => {
             <div className="flex items-center gap-2 text-primary">
               <FaChartLine className="text-2xl" />
               <span className="text-sm font-bold uppercase tracking-[0.2em]">
-                Workout Details
+                {t("workoutDetails")}
               </span>
             </div>
             <h1 className="text-3xl md:text-4xl font-black tracking-tight mt-1">
               {workout.trainingPlan.name}
             </h1>
-            <p className="text-slate-400 font-medium">
-              {format(workout.createdAt, "iiii, MMMM dd, yyyy")}
+            <p className="text-slate-400 font-medium capitalize">
+              {t("weekdayMonthDayYear", {
+                date: workout.createdAt,
+              })}
             </p>
           </div>
           <CloseModalButton onClose={onClose} />
@@ -38,7 +42,7 @@ const WorkoutDetails = ({ workout, onClose }: WorkoutDetailsProps) => {
         <div className="flex gap-5">
           <div className="w-full bg-gray-200 dark:bg-card-dark border border-border-light dark:border-border-dark rounded-xl p-4">
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">
-              Total Volume
+              {t("totalVolume")}
             </p>
             <p className="text-2xl font-black">
               {calculateWorkoutVolume(workout)}{" "}
@@ -47,7 +51,7 @@ const WorkoutDetails = ({ workout, onClose }: WorkoutDetailsProps) => {
           </div>
           <div className="w-full bg-gray-200 dark:bg-card-dark border border-border-light dark:border-border-dark rounded-xl p-4">
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">
-              Total Sets
+              {t("totalSets")}
             </p>
             <p className="text-2xl font-black">{calculateTotalSets(workout)}</p>
           </div>
@@ -73,7 +77,7 @@ const WorkoutDetails = ({ workout, onClose }: WorkoutDetailsProps) => {
                     <span className="text-xs font-medium opacity-70">kg</span>
                   </p>
                   <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">
-                    Exercise Volume
+                    {t("exerciseVolume")}
                   </p>
                 </div>
               </div>
@@ -82,13 +86,13 @@ const WorkoutDetails = ({ workout, onClose }: WorkoutDetailsProps) => {
                   <thead>
                     <tr className="bg-gray-200 dark:bg-card-dark text-[10px] uppercase tracking-widest font-bold text-slate-400">
                       <th className="px-4 py-3 border-b border-border-light dark:border-border-dark">
-                        Set
+                        {t("set")}
                       </th>
                       <th className="px-4 py-3 border-b border-border-light dark:border-border-dark text-primary text-center">
-                        Weight
+                        {t("weight")}
                       </th>
                       <th className="px-4 py-3 border-b border-border-light dark:border-border-dark text-primary text-center">
-                        Reps
+                        {t("reps")}
                       </th>
                     </tr>
                   </thead>

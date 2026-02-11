@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { useTranslation } from "react-i18next";
 
 interface PlanManagerToggleProps {
   isMyPlansEnabled: boolean;
@@ -17,6 +18,8 @@ const PlanManagerToggleTabs = ({
   setIsPredefinedPlansEnabled,
   setIsMyExercisesEnabled,
 }: PlanManagerToggleProps) => {
+  const { t } = useTranslation();
+
   const enabledButtonStyle = "border-primary text-primary";
   const disabledButtonStyle =
     "border-transparent text-gray-400 dark:text-gray-300 hover:text-gray-600 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700";
@@ -41,7 +44,9 @@ const PlanManagerToggleTabs = ({
           }}
           type="button"
         >
-          <span className="text-sm font-medium tracking-wide">My Plans</span>
+          <span className="text-sm font-medium tracking-wide">
+            {t("myPlans")}
+          </span>
         </button>
 
         <button
@@ -56,7 +61,7 @@ const PlanManagerToggleTabs = ({
           type="button"
         >
           <span className="text-sm font-medium tracking-wide">
-            Predefined Plans
+            {t("predefinedPlans")}
           </span>
         </button>
 
@@ -72,7 +77,7 @@ const PlanManagerToggleTabs = ({
           type="button"
         >
           <span className="text-sm font-medium tracking-wide">
-            My Exercises
+            {t("myExercises")}
           </span>
         </button>
       </div>

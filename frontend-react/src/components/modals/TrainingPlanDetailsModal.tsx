@@ -6,6 +6,7 @@ import type { PlanResponse } from "../../services/trainingService";
 import { calculateAverageTrainingTime } from "../../utils/plansUtils";
 import AbsoluteWindowWrapper from "../ui/AbsoluteWindowWrapper";
 import CloseModalButton from "../ui/CloseModalButton";
+import { Trans, useTranslation } from "react-i18next";
 
 interface TrainingPlanDetailsModalProps {
   onClose: () => void;
@@ -19,6 +20,7 @@ const TrainingPlanDetailsModal = ({
   exercises,
 }: TrainingPlanDetailsModalProps) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleWorkoutStart = (trainingPlan: PlanResponse) => {
     toast.success(`Starting workout: ${trainingPlan.name}`);
@@ -59,15 +61,19 @@ const TrainingPlanDetailsModal = ({
             <div className="flex items-center gap-4 bg-selection-light dark:bg-black/20 rounded-lg p-4 border border-border-light dark:border-border-dark">
               <div className="flex-1">
                 <p className="text-[10px] text-gray-500 uppercase font-bold tracking-tighter mb-1">
-                  Volume Protocol
+                  {t("volumeProtocol")}
                 </p>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-2xl font-black">
-                    {planItem.defaultSets}
-                  </span>
-                  <span className="text-sm text-gray-400 font-medium uppercase tracking-wider">
-                    {planItem.defaultSets === 1 ? "Set" : "Sets"}
-                  </span>
+                  <Trans
+                    i18nKey="nSets"
+                    values={{ count: planItem.defaultSets }}
+                    components={{
+                      1: <span className="text-2xl font-black"></span>,
+                      2: (
+                        <span className="text-sm text-gray-400 font-medium uppercase tracking-wider"></span>
+                      ),
+                    }}
+                  />
                 </div>
               </div>
             </div>
@@ -77,19 +83,18 @@ const TrainingPlanDetailsModal = ({
       <div className="px-6 py-4 border-t border-border-light dark:border-border-dark flex justify-between items-center rounded-b-xl">
         <div>
           <span className="text-md font-medium text-gray-500">
-            ~{calculateAverageTrainingTime(plan)} minutes
+            ~{t("nMinutes", { count: calculateAverageTrainingTime(plan) })}
           </span>
           <span className="text-md font-medium text-gray-500"> | </span>
           <span className="text-md font-medium text-gray-500">
-            {plan.planItems.length}{" "}
-            {plan.planItems.length === 1 ? "exercise" : "exercises"}
+            {t("nExercises", { count: plan.planItems.length })}
           </span>
         </div>
         <button
           className="bg-primary hover:bg-blue-600 active:scale-95 text-white text-sm font-bold py-2 px-6 rounded-lg transition-all shadow-lg shadow-primary/20 flex items-center gap-2 cursor-pointer"
           onClick={() => handleWorkoutStart(plan)}
         >
-          Start Workout
+          {t("startWorkout")}
           <FaPlay size={18} />
         </button>
       </div>

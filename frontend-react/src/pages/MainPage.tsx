@@ -10,8 +10,11 @@ import { useUserProfile } from "../hooks/useUserProfile";
 import { useAvailablePlans } from "../hooks/useWorkoutFlow";
 import { getWorkouts } from "../services/workoutService";
 import { getCurrentDate } from "../utils/dateUtils";
+import { useTranslation } from "react-i18next";
 
 const MainPage = () => {
+  const { t } = useTranslation();
+
   const { plans, isLoading: plansLoading, userPlansOnly } = useAvailablePlans();
 
   const {
@@ -64,12 +67,16 @@ const MainPage = () => {
                 <div className="h-10 w-70 bg-gray-200 dark:bg-gray-800 animate-skeleton rounded-lg"></div>
               ) : (
                 <h1 className="font-display text-3xl md:text-4xl font-black tracking-tight text-gray-900 dark:text-white">
-                  Welcome back, {currentUser.username}!
+                  {t("welcomeMessage", {
+                    username: currentUser.username,
+                  })}
                 </h1>
               )}
               <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
                 <FaRegCalendar size={18} />
-                <p className="text-sm font-medium">{displayCurrentDate()}</p>
+                <p className="text-sm font-medium capitalize">
+                  {t("weekdayDayMonth", { date: currentDate })}
+                </p>
               </div>
             </div>
           </header>
