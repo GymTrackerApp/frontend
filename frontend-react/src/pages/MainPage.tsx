@@ -1,16 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { startOfWeek } from "date-fns";
+import { useTranslation } from "react-i18next";
 import { FaRegCalendar } from "react-icons/fa";
 import MyPlans from "../components/MyPlans";
-import PageWrapper from "../components/ui/PageWrapper";
 import QuickStart from "../components/QuickStart";
 import QuickStats from "../components/QuickStats";
 import RecentWorkouts from "../components/RecentWorkouts";
+import PageWrapper from "../components/ui/PageWrapper";
 import { useUserProfile } from "../hooks/useUserProfile";
 import { useAvailablePlans } from "../hooks/useWorkoutFlow";
 import { getWorkouts } from "../services/workoutService";
 import { getCurrentDate } from "../utils/dateUtils";
-import { useTranslation } from "react-i18next";
 
 const MainPage = () => {
   const { t } = useTranslation();
@@ -22,15 +22,6 @@ const MainPage = () => {
     isLoading: isCurrentUserLoading,
     isError: isCurrentUserError,
   } = useUserProfile();
-
-  const displayCurrentDate = () => {
-    const currentDate: Date = getCurrentDate();
-    return currentDate.toLocaleDateString("en-US", {
-      weekday: "long",
-      month: "short",
-      day: "numeric",
-    });
-  };
 
   const currentDate = getCurrentDate();
   const weekStartDate = startOfWeek(currentDate, { weekStartsOn: 1 });
