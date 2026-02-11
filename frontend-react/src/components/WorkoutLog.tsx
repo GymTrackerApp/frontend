@@ -22,8 +22,8 @@ const WorkoutLog = ({ workout, setSelectedWorkout }: WorkoutLogProps) => {
         {t("dateFormats.monthDay", { date: workout.createdAt })}
       </td>
       <td className="px-6 py-4">{calculateWorkoutVolume(workout)} kg</td>
-      <td className="hidden sm:block px-6 py-4">
-        <span className="inline-flex rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20 dark:bg-green-500/10 dark:text-green-400 dark:ring-green-500/20">
+      <td className="hidden sm:table-cell px-6 py-4">
+        <span className="inline-flex my-auto rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20 dark:bg-green-500/10 dark:text-green-400 dark:ring-green-500/20">
           {t("completeStatus")}
         </span>
       </td>

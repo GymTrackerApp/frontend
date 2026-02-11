@@ -32,7 +32,7 @@ const RecentWorkouts = () => {
         <h2 className="text-xl font-bold text-gray-900 dark:text-white">
           {t("recentWorkoutsTitle")}
         </h2>
-        <div className="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-card-dark shadow-sm">
+        <div className="overflow-hidden overflow-x-auto scrollbar-none rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-card-dark shadow-sm">
           <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400">
             <thead className="bg-gray-100 dark:bg-gray-800/50 text-xs uppercase text-gray-700 dark:text-gray-300">
               <tr>

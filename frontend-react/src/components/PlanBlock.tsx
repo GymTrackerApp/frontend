@@ -35,7 +35,9 @@ const PlanBlock = ({ plan }: PlanBlockProps) => {
   });
 
   const handleWorkoutStart = (trainingPlan: PlanResponse) => {
-    toast.success(`Starting workout: ${trainingPlan.name}`);
+    toast.success(
+      t("toastMessages.workoutStartMessage", { planName: trainingPlan.name }),
+    );
     navigate("/workout?trainingPlanId=" + trainingPlan.id);
   };
 

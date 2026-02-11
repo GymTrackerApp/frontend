@@ -117,7 +117,7 @@ const PlanManager = () => {
 
           {isMyPlansEnabled && (
             <button
-              className="flex cursor-pointer items-center justify-center rounded-lg h-11 px-5 bg-primary hover:bg-blue-600 text-white gap-2 text-sm font-bold shadow-[0_0_15px_rgba(59,130,246,0.4)] transition-all transform active:scale-95"
+              className="flex cursor-pointer items-center justify-center rounded-lg min-h-11 px-5 bg-primary hover:bg-blue-600 text-white gap-2 text-sm font-bold shadow-[0_0_15px_rgba(59,130,246,0.4)] transition-all transform active:scale-95"
               onClick={() => setNewPlanModalEnabled(true)}
             >
               <FaPlus size={20} />
@@ -127,7 +127,7 @@ const PlanManager = () => {
 
           {isMyExercisesEnabled && (
             <button
-              className="flex cursor-pointer items-center justify-center rounded-lg h-11 px-5 bg-primary hover:bg-blue-600 text-white gap-2 text-sm font-bold shadow-[0_0_15px_rgba(59,130,246,0.4)] transition-all transform active:scale-95"
+              className="flex cursor-pointer items-center justify-center rounded-lg min-h-11 px-5 bg-primary hover:bg-blue-600 text-white gap-2 text-sm font-bold shadow-[0_0_15px_rgba(59,130,246,0.4)] transition-all transform active:scale-95"
               onClick={() => setNewExerciseModalEnabled(true)}
             >
               <FaPlus size={20} />

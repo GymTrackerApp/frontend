@@ -44,6 +44,7 @@ import ConfirmationWindow from "./ui/ConfirmationWindow";
 import SelectOptionWindow from "./ui/SelectOptionWindow";
 import { exercisesFilter } from "../utils/exerciseUtils";
 import { useTranslation } from "react-i18next";
+import clsx from "clsx";
 
 interface WorkoutFormProps {
   plan: PlanResponse;
@@ -557,12 +558,20 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
           onClick={() => setIsAddExerciseWindowEnabled(true)}
         >
           <FaPlus />
-          <span className="font-bold text-lg tracking-wide">
+          <span
+            className={clsx(
+              "font-bold tracking-wide",
+              localStorage.getItem("language") === "pl" && "text-sm",
+            )}
+          >
             {t("addExercise")}
           </span>
         </button>
         <button
-          className="h-14 px-8 w-53.75 mx-auto flex justify-center items-center rounded-2xl bg-[#223149]/50 hover:bg-gray-500 hover:dark:bg-[#223149] border border-input-light dark:border-[#223149] text-white dark:text-gray-300 hover:text-white font-semibold transition-all hover:scale-105 active:scale-95 cursor-pointer"
+          className={clsx(
+            "h-14 px-8 w-53.75 mx-auto flex justify-center items-center rounded-2xl bg-[#223149]/50 hover:bg-gray-500 hover:dark:bg-[#223149] border border-input-light dark:border-[#223149] text-white dark:text-gray-300 hover:text-white font-semibold transition-all hover:scale-105 active:scale-95 cursor-pointer",
+            localStorage.getItem("language") === "pl" && "text-sm",
+          )}
           onClick={() => setIsFinishedWorkoutWindowOpen(true)}
         >
           {t("finish")}
@@ -671,7 +680,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                         selectedCustomRestTime < 1 ||
                         selectedCustomRestTime > 3600
                       ) {
-                        toast.error(t("customRestTimerInvalidRangeMessage"));
+                        toast.error(t("toastMessages.customRestTimerInvalidRangeMessage"));
                         return;
                       }
                       setSelectTimerEnabled(false);

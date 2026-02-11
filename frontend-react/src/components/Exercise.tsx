@@ -49,8 +49,10 @@ const Exercise = ({
         <div className="flex items-center gap-4 text-xs text-gray-400 font-medium">
           <div className="flex items-center gap-1.5">
             <FaDumbbell size={15} className="rotate-45" />
-            <span>
-              {t(`exerciseCategories.${exercise.category.toLowerCase()}`)}
+            <span className="capitalize">
+              {t(
+                `exerciseCategories.${exercise.category.toLowerCase()}`,
+              ).toLowerCase()}
             </span>
           </div>
         </div>

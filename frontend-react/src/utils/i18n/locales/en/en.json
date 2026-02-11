@@ -112,7 +112,7 @@
   "settingsTitle": "Settings",
   "settingsDescription": "Keep your profile simple and your focus on the gym",
   "accountInformation": "Account Information",
-  "memberSince": "Member since {{date, dd MMMM yyyy}}",
+  "memberSince": "Member since {{date, date(fmt: dd MMMM yyyy)}}",
   "editProfile": "Edit Profile",
   "changePassword": "Change Password",
   "appPreferences": "App Preferences",

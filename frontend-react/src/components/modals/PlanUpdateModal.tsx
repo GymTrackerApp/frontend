@@ -139,7 +139,7 @@ const PlanUpdateModal = ({ exercises, plan, onClose }: UpdatePlanProps) => {
           />
         </div>
       }
-      saveButtonText={"Update"}
+      saveButtonText={t("update")}
       onClose={onClose}
     >
       {planForm.planItems.map((planItem) => (
