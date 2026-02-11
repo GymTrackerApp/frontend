@@ -10,10 +10,10 @@ import {
   FaRegCalendar,
 } from "react-icons/fa";
 import AnalysisPlaceholder from "../components/AnalysisPlaceholder";
-import ExerciseSelectionOption from "../components/selections/ExerciseSelectionOption";
-import PageWrapper from "../components/ui/PageWrapper";
 import ProgressChart, { type DataContent } from "../components/ProgressChart";
+import ExerciseSelectionOption from "../components/selections/ExerciseSelectionOption";
 import TrainingPlanSelectionOption from "../components/selections/TrainingPlanSelectionOption";
+import PageWrapper from "../components/ui/PageWrapper";
 import SelectOptionWindow from "../components/ui/SelectOptionWindow";
 import {
   useAvailableExercises,
@@ -28,8 +28,9 @@ import {
   type WorkoutTrainingHistoryResponse,
 } from "../services/workoutService";
 import { getCurrentDate } from "../utils/dateUtils";
-import { findMaxLift, findMaxVolume } from "../utils/workoutUtils";
 import { exercisesFilter } from "../utils/exerciseUtils";
+import { findMaxLift, findMaxVolume } from "../utils/workoutUtils";
+import { useTranslation } from "react-i18next";
 
 type MetricType = "training" | "exercise";
 
@@ -38,11 +39,6 @@ interface MetricOption {
   value: MetricType;
 }
 
-const METRIC_OPTIONS: MetricOption[] = [
-  { label: "Training Volume", value: "training" },
-  { label: "Exercise Performance", value: "exercise" },
-];
-
 type DateRangeType = "7d" | "30d" | "60d" | "90d" | "6m";
 
 interface DateRangeOption {
@@ -50,17 +46,11 @@ interface DateRangeOption {
   value: DateRangeType;
 }
 
-const DATE_RANGE_OPTIONS: DateRangeOption[] = [
-  { label: "Last 7 days", value: "7d" },
-  { label: "Last 30 days", value: "30d" },
-  { label: "Last 60 days", value: "60d" },
-  { label: "Last 90 days", value: "90d" },
-  { label: "Last 6 months", value: "6m" },
-];
-
 type WindowType = "metric" | "range" | "exercise" | "training" | null;
 
 const Progress = () => {
+  const { t } = useTranslation();
+
   const [selectedMetricType, setSelectedMetricType] =
     useState<MetricType>("exercise");
   const [selectedExercise, setSelectedExercise] =
@@ -73,6 +63,19 @@ const Progress = () => {
   const [activeWindow, setActiveWindow] = useState<WindowType>(null);
 
   const currentDate = getCurrentDate();
+
+  const METRIC_OPTIONS: MetricOption[] = [
+    { label: t("trainingVolume"), value: "training" },
+    { label: t("exercisePerformance"), value: "exercise" },
+  ];
+
+  const DATE_RANGE_OPTIONS: DateRangeOption[] = [
+    { label: t("lastNDays", { count: 7 }), value: "7d" },
+    { label: t("lastNDays", { count: 30 }), value: "30d" },
+    { label: t("lastNDays", { count: 60 }), value: "60d" },
+    { label: t("lastNDays", { count: 90 }), value: "90d" },
+    { label: t("lastNMonths", { count: 6 }), value: "6m" },
+  ];
 
   const getStartDate = (range: DateRangeType) => {
     const now = new Date();
@@ -193,11 +196,10 @@ const Progress = () => {
         <header className="flex flex-col xl:flex-row xl:items-end justify-between gap-6">
           <div className="space-y-2">
             <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-              Progress Analysis
+              {t("progressAnalysisTitle")}
             </h2>
             <p className="text-gray-500 text-lg max-w-xl">
-              Detailed breakdown of your strength gains and volume distribution
-              over time.
+              {t("progressAnalysisDescription")}
             </p>
           </div>
 
@@ -234,7 +236,7 @@ const Progress = () => {
                     className="hidden lg:block text-gray-400 rotate-45"
                   />
                   <span>
-                    {selectedTraining ? selectedTraining.name : "Select Plan"}
+                    {selectedTraining ? selectedTraining.name : t("selectPlan")}
                   </span>
                   <FaChevronDown size={16} className="text-gray-400" />
                 </button>
@@ -254,7 +256,7 @@ const Progress = () => {
                   <span>
                     {selectedExercise
                       ? selectedExercise.name
-                      : "Select Exercise"}
+                      : t("selectExercise")}
                   </span>
                   <FaChevronDown size={16} className="text-gray-400" />
                 </button>
@@ -275,8 +277,8 @@ const Progress = () => {
                     ? (DATE_RANGE_OPTIONS.find(
                         (dataRangeOption) =>
                           dataRangeOption.value === selectedDateRange,
-                      )?.label ?? "Select Date Range")
-                    : "Select Date Range"}
+                      )?.label ?? t("selectDateRange"))
+                    : t("selectDateRange")}
                 </span>
                 <FaChevronDown size={16} className="text-gray-400" />
               </button>
@@ -291,11 +293,11 @@ const Progress = () => {
                 <h3 className="text-lg text-gray-500 uppercase tracking-tight font-bold">
                   {selectedMetricType === "training"
                     ? selectedTraining
-                      ? `"${selectedTraining.name}" Volume`
-                      : "No training plan selected"
+                      ? `"${selectedTraining.name}" ${t("volume")}`
+                      : t("noTrainingPlanSelected")
                     : selectedExercise
-                      ? `"${selectedExercise.name}" Progress`
-                      : "No exercise selected"}
+                      ? `"${selectedExercise.name}" ${t("progress")}`
+                      : t("noExerciseSelected")}
                 </h3>
                 {selectedMetricType === "training" && trainingHistoryData ? (
                   selectedTraining ? (
@@ -306,7 +308,7 @@ const Progress = () => {
                             {findMaxVolume(trainingHistoryData)}
                           </span>
                           <span className="text-lg font-medium text-gray-400 dark:text-gray-500">
-                            kg (highest volume)
+                            kg ({t("highestVolume")})
                           </span>
                         </>
                       )}
@@ -320,7 +322,7 @@ const Progress = () => {
                           {findMaxLift(exerciseHistoryData)}
                         </span>
                         <span className="text-lg font-medium text-gray-400 dark:text-gray-500">
-                          kg (highest lift)
+                          kg ({t("highestLift")})
                         </span>
                       </>
                     )}
@@ -337,46 +339,50 @@ const Progress = () => {
                 isExerciseHistoryError ? (
                   <div className="flex justify-center items-center w-full h-full">
                     <p className="text-2xl text-gray-400">
-                      Error when fetching exercise history
+                      {t("fetchingExerciseHistoryFailed")}
                     </p>
                   </div>
                 ) : isExerciseHistoryLoading ? (
                   <div className="flex justify-center items-center w-full h-full">
                     <p className="text-2xl text-gray-400">
-                      Loading exercise history...
+                      {t("exerciseHistoryLoading")}
                     </p>
                   </div>
                 ) : !exerciseHistoryData ? (
                   <div className="flex justify-center items-center w-full h-full">
-                    <p className="text-2xl text-gray-400">No data available</p>
+                    <p className="text-2xl text-gray-400">
+                      {t("noDataAvailable")}
+                    </p>
                   </div>
                 ) : (
                   <ProgressChart
                     historyData={prepareChartData(exerciseHistoryData)}
-                    yAxisTitle="Average Weight (kg)"
+                    yAxisTitle={`${t("averageWeight")} (kg)`}
                   />
                 )
               ) : selectedMetricType === "training" && selectedTraining ? (
                 isTrainingHistoryError ? (
                   <div className="flex justify-center items-center w-full h-full">
                     <p className="text-2xl text-gray-400">
-                      Error when fetching training history
+                      {t("fetchingTrainingHistoryFailed")}
                     </p>
                   </div>
                 ) : isTrainingHistoryLoading ? (
                   <div className="flex justify-center items-center w-full h-full">
                     <p className="text-2xl text-gray-400">
-                      Loading training history...
+                      {t("trainingHistoryLoading")}
                     </p>
                   </div>
                 ) : !trainingHistoryData ? (
                   <div className="flex justify-center items-center w-full h-full">
-                    <p className="text-2xl text-gray-400">No data available</p>
+                    <p className="text-2xl text-gray-400">
+                      {t("noDataAvailable")}
+                    </p>
                   </div>
                 ) : (
                   <ProgressChart
                     historyData={prepareChartData(trainingHistoryData) || []}
-                    yAxisTitle="Volume (kg)"
+                    yAxisTitle={`${t("trainingVolume")} (kg)`}
                   />
                 )
               ) : null}
@@ -387,7 +393,7 @@ const Progress = () => {
         <div>
           {activeWindow === "exercise" && (
             <SelectOptionWindow
-              title={"Select Exercise"}
+              title={t("selectExercise")}
               onClose={() => setActiveWindow(null)}
               data={exercises}
               isDataLoading={isExercisesLoading}
@@ -404,7 +410,7 @@ const Progress = () => {
 
           {activeWindow === "training" && (
             <SelectOptionWindow
-              title={"Select Training Plan"}
+              title={t("selectPlan")}
               onClose={() => setActiveWindow(null)}
               data={trainingPlans}
               isDataLoading={isTrainingPlansLoading}
@@ -425,7 +431,7 @@ const Progress = () => {
 
           {activeWindow === "range" && (
             <SelectOptionWindow
-              title={"Select Date Range"}
+              title={t("selectDateRange")}
               onClose={() => setActiveWindow(null)}
               data={DATE_RANGE_OPTIONS}
               isDataLoading={false}

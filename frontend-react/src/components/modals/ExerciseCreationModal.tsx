@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 import { FaChevronDown, FaInfoCircle } from "react-icons/fa";
 import {
   createNewExercise,
@@ -11,9 +12,9 @@ import {
   type ExerciseResponse,
 } from "../../services/exerciseService";
 import type { ErrorResponse } from "../../types/ApiResponse";
+import CategorySelectionOption from "../selections/CategorySelectionOption";
 import SelectOptionWindow from "../ui/SelectOptionWindow";
 import ExerciseActionModal from "./ExerciseActionModal";
-import CategorySelectionOption from "../selections/CategorySelectionOption";
 
 interface CreateNewExerciseProps {
   onClose: () => void;
@@ -26,6 +27,7 @@ interface NewExerciseForm {
 
 const CreateNewExerciseForm = ({ onClose }: CreateNewExerciseProps) => {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   const [formData, setFormData] = useState<NewExerciseForm>({
     exerciseName: "",
@@ -42,7 +44,11 @@ const CreateNewExerciseForm = ({ onClose }: CreateNewExerciseProps) => {
     mutationFn: createNewExercise,
     onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: ["userExercises"] });
-      toast.success(`Exercise ${response.name} created successfully.`);
+      toast.success(
+        t("toastMessages.exerciseCreatedSuccessfully", {
+          name: response.name,
+        }),
+      );
       onClose();
     },
     onError: (error) => {
@@ -66,7 +72,7 @@ const CreateNewExerciseForm = ({ onClose }: CreateNewExerciseProps) => {
     if (newExerciseMutation.isPending) return;
 
     if (!formData.exerciseName.trim()) {
-      toast.error("Exercise name is required");
+      toast.error(t("toastMessages.exerciseNameRequired"));
       return;
     }
 
@@ -80,20 +86,20 @@ const CreateNewExerciseForm = ({ onClose }: CreateNewExerciseProps) => {
 
   return (
     <ExerciseActionModal
-      title={"Create Exercise"}
+      title={t("createExercise")}
       onClose={onClose}
       handleFormSubmit={handleFormSubmit}
-      submitButtonTitle={"Create"}
+      submitButtonTitle={t("create")}
     >
       <div className="mx-auto max-w-xl px-6 py-16 flex flex-col gap-12">
         <div className="group relative">
           <label className="block text-[10px] font-bold text-primary uppercase tracking-[0.2em] mb-3">
-            Exercise Name
+            {t("exerciseName")}
           </label>
           <input
             className="w-full bg-transparent text-3xl md:text-4xl font-bold placeholder-text-muted/20 border-0 border-b-2 border-border-light dark:border-border-dark focus:border-primary focus:outline-none focus:ring-0 px-0 pb-4 transition-colors"
             name="exerciseName"
-            placeholder="e.g. Benchpress"
+            placeholder={t("exerciseNamePlaceholder")}
             type="text"
             onChange={handleFormUpdate}
             value={formData["exerciseName"]}
@@ -103,7 +109,7 @@ const CreateNewExerciseForm = ({ onClose }: CreateNewExerciseProps) => {
         <div className="space-y-6">
           <div>
             <label className="block text-[10px] font-bold text-primary uppercase tracking-[0.2em] mb-4">
-              Exercise Category
+              {t("exerciseCategory")}
             </label>
             <button
               className="w-full flex justify-between items-center bg-card-light/50 dark:bg-card-dark border border-border-light dark:border-border-dark rounded-xl px-4 py-3 focus:ring-1 focus:ring-primary focus:border-primary transition-all cursor-pointer"
@@ -114,8 +120,10 @@ const CreateNewExerciseForm = ({ onClose }: CreateNewExerciseProps) => {
             >
               <span className="capitalize">
                 {formData["category"] === "UNCATEGORIZED"
-                  ? "Select Category"
-                  : formData["category"].toLowerCase()}
+                  ? t("selectCategory")
+                  : t(
+                      `exerciseCategories.${formData["category"].toLowerCase()}`,
+                    ).toLowerCase()}
               </span>
               <FaChevronDown />
             </button>
@@ -124,15 +132,14 @@ const CreateNewExerciseForm = ({ onClose }: CreateNewExerciseProps) => {
         <div className="flex items-center gap-3 p-4 rounded-xl bg-card-light/50 dark:bg-card-dark border border-border-light/50 dark:border-border-dark/50">
           <FaInfoCircle className="text-primary/60" size={25} />
           <p className="text-xs text-gray-500 dark:text-text-muted leading-relaxed">
-            This exercise will be added to your personal library and can be used
-            in any of your training plans.
+            {t("createExerciseModalDescription")}
           </p>
         </div>
       </div>
 
       {categorySelection && (
         <SelectOptionWindow
-          title={"Select Category"}
+          title={t("selectCategory")}
           onClose={() => setCategorySelection(false)}
           data={EXERCISE_CATEGORIES}
           onSelect={(item) => {
@@ -143,11 +150,17 @@ const CreateNewExerciseForm = ({ onClose }: CreateNewExerciseProps) => {
             setCategorySelection(false);
           }}
           renderItem={(category) => (
-            <CategorySelectionOption exerciseCategory={category} />
+            <CategorySelectionOption
+              exerciseCategory={t(
+                `exerciseCategories.${category.toLowerCase()}`,
+              )}
+            />
           )}
           dataFilter={(data, keyword) =>
             data.filter((exerciseCategory) =>
-              exerciseCategory.toLowerCase().includes(keyword.toLowerCase()),
+              t(`exerciseCategories.${exerciseCategory.toLowerCase()}`)
+                .toLowerCase()
+                .includes(keyword.toLowerCase()),
             )
           }
         />

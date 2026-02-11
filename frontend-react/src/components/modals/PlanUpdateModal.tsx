@@ -11,6 +11,7 @@ import {
 } from "../../services/trainingService";
 import type { ErrorResponse, GeneralResponse } from "../../types/ApiResponse";
 import PlanActionModal from "./PlanActionModal";
+import { useTranslation } from "react-i18next";
 
 interface UpdatePlanProps {
   exercises: Array<ExerciseResponse>;
@@ -36,6 +37,7 @@ const PlanUpdateModal = ({ exercises, plan, onClose }: UpdatePlanProps) => {
   });
 
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   const updatePlanMutation = useMutation<
     GeneralResponse,
@@ -66,12 +68,12 @@ const PlanUpdateModal = ({ exercises, plan, onClose }: UpdatePlanProps) => {
     if (updatePlanMutation.isPending) return;
 
     if (!planForm.planName) {
-      toast.error("Plan name is required");
+      toast.error(t("toastMessages.planNameRequired"));
       return;
     }
 
     if (planForm.planItems.length === 0) {
-      toast.error("Plan must have at least one exercise");
+      toast.error(t("toastMessages.planMustHaveAtLeastOneExercise"));
       return;
     }
 
@@ -95,7 +97,7 @@ const PlanUpdateModal = ({ exercises, plan, onClose }: UpdatePlanProps) => {
         (element) => element.exerciseId === selectedExercise.exerciseId,
       )
     ) {
-      toast.error("This exercise was already added");
+      toast.error(t("toastMessages.exerciseAlreadyAdded"));
       return;
     }
 
@@ -111,23 +113,23 @@ const PlanUpdateModal = ({ exercises, plan, onClose }: UpdatePlanProps) => {
     };
 
     setPlanForm(updatedPlanForm);
-    toast.success("Exercise added to plan");
+    toast.success(t("toastMessages.exerciseAddedToPlan"));
   };
 
   return (
     <PlanActionModal
       exercises={exercises}
       handleSelectExercise={handleSelectExercise}
-      title={"Update Plan"}
+      title={t("updatePlan")}
       handleSubmit={handleSubmit}
       remainingFormElements={
         <div className="group relative">
           <label className="block text-[10px] font-bold text-primary uppercase tracking-[0.2em] mb-3">
-            Plan Name
+            {t("planName")}
           </label>
           <input
             className="w-full bg-transparent text-3xl md:text-4xl font-bold placeholder-text-muted/30 border-0 border-b-2 border-border-light dark:border-border-dark focus:border-primary focus:outline-none focus:ring-0 px-0 pb-4 transition-colors"
-            placeholder="e.g. Push"
+            placeholder={t("planNamePlaceholder")}
             type="text"
             required
             onChange={(e) =>
@@ -137,7 +139,7 @@ const PlanUpdateModal = ({ exercises, plan, onClose }: UpdatePlanProps) => {
           />
         </div>
       }
-      saveButtonText={"Update"}
+      saveButtonText={t("update")}
       onClose={onClose}
     >
       {planForm.planItems.map((planItem) => (

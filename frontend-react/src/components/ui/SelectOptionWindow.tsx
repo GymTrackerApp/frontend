@@ -2,6 +2,7 @@ import { useState } from "react";
 import AbsoluteWindowWrapper from "./AbsoluteWindowWrapper";
 import CloseModalButton from "./CloseModalButton";
 import SearchBar from "./SearchBar";
+import { useTranslation } from "react-i18next";
 
 interface SelectOptionWindowProps<T> {
   title: string;
@@ -24,6 +25,8 @@ const SelectOptionWindow = <T,>({
   onSelect,
   renderItem,
 }: SelectOptionWindowProps<T>) => {
+  const { t } = useTranslation();
+
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   const filteredData = dataFilter ? dataFilter(data, searchQuery) : data;
@@ -43,13 +46,13 @@ const SelectOptionWindow = <T,>({
         <div className="grid grid-cols-1 gap-3">
           {isDataLoading ? (
             <div className="flex items-center justify-between p-4 bg-selection-light dark:bg-card-dark rounded-xl border border-border-light/20 dark:border-border-dark/30 text-left font-semibold">
-              <p>Loading data...</p>
+              <p>{t("loadingData")}</p>
             </div>
           ) : filteredData.length === 0 ? (
             <div className="flex items-center justify-between p-4 bg-selection-light dark:bg-card-dark rounded-xl border border-border-light/20 dark:border-border-dark/30 text-left font-semibold">
               <p>
                 {emptyDataMessage ||
-                  (dataFilter ? "No matches found" : "No options available")}
+                  (dataFilter ? t("noMatchesFound") : t("noOptionsAvailable"))}
               </p>
             </div>
           ) : (

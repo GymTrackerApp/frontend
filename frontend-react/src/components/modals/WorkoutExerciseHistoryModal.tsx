@@ -1,16 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
-import { format, parseISO } from "date-fns";
-import { FaHistory } from "react-icons/fa";
+import { parseISO } from "date-fns";
 import { Fragment } from "react";
+import { useTranslation } from "react-i18next";
+import { FaHistory } from "react-icons/fa";
 import type { PlanItemResponse } from "../../services/trainingService";
 import {
   getWorkoutExerciseHistory,
   type WorkoutExerciseHistoryResponse,
 } from "../../services/workoutService";
 import type { ErrorResponse } from "../../types/ApiResponse";
+import WorkoutExerciseHistoryLoading from "../loaders/WorkoutExerciseHistoryLoading";
 import AbsoluteWindowWrapper from "../ui/AbsoluteWindowWrapper";
 import CloseModalButton from "../ui/CloseModalButton";
-import WorkoutExerciseHistoryLoading from "../loaders/WorkoutExerciseHistoryLoading";
 
 interface WorkoutExerciseHistoryModal {
   planItem: PlanItemResponse;
@@ -21,6 +22,8 @@ const WorkoutExerciseHistoryModal = ({
   planItem,
   onClose,
 }: WorkoutExerciseHistoryModal) => {
+  const { t } = useTranslation();
+
   const { data, isLoading, isError } = useQuery<
     WorkoutExerciseHistoryResponse,
     ErrorResponse
@@ -38,11 +41,11 @@ const WorkoutExerciseHistoryModal = ({
             <div className="flex items-center gap-2">
               <FaHistory size={20} className="text-primary " />
               <h3 className="tracking-tight text-xl font-bold leading-tight">
-                History: {planItem.exerciseName}
+                {t("history")}: {planItem.exerciseName}
               </h3>
             </div>
             <p className="text-xs text-gray-400 font-medium mt-1 pl-7">
-              Progressive Overload Tracking
+              {t("progressiveOverloadTracking")}
             </p>
           </div>
           <CloseModalButton onClose={onClose} />
@@ -53,7 +56,7 @@ const WorkoutExerciseHistoryModal = ({
             {isError ? (
               <div className="flex justify-center items-center col-span-2">
                 <span className="text-lg text-gray-400">
-                  Failed to fetch history
+                  {t("fetchingExerciseHistoryFailed")}
                 </span>
               </div>
             ) : isLoading ? (
@@ -61,7 +64,7 @@ const WorkoutExerciseHistoryModal = ({
             ) : !data || data.history.length === 0 ? (
               <div className="flex justify-center items-center col-span-2">
                 <span className="text-lg text-gray-400">
-                  There is no history for this exercise yet
+                  {t("noExerciseHistoryMessage")}
                 </span>
               </div>
             ) : (
@@ -73,16 +76,14 @@ const WorkoutExerciseHistoryModal = ({
                   <div className="flex flex-col py-5 pl-2 dark:border-t dark:border-gray-700/30 group hover:dark:bg-gray-800/20 rounded-lg transition-colors px-2 -mx-2">
                     <div className="flex justify-between items-baseline mb-3">
                       <p className="dark:text-gray-300 text-base font-semibold group-hover:dark:text-white transition-colors leading-tight">
-                        {format(
-                          parseISO(workoutSessionSnapshot.workoutDate),
-                          "MMM dd, yyyy",
-                        )}
+                        {t("dateFormats.monthDayYear", {
+                          date: parseISO(workoutSessionSnapshot.workoutDate),
+                        })}
                         <br></br>
-                        <span className="text-xs font-normal">
-                          {format(
-                            parseISO(workoutSessionSnapshot.workoutDate),
-                            "iiii",
-                          )}
+                        <span className="text-xs font-normal capitalize">
+                          {t("dateFormats.weekday", {
+                            date: parseISO(workoutSessionSnapshot.workoutDate),
+                          })}
                         </span>
                       </p>
                     </div>

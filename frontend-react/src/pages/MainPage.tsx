@@ -1,17 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
 import { startOfWeek } from "date-fns";
+import { useTranslation } from "react-i18next";
 import { FaRegCalendar } from "react-icons/fa";
 import MyPlans from "../components/MyPlans";
-import PageWrapper from "../components/ui/PageWrapper";
 import QuickStart from "../components/QuickStart";
 import QuickStats from "../components/QuickStats";
 import RecentWorkouts from "../components/RecentWorkouts";
+import PageWrapper from "../components/ui/PageWrapper";
 import { useUserProfile } from "../hooks/useUserProfile";
 import { useAvailablePlans } from "../hooks/useWorkoutFlow";
 import { getWorkouts } from "../services/workoutService";
 import { getCurrentDate } from "../utils/dateUtils";
 
 const MainPage = () => {
+  const { t } = useTranslation();
+
   const { plans, isLoading: plansLoading, userPlansOnly } = useAvailablePlans();
 
   const {
@@ -19,15 +22,6 @@ const MainPage = () => {
     isLoading: isCurrentUserLoading,
     isError: isCurrentUserError,
   } = useUserProfile();
-
-  const displayCurrentDate = () => {
-    const currentDate: Date = getCurrentDate();
-    return currentDate.toLocaleDateString("en-US", {
-      weekday: "long",
-      month: "short",
-      day: "numeric",
-    });
-  };
 
   const currentDate = getCurrentDate();
   const weekStartDate = startOfWeek(currentDate, { weekStartsOn: 1 });
@@ -64,12 +58,16 @@ const MainPage = () => {
                 <div className="h-10 w-70 bg-gray-200 dark:bg-gray-800 animate-skeleton rounded-lg"></div>
               ) : (
                 <h1 className="font-display text-3xl md:text-4xl font-black tracking-tight text-gray-900 dark:text-white">
-                  Welcome back, {currentUser.username}!
+                  {t("welcomeMessage", {
+                    username: currentUser.username,
+                  })}
                 </h1>
               )}
               <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
                 <FaRegCalendar size={18} />
-                <p className="text-sm font-medium">{displayCurrentDate()}</p>
+                <p className="text-sm font-medium capitalize">
+                  {t("dateFormats.weekdayDayMonth", { date: currentDate })}
+                </p>
               </div>
             </div>
           </header>

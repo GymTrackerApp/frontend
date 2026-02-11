@@ -2,6 +2,7 @@ import { FaDumbbell, FaPen, FaTrashAlt } from "react-icons/fa";
 import type { ExerciseResponse } from "../services/exerciseService";
 import { useState } from "react";
 import ConfirmationWindow from "./ui/ConfirmationWindow";
+import { useTranslation } from "react-i18next";
 
 interface ExerciseProps {
   exercise: ExerciseResponse;
@@ -14,6 +15,8 @@ const Exercise = ({
   setUpdateExercise,
   handleRemoveExercise,
 }: ExerciseProps) => {
+  const { t } = useTranslation();
+
   const [isExerciseRemovalWindowOpened, setIsExerciseRemovalWindowOpened] =
     useState<boolean>(false);
   return (
@@ -46,7 +49,11 @@ const Exercise = ({
         <div className="flex items-center gap-4 text-xs text-gray-400 font-medium">
           <div className="flex items-center gap-1.5">
             <FaDumbbell size={15} className="rotate-45" />
-            <span>{exercise.category}</span>
+            <span className="capitalize">
+              {t(
+                `exerciseCategories.${exercise.category.toLowerCase()}`,
+              ).toLowerCase()}
+            </span>
           </div>
         </div>
       </div>
@@ -56,12 +63,10 @@ const Exercise = ({
             handleRemoveExercise(exercise.exerciseId);
           }}
           onClose={() => setIsExerciseRemovalWindowOpened(false)}
-          confirmButtonText={"Yes, Remove Exercise"}
-          cancelButtonText={"No, Keep Exercise"}
-          windowTitle={"Remove Exercise"}
-          windowDescription={
-            "Are you sure you want to remove this exercise? This action may affect existing workout plans."
-          }
+          confirmButtonText={t("deleteExerciseConfirmButtonText")}
+          cancelButtonText={t("deleteExerciseCancelButtonText")}
+          windowTitle={t("deleteExerciseTitle")}
+          windowDescription={t("deleteExerciseDescription")}
         />
       )}
     </div>

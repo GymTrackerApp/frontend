@@ -2,17 +2,19 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 import { FaPlus } from "react-icons/fa";
 import CreateNewResource from "../components/CreateNewResource";
 import Exercise from "../components/Exercise";
 import ExerciseLoading from "../components/loaders/ExerciseLoading";
+import PlanLoading from "../components/loaders/PlanLoading";
 import NewExerciseModal from "../components/modals/ExerciseCreationModal";
 import ExerciseUpdateModal from "../components/modals/ExerciseUpdateModal";
 import PlanCreationModal from "../components/modals/PlanCreationModal";
-import PageWrapper from "../components/ui/PageWrapper";
 import Plan from "../components/Plan";
-import PlanLoading from "../components/loaders/PlanLoading";
 import PlanManagerToggleTabs from "../components/PlanManagerToggleTabs";
+import LoadingFailed from "../components/ui/LoadingFailed";
+import PageWrapper from "../components/ui/PageWrapper";
 import { useAvailableExercises } from "../hooks/useWorkoutFlow";
 import {
   getUserExercises,
@@ -25,9 +27,10 @@ import {
   type PlanResponse,
 } from "../services/trainingService";
 import type { ErrorResponse, GeneralResponse } from "../types/ApiResponse";
-import LoadingFailed from "../components/ui/LoadingFailed";
 
 const PlanManager = () => {
+  const { t } = useTranslation();
+
   const [newPlanModalEnabled, setNewPlanModalEnabled] =
     useState<boolean>(false);
   const [newExerciseModalEnabled, setNewExerciseModalEnabled] =
@@ -104,30 +107,31 @@ const PlanManager = () => {
       <div className="w-full max-w-300 mx-auto px-6 py-8 flex flex-col gap-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div className="flex flex-col gap-2">
-            <h1 className="text-3xl font-black tracking-tight">Plan Manager</h1>
+            <h1 className="text-3xl font-black tracking-tight">
+              {t("planManagerTitle")}
+            </h1>
             <p className="text-gray-500 text-base font-normal max-w-lg">
-              Manage your workout routines, customize schedules, and track your
-              exercise library
+              {t("planManagerDescription")}
             </p>
           </div>
 
           {isMyPlansEnabled && (
             <button
-              className="flex cursor-pointer items-center justify-center rounded-lg h-11 px-5 bg-primary hover:bg-blue-600 text-white gap-2 text-sm font-bold shadow-[0_0_15px_rgba(59,130,246,0.4)] transition-all transform active:scale-95"
+              className="flex cursor-pointer items-center justify-center rounded-lg min-h-11 px-5 bg-primary hover:bg-blue-600 text-white gap-2 text-sm font-bold shadow-[0_0_15px_rgba(59,130,246,0.4)] transition-all transform active:scale-95"
               onClick={() => setNewPlanModalEnabled(true)}
             >
               <FaPlus size={20} />
-              <span>Create New Plan</span>
+              <span>{t("createNewPlan")}</span>
             </button>
           )}
 
           {isMyExercisesEnabled && (
             <button
-              className="flex cursor-pointer items-center justify-center rounded-lg h-11 px-5 bg-primary hover:bg-blue-600 text-white gap-2 text-sm font-bold shadow-[0_0_15px_rgba(59,130,246,0.4)] transition-all transform active:scale-95"
+              className="flex cursor-pointer items-center justify-center rounded-lg min-h-11 px-5 bg-primary hover:bg-blue-600 text-white gap-2 text-sm font-bold shadow-[0_0_15px_rgba(59,130,246,0.4)] transition-all transform active:scale-95"
               onClick={() => setNewExerciseModalEnabled(true)}
             >
               <FaPlus size={20} />
-              <span>Create New Exercise</span>
+              <span>{t("createNewExercise")}</span>
             </button>
           )}
         </div>
@@ -156,7 +160,7 @@ const PlanManager = () => {
               {isMyPlansLoading ? (
                 <PlanLoading />
               ) : isMyPlansError || !myPlans ? (
-                <LoadingFailed message="Failed to load plans" />
+                <LoadingFailed message={t("fetchingPlansFailed")} />
               ) : (
                 <>
                   {myPlans.map((plan) => (
@@ -169,8 +173,8 @@ const PlanManager = () => {
                     />
                   ))}
                   <CreateNewResource
-                    creationText={"Create Custom Plan"}
-                    descriptionText="Design a new routine from scratch tailored to your goals"
+                    creationText={t("createNewPlan")}
+                    descriptionText={t("createCustomPlanDescription")}
                     onNewResourceCreated={() => setNewPlanModalEnabled(true)}
                   />
                 </>
@@ -191,7 +195,7 @@ const PlanManager = () => {
               {isMyExercisesLoading ? (
                 <ExerciseLoading />
               ) : isMyExercisesError || !myExercises ? (
-                <LoadingFailed message="Failed to load exercises" />
+                <LoadingFailed message={t("fetchingExercisesFailed")} />
               ) : (
                 <>
                   {myExercises.map((exercise) => (
@@ -203,8 +207,8 @@ const PlanManager = () => {
                     />
                   ))}
                   <CreateNewResource
-                    creationText={"Create New Exercise"}
-                    descriptionText="Expand your library with custom exercises"
+                    creationText={t("createNewExercise")}
+                    descriptionText={t("createNewExerciseDescription")}
                     onNewResourceCreated={() =>
                       setNewExerciseModalEnabled(true)
                     }
@@ -228,7 +232,7 @@ const PlanManager = () => {
               {isPredefinedPlansLoading ? (
                 <PlanLoading />
               ) : isPredefinedPlansError || !predefinedPlans ? (
-                <LoadingFailed message="Failed to load predefined plans" />
+                <LoadingFailed message={t("fetchingPlansFailed")} />
               ) : (
                 predefinedPlans.map((plan) => (
                   <Plan

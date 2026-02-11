@@ -1,6 +1,9 @@
 import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 const AutoWorkoutTimer = () => {
+  const { t } = useTranslation();
+
   const [seconds, setSeconds] = React.useState(0);
 
   useEffect(() => {
@@ -27,7 +30,7 @@ const AutoWorkoutTimer = () => {
         {displayTime(seconds)}
       </div>
       <span className="text-[10px] uppercase tracking-widest text-primary/80 font-bold mt-0.5">
-        Elapsed
+        {t("elapsed")}
       </span>
     </div>
   );

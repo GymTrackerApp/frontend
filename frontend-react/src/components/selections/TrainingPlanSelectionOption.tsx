@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { FaChevronRight, FaDumbbell } from "react-icons/fa";
 import type { PlanResponse } from "../../services/trainingService";
+import { useTranslation } from "react-i18next";
 
 interface TrainingPlanSelectionOptionProps {
   plan: PlanResponse;
@@ -9,6 +10,8 @@ interface TrainingPlanSelectionOptionProps {
 const TrainingPlanSelectionOption = ({
   plan,
 }: TrainingPlanSelectionOptionProps) => {
+  const { t } = useTranslation();
+
   return (
     <div className="w-full flex items-center justify-between">
       <div className="flex items-center gap-4">
@@ -35,8 +38,7 @@ const TrainingPlanSelectionOption = ({
           </p>
           <div className="flex items-center gap-2 mt-0.5">
             <span className="text-xs text-slate-600 dark:text-slate-400">
-              {plan.planItems.length}{" "}
-              {plan.planItems.length === 1 ? "exercise" : "exercises"}
+              {t("nExercises", { count: plan.planItems.length })}
             </span>
             <span className="size-1 rounded-full bg-slate-300 dark:bg-slate-600"></span>
             <span
@@ -47,7 +49,7 @@ const TrainingPlanSelectionOption = ({
                   : "text-purple-400 bg-purple-400/10",
               )}
             >
-              {plan.isCustom ? "Your" : "Predefined"}
+              {plan.isCustom ? t("your") : t("predefined")}
             </span>
           </div>
         </div>

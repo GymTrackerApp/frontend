@@ -7,6 +7,7 @@ import AbsoluteWindowWrapper from "../ui/AbsoluteWindowWrapper";
 import CancelCreateButtons from "../ui/CancelCreateButtons";
 import CloseModalButton from "../ui/CloseModalButton";
 import SelectOptionWindow from "../ui/SelectOptionWindow";
+import { useTranslation } from "react-i18next";
 
 interface PlanActionModalProps {
   exercises: Array<ExerciseResponse>;
@@ -29,6 +30,8 @@ const PlanActionModal = ({
   saveButtonText,
   onClose,
 }: PlanActionModalProps) => {
+  const { t } = useTranslation();
+
   const [addExerciseEnabled, setAddExerciseEnabled] = useState<boolean>(false);
 
   return (
@@ -58,16 +61,16 @@ const PlanActionModal = ({
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-sm font-semibold text-text-main flex items-center gap-2">
                   <FaListAlt className="text-primary text-lg" />
-                  Plan Exercises
+                  {t("planExercises")}
                 </h3>
               </div>
               <div className="flex flex-col dark:bg-surface-border/30 rounded-xl overflow-hidden border border-border-light dark:border-border-dark">
                 <div className="grid grid-cols-12 gap-4 px-5 py-3 bg-surface-dark/50 text-[10px] font-bold text-text-muted uppercase tracking-widest border-b border-border-light dark:border-border-dark">
                   <div className="col-span-8 md:col-span-9 my-auto">
-                    Exercise
+                    {t("exercise")}
                   </div>
                   <div className="col-span-3 md:col-span-2 text-center my-auto">
-                    Default Sets
+                    {t("defaultSets")}
                   </div>
                   <div className="col-span-1"></div>
                 </div>
@@ -80,7 +83,7 @@ const PlanActionModal = ({
                   }}
                 >
                   <FaPlusCircle className="text-xl group-hover:scale-110 transition-transform" />
-                  Add Exercise
+                  {t("addExercise")}
                 </button>
               </div>
             </div>
@@ -96,7 +99,7 @@ const PlanActionModal = ({
 
       {addExerciseEnabled && (
         <SelectOptionWindow
-          title={"Select Exercise"}
+          title={t("selectExercise")}
           onClose={() => setAddExerciseEnabled(false)}
           data={exercises}
           renderItem={(exercise) => (
