@@ -53,7 +53,7 @@ interface WorkoutFormProps {
 const WorkoutForm = ({ plan }: WorkoutFormProps) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [planItemSelectedForDetails, setPlanItemSelectedForDetails] =
     useState<PlanItemResponse | null>(null);
@@ -407,13 +407,15 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                     <h3 className="text-lg font-bold tracking-tight">
                       {planItem.exerciseName}
                     </h3>
-                    <p className="text-xs text-gray-400 mt-0.5 font-medium">
-                      {
-                        exercises.find(
-                          (exercise) =>
-                            planItem.exerciseId === exercise.exerciseId,
-                        )?.category
-                      }
+                    <p className="text-xs text-gray-400 mt-0.5 font-medium capitalize">
+                      {t(
+                        `exerciseCategories.${exercises
+                          .find(
+                            (exercise) =>
+                              planItem.exerciseId === exercise.exerciseId,
+                          )
+                          ?.category.toLowerCase()}`,
+                      ).toLowerCase()}
                     </p>
                   </div>
                 </div>
@@ -561,7 +563,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
           <span
             className={clsx(
               "font-bold tracking-wide",
-              localStorage.getItem("language") === "pl" && "text-sm",
+              i18n.language === "pl" && "text-sm",
             )}
           >
             {t("addExercise")}
@@ -570,7 +572,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
         <button
           className={clsx(
             "h-14 px-8 w-53.75 mx-auto flex justify-center items-center rounded-2xl bg-[#223149]/50 hover:bg-gray-500 hover:dark:bg-[#223149] border border-input-light dark:border-[#223149] text-white dark:text-gray-300 hover:text-white font-semibold transition-all hover:scale-105 active:scale-95 cursor-pointer",
-            localStorage.getItem("language") === "pl" && "text-sm",
+            i18n.language === "pl" && "text-sm",
           )}
           onClick={() => setIsFinishedWorkoutWindowOpen(true)}
         >
@@ -680,7 +682,9 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                         selectedCustomRestTime < 1 ||
                         selectedCustomRestTime > 3600
                       ) {
-                        toast.error(t("toastMessages.customRestTimerInvalidRangeMessage"));
+                        toast.error(
+                          t("toastMessages.customRestTimerInvalidRangeMessage"),
+                        );
                         return;
                       }
                       setSelectTimerEnabled(false);

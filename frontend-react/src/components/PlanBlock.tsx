@@ -52,7 +52,7 @@ const PlanBlock = ({ plan }: PlanBlockProps) => {
             {isLastWorkoutLoading
               ? t("lastWorkoutLoading")
               : isLastWorkoutError
-                ? "Could not load"
+                ? t("couldNotLoad")
                 : !lastWorkout || lastWorkout?.length === 0
                   ? t("neverPerformed")
                   : `${t("lastDone")}: ${getRelativeDate(lastWorkout[0].createdAt)}`}

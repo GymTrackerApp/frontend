@@ -166,6 +166,7 @@
   "signUpButton": "Register",
   "loadingWorkoutTitle": "Preparing your workout...",
   "loadingWorkoutDescription": "Loading your personalized plan, please wait.",
+  "couldNotLoad": "Could not load",
   "toastMessages": {
     "exerciseRemovedFromWorkout": "Exercise removed from workout",
     "workoutDiscarded": "Workout discarded",

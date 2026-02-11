@@ -177,6 +177,7 @@
   "signUpButton": "Zarejestruj",
   "loadingWorkoutTitle": "Przygotowujemy Twój trening...",
   "loadingWorkoutDescription": "Ładowanie spersonalizowanego planu, proszę czekać.",
+  "couldNotLoad": "Nie udało się załadować",
   "toastMessages": {
     "exerciseRemovedFromWorkout": "Ćwiczenie zostało usunięte z treningu",
     "workoutDiscarded": "Trening został odrzucony",
