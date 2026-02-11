@@ -277,8 +277,8 @@ const Progress = () => {
                     ? (DATE_RANGE_OPTIONS.find(
                         (dataRangeOption) =>
                           dataRangeOption.value === selectedDateRange,
-                      )?.label ?? "Select Date Range")
-                    : "Select Date Range"}
+                      )?.label ?? t("selectDateRange"))
+                    : t("selectDateRange")}
                 </span>
                 <FaChevronDown size={16} className="text-gray-400" />
               </button>
@@ -410,7 +410,7 @@ const Progress = () => {
 
           {activeWindow === "training" && (
             <SelectOptionWindow
-              title={"Select Training Plan"}
+              title={t("selectPlan")}
               onClose={() => setActiveWindow(null)}
               data={trainingPlans}
               isDataLoading={isTrainingPlansLoading}

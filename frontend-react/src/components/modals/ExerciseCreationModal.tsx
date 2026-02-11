@@ -72,7 +72,7 @@ const CreateNewExerciseForm = ({ onClose }: CreateNewExerciseProps) => {
     if (newExerciseMutation.isPending) return;
 
     if (!formData.exerciseName.trim()) {
-      toast.error("Exercise name is required");
+      toast.error(t("toastMessages.exerciseNameRequired"));
       return;
     }
 

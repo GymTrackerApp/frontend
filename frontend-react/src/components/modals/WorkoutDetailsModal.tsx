@@ -31,7 +31,7 @@ const WorkoutDetails = ({ workout, onClose }: WorkoutDetailsProps) => {
               {workout.trainingPlan.name}
             </h1>
             <p className="text-slate-400 font-medium capitalize">
-              {t("weekdayMonthDayYear", {
+              {t("dateFormats.weekdayMonthDayYear", {
                 date: workout.createdAt,
               })}
             </p>

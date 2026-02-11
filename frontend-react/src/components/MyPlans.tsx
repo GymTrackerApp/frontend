@@ -3,7 +3,7 @@ import type { PlanResponse } from "../services/trainingService";
 import CreateNewResource from "./CreateNewResource";
 import PlanBlock from "./PlanBlock";
 import PlanBlockLoading from "./loaders/PlanBlockLoading";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 interface MyPlansProps {
   userPlans: Array<PlanResponse> | undefined;
@@ -12,6 +12,7 @@ interface MyPlansProps {
 
 const MyPlans = ({ userPlans, plansLoading }: MyPlansProps) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <div className="col-span-3 flex flex-col gap-6">

@@ -64,7 +64,7 @@ const PlanCreationModal = ({ exercises, onClose }: NewPlanProps) => {
     if (newPlanMutation.isPending) return;
 
     if (!newPlanForm.planName) {
-      toast.error("Plan name is required");
+      toast.error(t("toastMessages.planNameRequired"));
       return;
     }
 

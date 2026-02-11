@@ -44,7 +44,9 @@ const ExerciseUpdateModal = ({ onClose, exercise }: ExerciseUpdateProps) => {
     mutationFn: updateExercise,
     onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: ["userExercises"] });
-      toast.success(`Exercise ${response.name} updated successfully.`);
+      toast.success(
+        t("toastMessages.exerciseUpdatedSuccessfully", { name: response.name }),
+      );
       onClose();
     },
     onError: (error) => {
@@ -68,7 +70,7 @@ const ExerciseUpdateModal = ({ onClose, exercise }: ExerciseUpdateProps) => {
     if (exerciseUpdateMutation.isPending) return;
 
     if (!formData.exerciseName.trim()) {
-      toast.error("Exercise name is required");
+      toast.error(t("toastMessages.exerciseNameRequired"));
       return;
     }
 
@@ -133,7 +135,7 @@ const ExerciseUpdateModal = ({ onClose, exercise }: ExerciseUpdateProps) => {
 
       {categorySelection && (
         <SelectOptionWindow
-          title={"Select Category"}
+          title={t("selectCategory")}
           onClose={() => setCategorySelection(false)}
           data={EXERCISE_CATEGORIES}
           onSelect={(item) => {

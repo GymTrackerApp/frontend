@@ -55,7 +55,6 @@ const RegisterLogin = () => {
     onError: (error: AxiosError<ErrorResponse>) => {
       if (error.response) {
         toast.error(error.response.data.message);
-        console.log(error);
       } else {
         toast.error(
           t("toastMessages.signUpFailed", { errorMessage: error.message }),

@@ -28,14 +28,15 @@ i18n
     lng: savedLng,
     interpolation: {
       escapeValue: false, // react already safes from xss
-      format: (value, formatStr, lng) => {
-        if (value instanceof Date) {
-          const locale = lng === "pl" ? pl : enUS;
-          return format(value, formatStr || "dd.MM.yyyy", { locale });
-        }
-        return value;
-      },
     },
   });
+
+i18n.services.formatter?.add("date", (value, lng, options) => {
+  if (value instanceof Date) {
+    const locale = lng === "pl" ? pl : enUS;
+    return format(value, options.fmt || "dd.MM.yyyy", { locale });
+  }
+  return value;
+});
 
 export default i18n;

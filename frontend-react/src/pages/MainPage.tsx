@@ -66,7 +66,7 @@ const MainPage = () => {
               <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
                 <FaRegCalendar size={18} />
                 <p className="text-sm font-medium capitalize">
-                  {t("weekdayDayMonth", { date: currentDate })}
+                  {t("dateFormats.weekdayDayMonth", { date: currentDate })}
                 </p>
               </div>
             </div>

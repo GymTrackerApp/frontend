@@ -38,9 +38,7 @@
   "noPlansFound": "No plans found",
   "noExercisesFound": "No exercises found",
   "completeStatus": "Complete",
-  "weekdayDayMonth": "{{date, EEEE, d MMMM}}",
-  "monthDay": "{{date, MMMM d}}",
-  "neverPerfomed": "Never performed",
+  "neverPerformed": "Never performed",
   "lastDone": "Last done",
   "dateToday": "Today",
   "dateYesterday": "Yesterday",
@@ -71,14 +69,13 @@
   "highestVolume": "Highest Volume",
   "highestLift": "Highest Lift",
   "averageWeight": "Average Weight",
-  "search": "Search",
+  "search": "Search...",
   "noResultsFound": "No results found",
   "noMatchesFound": "No matches found",
   "noOptionsAvailable": "No options available",
   "your": "Your",
   "predefined": "Predefined",
   "workoutDetails": "Workout Details",
-  "weekdayMonthDayYear": "{{date, EEEE, MMMM d, yyyy}}",
   "totalVolume": "Total Volume",
   "totalSets": "Total Sets",
   "exerciseVolume": "Exercise Volume",
@@ -137,8 +134,6 @@
   "workoutExerciseOptions": "Workout Exercise Options",
   "history": "History",
   "progressiveOverloadTracking": "Progressive Overload Tracking",
-  "weekday": "{{date, EEEE}}",
-  "monthDayYear": "{{date, MMM dd, yyyy}}",
   "replaceExercise": "Replace Exercise",
   "selectTimer": "Select Timer",
   "nSeconds_one": "{{count}} second",
@@ -169,6 +164,8 @@
   "usernamePlaceholder": "John Doe",
   "signInButton": "Login",
   "signUpButton": "Register",
+  "loadingWorkoutTitle": "Preparing your workout...",
+  "loadingWorkoutDescription": "Loading your personalized plan, please wait.",
   "toastMessages": {
     "exerciseRemovedFromWorkout": "Exercise removed from workout",
     "workoutDiscarded": "Workout discarded",
@@ -179,12 +176,18 @@
     "planUpdatedSuccessfully": "Plan {{name}} updated successfully",
     "planDeletedSuccessfully": "Plan deleted successfully",
     "planMustHaveAtLeastOneExercise": "Plan must have at least one exercise",
+    "planNameRequired": "Plan name is required",
     "exerciseAlreadyAdded": "This exercise was already added",
+    "exerciseAlreadyExistsInWorkout": "Exercise already exists in the workout",
     "exerciseAddedToPlan": "Exercise added to plan",
     "signInFailed": "Sign in failed: {{errorMessage}}. Something went wrong, please try again.",
     "signInSuccessful": "Sign in successful",
     "signUpSuccessful": "Sign up successful. Please log in.",
-    "signUpFailed": "Sign up failed: {{errorMessage}}. Something went wrong, please try again."
+    "signUpFailed": "Sign up failed: {{errorMessage}}. Something went wrong, please try again.",
+    "userNotLoggedIn": "User not logged in. Please log in to continue.",
+    "workoutStartMessage": "Starting workout: {{planName}}. Let's crush it!",
+    "exerciseNameRequired": "Exercise name is required",
+    "customRestTimerInvalidRangeMessage": "Custom rest timer must be between 1 and 3600 seconds"
   },
   "exerciseCategories": {
     "arms": "ARMS",
@@ -196,5 +199,12 @@
     "legs": "LEGS",
     "shoulders": "SHOULDERS",
     "uncategorized": "UNCATEGORIZED"
+  },
+  "dateFormats": {
+    "weekdayDayMonth": "{{date, date(fmt: EEEE, d MMMM)}}",
+    "monthDayYear": "{{date, date(fmt: MMMM d, yyyy)}}",
+    "weekdayMonthDayYear": "{{date, date(fmt: EEEE, MMMM d, yyyy)}}",
+    "monthDay": "{{date, date(fmt: MMMM d)}}",
+    "weekday": "{{date, date(fmt: EEEE)}}"
   }
 }

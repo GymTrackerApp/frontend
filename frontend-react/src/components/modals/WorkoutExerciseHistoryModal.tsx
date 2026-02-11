@@ -76,12 +76,12 @@ const WorkoutExerciseHistoryModal = ({
                   <div className="flex flex-col py-5 pl-2 dark:border-t dark:border-gray-700/30 group hover:dark:bg-gray-800/20 rounded-lg transition-colors px-2 -mx-2">
                     <div className="flex justify-between items-baseline mb-3">
                       <p className="dark:text-gray-300 text-base font-semibold group-hover:dark:text-white transition-colors leading-tight">
-                        {t("monthDayYear", {
+                        {t("dateFormats.monthDayYear", {
                           date: parseISO(workoutSessionSnapshot.workoutDate),
                         })}
                         <br></br>
                         <span className="text-xs font-normal capitalize">
-                          {t("weekday", {
+                          {t("dateFormats.weekday", {
                             date: parseISO(workoutSessionSnapshot.workoutDate),
                           })}
                         </span>

@@ -32,9 +32,10 @@ const ProfileSettings = () => {
     "kg" | "lbs"
   >("kg");
   const [preferredLanguage, setPreferredLanguage] = useState<SupportedLanguage>(
-    localStorage.getItem("language")
-      ? (localStorage.getItem("language") as SupportedLanguage)
-      : "en",
+    () => {
+      const stored = localStorage.getItem("language");
+      return stored === "pl" || stored === "en" ? stored : "en";
+    },
   );
 
   const toggleTheme = () => {
@@ -49,7 +50,7 @@ const ProfileSettings = () => {
     setDarkModeEnabled(!darkModeEnabled);
   };
 
-  const toggleLanguage = (newLng: "pl" | "en") => {
+  const toggleLanguage = (newLng: SupportedLanguage) => {
     if (preferredLanguage === newLng) return;
     setPreferredLanguage(newLng);
     i18n.changeLanguage(newLng);

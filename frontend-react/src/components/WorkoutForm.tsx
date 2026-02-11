@@ -217,7 +217,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
     if (
       workoutItems.some((item) => item.exerciseId === newExercise.exerciseId)
     ) {
-      toast.error("Exercise already exists in the workout");
+      toast.error(t("toastMessages.exerciseAlreadyExistsInWorkout"));
       return;
     }
 
@@ -266,7 +266,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
 
   const addExercise = (exercise: ExerciseResponse) => {
     if (workoutItems.some((item) => item.exerciseId === exercise.exerciseId)) {
-      toast.error("Exercise already exists in the workout");
+      toast.error(t("toastMessages.exerciseAlreadyExistsInWorkout"));
       return;
     }
 
@@ -671,9 +671,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                         selectedCustomRestTime < 1 ||
                         selectedCustomRestTime > 3600
                       ) {
-                        toast.error(
-                          "Custom time must be between 1 and 3600 sec",
-                        );
+                        toast.error(t("customRestTimerInvalidRangeMessage"));
                         return;
                       }
                       setSelectTimerEnabled(false);
@@ -692,7 +690,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                         selectedCustomRestTime > 3600
                       ) {
                         toast.error(
-                          "Custom time must be between 1 and 3600 sec",
+                          t("toastMessages.customRestTimerInvalidRangeMessage"),
                         );
                         return;
                       }
@@ -722,15 +720,19 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
         <SelectOptionWindow
           title={t("workoutExerciseOptions")}
           onClose={() => setPlanItemSelectedForDetails(null)}
-          data={[t("viewHistory"), t("replace"), t("delete")]}
+          data={[
+            { id: "viewHistory", label: t("viewHistory"), icon: <FaHistory /> },
+            { id: "replace", label: t("replace"), icon: <FaSync /> },
+            { id: "delete", label: t("delete"), icon: <FaTrashAlt /> },
+          ]}
           onSelect={(item) => {
-            if (item === t("viewHistory")) {
+            if (item.id === "viewHistory") {
               setExerciseHistory(planItemSelectedForDetails);
-            } else if (item === t("replace")) {
+            } else if (item.id === "replace") {
               setReplacingExerciseId(planItemSelectedForDetails.exerciseId);
-            } else if (item === t("delete")) {
+            } else if (item.id === "delete") {
               removeExercise(planItemSelectedForDetails.exerciseId);
-              toast.success("Exercise removed from workout");
+              toast.success(t("toastMessages.exerciseRemovedFromWorkout"));
             }
             setPlanItemSelectedForDetails(null);
           }}
@@ -738,12 +740,10 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
             <div className="group flex justify-between items-center w-full">
               <div className="flex items-center gap-4">
                 <div className="size-12 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform bg-blue-500/10 text-blue-400">
-                  {item === t("viewHistory") && <FaHistory />}
-                  {item === t("replace") && <FaSync />}
-                  {item === t("delete") && <FaTrashAlt />}
+                  {item.icon}
                 </div>
                 <span className="group-hover:text-primary font-semibold">
-                  {item}
+                  {item.label}
                 </span>
               </div>
               <FaChevronRight className="group-hover:translate-x-1 group-hover:text-primary transition-all" />

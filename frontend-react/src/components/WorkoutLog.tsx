@@ -19,7 +19,7 @@ const WorkoutLog = ({ workout, setSelectedWorkout }: WorkoutLogProps) => {
         {workout.trainingPlan.name}
       </td>
       <td className="px-6 py-4 capitalize">
-        {t("monthDay", { date: workout.createdAt })}
+        {t("dateFormats.monthDay", { date: workout.createdAt })}
       </td>
       <td className="px-6 py-4">{calculateWorkoutVolume(workout)} kg</td>
       <td className="hidden sm:block px-6 py-4">

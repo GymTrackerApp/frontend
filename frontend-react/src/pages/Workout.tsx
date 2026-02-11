@@ -8,8 +8,11 @@ import {
 import type { ErrorResponse } from "../types/ApiResponse";
 import LoadingPage from "./LoadingPage";
 import ErrorPage from "./ErrorPage";
+import { useTranslation } from "react-i18next";
 
 const Workout = () => {
+  const { t } = useTranslation();
+
   const [searchParams] = useSearchParams();
   const trainingPlanId = searchParams.get("trainingPlanId");
 
@@ -29,8 +32,8 @@ const Workout = () => {
         <ErrorPage />
       ) : isLoading || !plan ? (
         <LoadingPage
-          title="Preparing your workout..."
-          description="Loading your personalized plan, please wait."
+          title={t("loadingWorkoutTitle")}
+          description={t("loadingWorkoutDescription")}
         />
       ) : (
         <WorkoutForm key={JSON.stringify(plan)} plan={plan} />

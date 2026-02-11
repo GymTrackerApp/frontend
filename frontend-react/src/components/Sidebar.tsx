@@ -62,7 +62,7 @@ const Sidebar = ({ username, isOpen }: SidebarProps) => {
     if (!refreshToken) {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
-      toast.error("User is not logged in");
+      toast.error(t("toastMessages.userNotLoggedIn"));
       navigate("/register-login", { replace: true });
       return;
     }
