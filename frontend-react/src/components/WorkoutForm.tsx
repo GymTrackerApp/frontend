@@ -409,12 +409,14 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
                     </h3>
                     <p className="text-xs text-gray-400 mt-0.5 font-medium capitalize">
                       {t(
-                        `exerciseCategories.${exercises
-                          .find(
-                            (exercise) =>
-                              planItem.exerciseId === exercise.exerciseId,
-                          )
-                          ?.category.toLowerCase()}`,
+                        `exerciseCategories.${
+                          exercises
+                            .find(
+                              (exercise) =>
+                                planItem.exerciseId === exercise.exerciseId,
+                            )
+                            ?.category.toLowerCase() ?? "uncategorized"
+                        }`,
                       ).toLowerCase()}
                     </p>
                   </div>
