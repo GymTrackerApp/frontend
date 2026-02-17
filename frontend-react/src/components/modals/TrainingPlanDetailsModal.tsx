@@ -53,12 +53,15 @@ const TrainingPlanDetailsModal = ({
             <div className="flex justify-between items-start mb-4">
               <div>
                 <h4 className="text-lg font-bold">{planItem.exerciseName}</h4>
-                <span className="text-xs text-gray-400 font-medium tracking-wide uppercase">
-                  {
-                    exercises.find(
-                      (exercise) => exercise.exerciseId === planItem.exerciseId,
-                    )?.category
-                  }
+                <span className="text-xs text-gray-400 font-medium tracking-wide capitalize">
+                  {t(
+                    `exerciseCategories.${exercises
+                      .find(
+                        (exercise) =>
+                          exercise.exerciseId === planItem.exerciseId,
+                      )
+                      ?.category.toLowerCase()}`,
+                  ).toLowerCase()}
                 </span>
               </div>
             </div>

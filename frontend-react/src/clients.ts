@@ -1,4 +1,5 @@
 import axios from "axios";
+import i18n from "./utils/i18n/index";
 
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
@@ -17,5 +18,11 @@ privateApi.interceptors.request.use((config) => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+  config.headers["Accept-Language"] = i18n.language || "en";
+  return config;
+});
+
+publicApi.interceptors.request.use((config) => {
+  config.headers["Accept-Language"] = i18n.language || "en";
   return config;
 });

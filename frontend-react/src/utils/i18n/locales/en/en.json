@@ -188,7 +188,8 @@
     "userNotLoggedIn": "User not logged in. Please log in to continue.",
     "workoutStartMessage": "Starting workout: {{planName}}. Let's crush it!",
     "exerciseNameRequired": "Exercise name is required",
-    "customRestTimerInvalidRangeMessage": "Custom rest timer must be between 1 and 3600 seconds"
+    "customRestTimerInvalidRangeMessage": "Custom rest timer must be between 1 and 3600 seconds",
+    "sessionExpiredMessage": "Session expired. Please log in again"
   },
   "exerciseCategories": {
     "arms": "ARMS",

@@ -166,7 +166,7 @@
   "deletePlanTitle": "Usuń plan",
   "deletePlanDescription": "Czy na pewno chcesz usunąć ten plan treningowy? Ta akcja nie może być cofnięta.",
   "noProgressChartData": "Brak danych treningowych dla wybranego okresu. <br/> Wykonaj trening, aby zobaczyć swoje postępy!",
-  "registerLoginPageTitle": "Śledź postępy z precyzją.",
+  "registerLoginPageTitle": "Śledź postępy z precyzją",
   "emailAddressLabel": "Adres e-mail",
   "emailAddressPlaceholder": "jan.kowalski@domena.pl",
   "passwordLabel": "Hasło",
@@ -198,7 +198,8 @@
     "userNotLoggedIn": "Użytkownik nie jest zalogowany. Proszę się zalogować, aby kontynuować.",
     "workoutStartMessage": "Rozpoczynasz trening: {{planName}}",
     "exerciseNameRequired": "Nazwa ćwiczenia jest wymagana",
-    "customRestTimerInvalidRangeMessage": "Licznik odpoczynku musi być między 1 a 3600 sekund"
+    "customRestTimerInvalidRangeMessage": "Licznik odpoczynku musi być między 1 a 3600 sekund",
+    "sessionExpiredMessage": "Sesja wygasła. Zaloguj się ponownie"
   },
   "exerciseCategories": {
     "arms": "RAMIONA",
