@@ -377,7 +377,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
 
         <button
           className="bg-blue-500 text-white dark:bg-blue-900 text-sm font-bold px-2 py-1 w-full border dark:border-gray-700 cursor-pointer hover:bg-blue-600 hover:dark:bg-blue-950 transition-colors
-                   disabled:bg-gray-200 disabled:border-gray-300 disabled:text-gray-400 disabled:dark:text-gray-500 
+                   disabled:bg-gray-200 disabled:border-gray-300 disabled:text-gray-400 disabled:dark:text-gray-500 disabled:hover:bg-gray-200
                      disabled:cursor-not-allowed disabled:opacity-70"
           onClick={() => setLastWorkoutEnabled(true)}
           disabled={

@@ -3,6 +3,7 @@ import { privateApi } from "./clients";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 const refreshClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:8080",
@@ -26,12 +27,13 @@ const processQueue = (error: unknown, token: string | null = null) => {
 
 const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const handleLogoutCleanup = () => {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
-      toast.error("Session expired. Please log in again");
+      toast.error(t("toastMessages.sessionExpiredMessage"));
       navigate("/register-login", { replace: true });
     };
 
@@ -83,9 +85,8 @@ const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
 
             processQueue(null, newAccessToken);
 
-            originalRequest.headers[
-              "Authorization"
-            ] = `Bearer ${newAccessToken}`;
+            originalRequest.headers["Authorization"] =
+              `Bearer ${newAccessToken}`;
             return privateApi(originalRequest);
           } catch (refreshError) {
             processQueue(refreshError, null);
@@ -96,11 +97,11 @@ const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
           }
         }
         return Promise.reject(error);
-      }
+      },
     );
 
     return () => privateApi.interceptors.response.eject(responseInterceptor);
-  }, [navigate]);
+  }, [navigate, t]);
 
   return children;
 };
