@@ -155,7 +155,7 @@
   "deletePlanTitle": "Remove Plan",
   "deletePlanDescription": "Are you sure you want to remove this training plan? This action cannot be undone.",
   "noProgressChartData": "No workout data for the selected period. <br/> Go log a workout to see your progress!",
-  "registerLoginPageTitle": "Track progressive overload with precision.",
+  "registerLoginPageTitle": "Track progressive overload with precision",
   "emailAddressLabel": "Email Address",
   "emailAddressPlaceholder": "john.doe@domain.com",
   "passwordLabel": "Password",

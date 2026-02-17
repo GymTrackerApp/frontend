@@ -101,7 +101,7 @@ const AxiosInterceptor = ({ children }: { children: React.ReactNode }) => {
     );
 
     return () => privateApi.interceptors.response.eject(responseInterceptor);
-  }, [navigate]);
+  }, [navigate, t]);
 
   return children;
 };

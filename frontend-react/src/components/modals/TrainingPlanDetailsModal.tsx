@@ -55,12 +55,14 @@ const TrainingPlanDetailsModal = ({
                 <h4 className="text-lg font-bold">{planItem.exerciseName}</h4>
                 <span className="text-xs text-gray-400 font-medium tracking-wide capitalize">
                   {t(
-                    `exerciseCategories.${exercises
-                      .find(
-                        (exercise) =>
-                          exercise.exerciseId === planItem.exerciseId,
-                      )
-                      ?.category.toLowerCase()}`,
+                    `exerciseCategories.${
+                      exercises
+                        .find(
+                          (exercise) =>
+                            exercise.exerciseId === planItem.exerciseId,
+                        )
+                        ?.category.toLowerCase() ?? "uncategorized"
+                    }`,
                   ).toLowerCase()}
                 </span>
               </div>
