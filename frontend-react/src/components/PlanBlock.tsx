@@ -7,6 +7,7 @@ import type { PlanResponse } from "../services/trainingService";
 import { getWorkouts } from "../services/workoutService";
 import { getRelativeDate } from "../utils/dateUtils";
 import { calculateAverageTrainingTime } from "../utils/plansUtils";
+import { transformWorkout } from "../utils/localizationUtils";
 
 interface PlanBlockProps {
   plan: PlanResponse;
@@ -23,15 +24,7 @@ const PlanBlock = ({ plan }: PlanBlockProps) => {
   } = useQuery({
     queryFn: () => getWorkouts(null, null, plan.id, 0, 1),
     queryKey: ["lastWorkout", plan.id],
-    select: (data) =>
-      data.map((workout) => {
-        const createdAt = new Date(workout.createdAt);
-        createdAt.setHours(0, 0, 0, 0);
-        return {
-          ...workout,
-          createdAt: createdAt,
-        };
-      }),
+    select: (data) => data.map((workout) => transformWorkout(workout, t)),
   });
 
   const handleWorkoutStart = (trainingPlan: PlanResponse) => {

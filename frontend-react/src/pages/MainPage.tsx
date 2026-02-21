@@ -11,6 +11,7 @@ import { useUserProfile } from "../hooks/useUserProfile";
 import { useAvailablePlans } from "../hooks/useWorkoutFlow";
 import { getWorkouts } from "../services/workoutService";
 import { getCurrentDate } from "../utils/dateUtils";
+import { transformWorkout } from "../utils/localizationUtils";
 
 const MainPage = () => {
   const { t } = useTranslation();
@@ -37,15 +38,7 @@ const MainPage = () => {
       weekStartDate.getTime(),
       currentDate.getTime(),
     ],
-    select: (data) =>
-      data.map((workout) => {
-        const createdAt = new Date(workout.createdAt);
-        createdAt.setHours(0, 0, 0, 0);
-        return {
-          ...workout,
-          createdAt: createdAt,
-        };
-      }),
+    select: (data) => data.map((workout) => transformWorkout(workout, t)),
   });
 
   return (

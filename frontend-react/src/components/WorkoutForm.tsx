@@ -45,6 +45,7 @@ import SelectOptionWindow from "./ui/SelectOptionWindow";
 import { exercisesFilter } from "../utils/exerciseUtils";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
+import { transformWorkout } from "../utils/localizationUtils";
 
 interface WorkoutFormProps {
   plan: PlanResponse;
@@ -145,14 +146,7 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
     queryFn: () => getWorkouts(null, null, plan.id, 0, 1),
     queryKey: ["lastWorkout", "plan", plan.id],
     select: (data) => {
-      return data.map((workout) => {
-        const createdAt = new Date(workout.createdAt);
-        createdAt.setHours(0, 0, 0, 0);
-        return {
-          ...workout,
-          createdAt: new Date(createdAt),
-        };
-      });
+      return data.map((workout) => transformWorkout(workout, t));
     },
   });
 
@@ -376,8 +370,8 @@ const WorkoutForm = ({ plan }: WorkoutFormProps) => {
         </button>
 
         <button
-          className="bg-blue-500 text-white dark:bg-blue-900 text-sm font-bold px-2 py-1 w-full border dark:border-gray-700 cursor-pointer hover:bg-blue-600 hover:dark:bg-blue-950 transition-colors
-                   disabled:bg-gray-200 disabled:border-gray-300 disabled:text-gray-400 disabled:dark:text-gray-500 disabled:hover:bg-gray-200
+          className="bg-blue-500 text-white dark:bg-blue-900 text-sm font-bold px-2 py-1 w-full border dark:border-gray-800 cursor-pointer hover:bg-blue-600 dark:hover:bg-[#18317e] transition-colors
+                   disabled:bg-gray-200 disabled:border-gray-300 disabled:text-gray-400 dark:disabled:text-gray-400 disabled:hover:bg-gray-200 dark:disabled:bg-blue-950 dark:disabled:border-blue-950 dark:disabled:hover:bg-blue-950
                      disabled:cursor-not-allowed disabled:opacity-70"
           onClick={() => setLastWorkoutEnabled(true)}
           disabled={

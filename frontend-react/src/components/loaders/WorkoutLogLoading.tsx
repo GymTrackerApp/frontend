@@ -1,6 +1,6 @@
 const WorkoutLogLoading = () => {
   return (
-    <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/30 animate-skeleton">
+    <tr className="animate-skeleton">
       <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
         <div className="h-5 w-full bg-input-light dark:bg-gray-700 rounded"></div>
       </td>

@@ -27,6 +27,10 @@ import {
   type PlanResponse,
 } from "../services/trainingService";
 import type { ErrorResponse, GeneralResponse } from "../types/ApiResponse";
+import {
+  transformExercise,
+  transformTrainingPlan,
+} from "../utils/localizationUtils";
 
 const PlanManager = () => {
   const { t } = useTranslation();
@@ -54,6 +58,8 @@ const PlanManager = () => {
   } = useQuery<Array<ExerciseResponse>, ErrorResponse>({
     queryFn: getUserExercises,
     queryKey: ["userExercises"],
+    select: (exercises) =>
+      exercises.map((exercise) => transformExercise(exercise, t)),
   });
 
   const {
@@ -63,6 +69,7 @@ const PlanManager = () => {
   } = useQuery<Array<PlanResponse>, ErrorResponse>({
     queryFn: getPredefinedPlans,
     queryKey: ["predefinedPlans"],
+    select: (plans) => plans.map((plan) => transformTrainingPlan(plan, t)),
   });
 
   const {
@@ -72,6 +79,7 @@ const PlanManager = () => {
   } = useQuery<Array<PlanResponse>, ErrorResponse>({
     queryFn: getUserPlans,
     queryKey: ["userPlans"],
+    select: (plans) => plans.map((plan) => transformTrainingPlan(plan, t)),
   });
 
   const { exercises: allUserAvailableExercises } = useAvailableExercises();
