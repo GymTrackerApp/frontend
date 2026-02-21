@@ -9,6 +9,7 @@ import type { ErrorResponse } from "../types/ApiResponse";
 import LoadingPage from "./LoadingPage";
 import ErrorPage from "./ErrorPage";
 import { useTranslation } from "react-i18next";
+import { transformTrainingPlan } from "../utils/localizationUtils";
 
 const Workout = () => {
   const { t } = useTranslation();
@@ -23,6 +24,7 @@ const Workout = () => {
   } = useQuery<PlanResponse, ErrorResponse>({
     queryFn: () => getTrainingPlanById(Number(trainingPlanId!)),
     queryKey: ["trainingPlan", trainingPlanId],
+    select: (trainingPlan) => transformTrainingPlan(trainingPlan, t),
     enabled: !!trainingPlanId,
   });
 

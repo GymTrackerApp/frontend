@@ -5,6 +5,7 @@ import WorkoutDetails from "./modals/WorkoutDetailsModal";
 import WorkoutLog from "./WorkoutLog";
 import WorkoutLogLoading from "./loaders/WorkoutLogLoading";
 import { useTranslation } from "react-i18next";
+import { transformWorkout } from "../utils/localizationUtils";
 
 const RecentWorkouts = () => {
   const { t } = useTranslation();
@@ -12,15 +13,7 @@ const RecentWorkouts = () => {
   const { data, isLoading, isError } = useQuery({
     queryFn: () => getWorkouts(null, null, null, 0, 3),
     queryKey: ["recentWorkouts"],
-    select: (data) =>
-      data.map((workout) => {
-        const createdAt = new Date(workout.createdAt);
-        createdAt.setHours(0, 0, 0, 0);
-        return {
-          ...workout,
-          createdAt: createdAt,
-        };
-      }),
+    select: (data) => data.map((workout) => transformWorkout(workout, t)),
   });
 
   const [selectedWorkout, setSelectedWorkout] =

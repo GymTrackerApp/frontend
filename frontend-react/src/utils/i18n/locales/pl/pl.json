@@ -212,6 +212,34 @@
     "shoulders": "BARKI",
     "uncategorized": "BEZ KATEGORII"
   },
+  "exercises": {
+    "Push-Up": "Pompki",
+    "Pull-Up": "Podciąganie na drążku",
+    "Squat": "Przysiady",
+    "Bicep Curl": "Uginanie ramion z hantlami",
+    "Shoulder Press": "Wyciskanie nad głowę",
+    "Plank": "Deska",
+    "Deadlift": "Martwy ciąg",
+    "Lunges": "Wykroki",
+    "Bench Press": "Wyciskanie sztangi na ławce",
+    "Triceps Dip": "Dipy",
+    "Leg Press": "Wypychanie na suwnicy",
+    "Lat Pulldown": "Ściąganie drążka wyciągu górnego",
+    "Chest Fly": "Rozpiętki",
+    "Glute Bridge": "Unoszenie bioder w leżeniu na plecach",
+    "Dumbbell Row": "Wiosłowanie hantlami",
+    "Overhead Tricep Extension": "Wyprosty ramion nad głową",
+    "Calf Raise": "Wspięcia na palce",
+    "Burpees": "Padnij-powstań"
+  },
+  "trainingPlans": {
+    "Full Body Beginner": "FBW dla początkujących",
+    "Upper": "Góra ciała",
+    "Lower": "Dół ciała",
+    "Push": "Push",
+    "Pull": "Pull",
+    "Legs": "Nogi"
+  },
   "dateFormats": {
     "weekdayDayMonth": "{{date, date(fmt: EEEE, d MMMM)}}",
     "monthDayYear": "{{date, date(fmt: d MMMM yyyy)}}",

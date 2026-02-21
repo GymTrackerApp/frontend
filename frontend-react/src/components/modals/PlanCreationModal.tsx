@@ -149,11 +149,16 @@ const PlanCreationModal = ({ exercises, onClose }: NewPlanProps) => {
             <div className="min-w-0">
               <p className="font-semibold truncate">{planItem.exerciseName}</p>
               <p className="text-xs text-text-muted mt-0.5 capitalize">
-                {exercises
-                  .find(
-                    (exercise) => exercise.exerciseId === planItem.exerciseId,
-                  )
-                  ?.category?.toLowerCase() ?? ""}{" "}
+                {t(
+                  `exerciseCategories.${
+                    exercises
+                      .find(
+                        (exercise) =>
+                          exercise.exerciseId === planItem.exerciseId,
+                      )
+                      ?.category?.toLowerCase() ?? "uncategorized"
+                  }`,
+                ).toLowerCase()}
               </p>
             </div>
           </div>
