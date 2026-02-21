@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { FaPlus } from "react-icons/fa";
@@ -51,6 +51,18 @@ const PlanManager = () => {
 
   const queryClient = useQueryClient();
 
+  const selectPlans = useCallback(
+    (plans: Array<PlanResponse>) =>
+      plans.map((plan) => transformTrainingPlan(plan, t)),
+    [t],
+  );
+
+  const selectExercises = useCallback(
+    (exercises: Array<ExerciseResponse>) =>
+      exercises.map((exercise) => transformExercise(exercise, t)),
+    [t],
+  );
+
   const {
     data: myExercises,
     isLoading: isMyExercisesLoading,
@@ -58,8 +70,7 @@ const PlanManager = () => {
   } = useQuery<Array<ExerciseResponse>, ErrorResponse>({
     queryFn: getUserExercises,
     queryKey: ["userExercises"],
-    select: (exercises) =>
-      exercises.map((exercise) => transformExercise(exercise, t)),
+    select: selectExercises,
   });
 
   const {
@@ -69,7 +80,7 @@ const PlanManager = () => {
   } = useQuery<Array<PlanResponse>, ErrorResponse>({
     queryFn: getPredefinedPlans,
     queryKey: ["predefinedPlans"],
-    select: (plans) => plans.map((plan) => transformTrainingPlan(plan, t)),
+    select: selectPlans,
   });
 
   const {
@@ -79,7 +90,7 @@ const PlanManager = () => {
   } = useQuery<Array<PlanResponse>, ErrorResponse>({
     queryFn: getUserPlans,
     queryKey: ["userPlans"],
-    select: (plans) => plans.map((plan) => transformTrainingPlan(plan, t)),
+    select: selectPlans,
   });
 
   const { exercises: allUserAvailableExercises } = useAvailableExercises();

@@ -41,6 +41,7 @@ export const transformWorkout = (workout: WorkoutResponse, t: TFunction) => {
   createdAt.setHours(0, 0, 0, 0);
   return {
     ...workout,
+    trainingPlan: transformTrainingPlan(workout.trainingPlan, t),
     workoutItems: workout.workoutItems.map((workoutItem) =>
       transformWorkoutItem(workoutItem, t),
     ),
