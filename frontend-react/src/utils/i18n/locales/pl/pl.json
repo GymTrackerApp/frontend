@@ -234,10 +234,10 @@
   },
   "trainingPlans": {
     "Full Body Beginner": "FBW dla początkujących",
-    "Upper": "Góra ciała (Upper)",
-    "Lower": "Dół ciała (Lower)",
-    "Push": "Trening typu Push",
-    "Pull": "Trening typu Pull",
+    "Upper": "Góra ciała",
+    "Lower": "Dół ciała",
+    "Push": "Push",
+    "Pull": "Pull",
     "Legs": "Nogi"
   },
   "dateFormats": {
