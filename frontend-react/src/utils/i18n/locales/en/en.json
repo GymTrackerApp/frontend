@@ -169,6 +169,8 @@
   "loadingWorkoutTitle": "Preparing your workout...",
   "loadingWorkoutDescription": "Loading your personalized plan, please wait.",
   "couldNotLoad": "Could not load",
+  "startingWorkoutConfirmation": "Do you want to start {{trainingPlanName}} workout?",
+  "start": "Start",
   "toastMessages": {
     "exerciseRemovedFromWorkout": "Exercise removed from workout",
     "workoutDiscarded": "Workout discarded",

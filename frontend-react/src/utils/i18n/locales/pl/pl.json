@@ -181,6 +181,8 @@
   "loadingWorkoutTitle": "Przygotowujemy Twój trening...",
   "loadingWorkoutDescription": "Ładowanie spersonalizowanego planu, proszę czekać.",
   "couldNotLoad": "Nie udało się załadować",
+  "startingWorkoutConfirmation": "Czy chcesz rozpocząć trening \"{{trainingPlanName}}\"?",
+  "start": "Rozpocznij",
   "toastMessages": {
     "exerciseRemovedFromWorkout": "Ćwiczenie zostało usunięte z treningu",
     "workoutDiscarded": "Trening został odrzucony",
