@@ -65,6 +65,8 @@
   "choosePlan": "Choose a training from the 'Select Plan' dropdown above to visualize your stats and training progress",
   "lastNDays": "Last {{count}} days",
   "lastNMonths": "Last {{count}} months",
+  "lastNYears_one": "Last year",
+  "lastNYears_other": "Last {{count}} years",
   "noDataAvailable": "No data available",
   "highestVolume": "Highest Volume",
   "highestLift": "Highest Lift",

@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
-import { format, parseISO, subDays, subMonths } from "date-fns";
+import { format, parseISO, subDays, subMonths, subYears } from "date-fns";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   FaCalendar,
   FaChevronDown,
@@ -30,7 +31,6 @@ import {
 import { getCurrentDate } from "../utils/dateUtils";
 import { exercisesFilter } from "../utils/exerciseUtils";
 import { findMaxLift, findMaxVolume } from "../utils/workoutUtils";
-import { useTranslation } from "react-i18next";
 
 type MetricType = "training" | "exercise";
 
@@ -39,7 +39,7 @@ interface MetricOption {
   value: MetricType;
 }
 
-type DateRangeType = "7d" | "30d" | "60d" | "90d" | "6m";
+type DateRangeType = "7d" | "30d" | "60d" | "90d" | "6m" | "1y";
 
 interface DateRangeOption {
   label: string;
@@ -75,6 +75,7 @@ const Progress = () => {
     { label: t("lastNDays", { count: 60 }), value: "60d" },
     { label: t("lastNDays", { count: 90 }), value: "90d" },
     { label: t("lastNMonths", { count: 6 }), value: "6m" },
+    { label: t("lastNYears", { count: 1 }), value: "1y" },
   ];
 
   const getStartDate = (range: DateRangeType) => {
@@ -92,6 +93,8 @@ const Progress = () => {
         return subDays(now, 90);
       case "6m":
         return subMonths(now, 6);
+      case "1y":
+        return subYears(now, 1);
     }
   };
 
