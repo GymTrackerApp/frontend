@@ -14,6 +14,7 @@ import ProgressPage from "./pages/ProgressPage.tsx";
 import AxiosInterceptor from "./AxiosInterceptor.tsx";
 import ProfileSettings from "./pages/ProfileSettings.tsx";
 import "./utils/i18n";
+import ProtectedRoute from "./pages/ProtectedRoute.tsx";
 
 const queryClient = new QueryClient();
 
@@ -23,7 +24,14 @@ createRoot(document.getElementById("root")!).render(
       <BrowserRouter>
         <AxiosInterceptor>
           <Routes>
-            <Route path="/" element={<MainPage />} />
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <MainPage />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/register-login" element={<RegisterLogin />} />
             <Route path="/plan-manager" element={<PlanManager />} />
             <Route path="/workout" element={<Workout />} />
