@@ -161,9 +161,11 @@
   "emailAddressLabel": "Email Address",
   "emailAddressPlaceholder": "john.doe@domain.com",
   "passwordLabel": "Password",
+  "confirmPasswordLabel": "Confirm Password",
   "forgotPasswordLabel": "Forgot password?",
   "usernameLabel": "Username",
   "usernamePlaceholder": "John Doe",
+  "passwordPlaceholder": "Password123@",
   "signInButton": "Login",
   "signUpButton": "Register",
   "loadingWorkoutTitle": "Preparing your workout...",
@@ -193,7 +195,8 @@
     "workoutStartMessage": "Starting workout: {{planName}}. Let's crush it!",
     "exerciseNameRequired": "Exercise name is required",
     "customRestTimerInvalidRangeMessage": "Custom rest timer must be between 1 and 3600 seconds",
-    "sessionExpiredMessage": "Session expired. Please log in again"
+    "sessionExpiredMessage": "Session expired. Please log in again",
+    "confirmPasswordMatchingError": "Confirm password must match the password"
   },
   "exerciseCategories": {
     "arms": "ARMS",

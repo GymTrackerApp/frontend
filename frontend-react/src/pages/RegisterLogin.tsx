@@ -2,10 +2,12 @@ import { useMutation } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 import {
   FaArrowRight,
   FaDumbbell,
   FaEnvelope,
+  FaEye,
   FaLock,
   FaUser,
 } from "react-icons/fa";
@@ -20,26 +22,23 @@ import {
   type SignUpRequest,
 } from "../services/authService";
 import { type ErrorResponse, type GeneralResponse } from "../types/ApiResponse";
-import { type SignInForm, type SignUpForm } from "../types/AuthForms";
-import { useTranslation } from "react-i18next";
+import { type RegisterLoginForm } from "../types/AuthForms";
 
 const RegisterLogin = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [isRegister, setIsRegister] = useState<boolean>(false);
 
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
   const inputStyling =
     "block w-full rounded-lg bg-input-light dark:bg-input-dark border border-border-light/30 dark:border-border-dark text-black dark:text-white placeholder:text-text-muted dark:placeholder:text-text-muted/80 focus:border-primary focus:ring-1 focus:outline-none focus:ring-primary sm:text-sm pl-10 h-12 transition-all";
 
-  const [signInFormData, setSignInFormData] = useState<SignInForm>({
+  const [formData, setFormData] = useState<RegisterLoginForm>({
+    username: "",
     email: "",
     password: "",
-  });
-
-  const [signUpFormData, setSignUpFormData] = useState<
-    Omit<SignUpForm, keyof SignInForm>
-  >({
-    username: "",
+    confirmPassword: "",
   });
 
   const signUpMutation = useMutation<
@@ -93,17 +92,10 @@ const RegisterLogin = () => {
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
 
-    if (fieldName in signInFormData) {
-      setSignInFormData({
-        ...signInFormData,
-        [fieldName]: fieldValue,
-      });
-    } else {
-      setSignUpFormData({
-        ...signUpFormData,
-        [fieldName]: fieldValue,
-      });
-    }
+    setFormData({
+      ...formData,
+      [fieldName]: fieldValue,
+    });
   };
 
   const handleSignIn = (e: React.FormEvent) => {
@@ -112,8 +104,8 @@ const RegisterLogin = () => {
     if (signInMutation.isPending) return;
 
     const data: SignInRequest = {
-      email: signInFormData.email,
-      password: signInFormData.password,
+      email: formData.email,
+      password: formData.password,
     };
 
     signInMutation.mutate(data);
@@ -124,10 +116,15 @@ const RegisterLogin = () => {
 
     if (signUpMutation.isPending) return;
 
+    if (formData.password !== formData.confirmPassword) {
+      toast.error(t("toastMessages.confirmPasswordMatchingError"));
+      return;
+    }
+
     const data: SignUpRequest = {
-      username: signUpFormData.username,
-      email: signInFormData.email,
-      password: signInFormData.password,
+      username: formData.username,
+      email: formData.email,
+      password: formData.password,
     };
 
     signUpMutation.mutate(data);
@@ -172,7 +169,7 @@ const RegisterLogin = () => {
                       name="username"
                       type="text"
                       placeholder={t("usernamePlaceholder")}
-                      value={signUpFormData.username}
+                      value={formData.username}
                       onChange={handleFormChange}
                       required
                     />
@@ -194,7 +191,7 @@ const RegisterLogin = () => {
                     name="email"
                     type="email"
                     placeholder={t("emailAddressPlaceholder")}
-                    value={signInFormData.email}
+                    value={formData.email}
                     onChange={handleFormChange}
                     required
                   />
@@ -220,14 +217,47 @@ const RegisterLogin = () => {
                     className={inputStyling}
                     id="password"
                     name="password"
-                    type="password"
-                    placeholder="********"
-                    value={signInFormData.password}
+                    type={showPassword ? "text" : "password"}
+                    placeholder={
+                      showPassword ? t("passwordPlaceholder") : "********"
+                    }
+                    value={formData.password}
                     onChange={handleFormChange}
                     required
                   />
+                  <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+                    <FaEye
+                      className="text-text-muted text-[20px] hover:text-white cursor-pointer"
+                      onClick={() => setShowPassword(!showPassword)}
+                    />
+                  </div>
                 </div>
               </div>
+
+              {isRegister && (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="block text-sm font-medium">
+                      {t("confirmPasswordLabel")}
+                    </label>
+                  </div>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <FaLock className="text-text-muted text-[20px]" />
+                    </div>
+                    <input
+                      className={inputStyling}
+                      id="confirm-password"
+                      name="confirmPassword"
+                      type="password"
+                      placeholder="********"
+                      value={formData.confirmPassword}
+                      onChange={handleFormChange}
+                      required
+                    />
+                  </div>
+                </div>
+              )}
             </div>
 
             <Button

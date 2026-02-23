@@ -173,9 +173,11 @@
   "emailAddressLabel": "Adres e-mail",
   "emailAddressPlaceholder": "jan.kowalski@domena.pl",
   "passwordLabel": "Hasło",
+  "confirmPasswordLabel": "Potwierdź hasło",
   "forgotPasswordLabel": "Zapomniałeś hasła?",
   "usernameLabel": "Nazwa użytkownika",
   "usernamePlaceholder": "Jan Kowalski",
+  "passwordPlaceholder": "Hasło123@",
   "signInButton": "Zaloguj",
   "signUpButton": "Zarejestruj",
   "loadingWorkoutTitle": "Przygotowujemy Twój trening...",
@@ -204,7 +206,8 @@
     "workoutStartMessage": "Rozpoczynasz trening: {{planName}}",
     "exerciseNameRequired": "Nazwa ćwiczenia jest wymagana",
     "customRestTimerInvalidRangeMessage": "Licznik odpoczynku musi być między 1 a 3600 sekund",
-    "sessionExpiredMessage": "Sesja wygasła. Zaloguj się ponownie"
+    "sessionExpiredMessage": "Sesja wygasła. Zaloguj się ponownie",
+    "confirmPasswordMatchingError": "Potwierdzenie hasła musi być takie samo jak hasło"
   },
   "exerciseCategories": {
     "arms": "RAMIONA",
