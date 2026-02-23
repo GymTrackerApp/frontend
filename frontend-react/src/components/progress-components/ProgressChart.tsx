@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import {
+  Bar,
+  BarChart,
   CartesianGrid,
-  Line,
-  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -53,16 +53,9 @@ const ProgressChart = ({ historyData, yAxisTitle }: ProgressChartProps) => {
   }
 
   return (
-    <div className="h-64 min-h-48 outline-none focus:outline-none mt-3">
-      <ResponsiveContainer
-        width="100%"
-        minWidth={0}
-        minHeight={undefined}
-        aspect={undefined}
-        height="100%"
-        className="focus:outline-none"
-      >
-        <LineChart data={processedData}>
+    <div className="h-64 min-h-48 outline-none focus:outline-none mt-3 [&_.recharts-surface]:outline-none">
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart data={processedData}>
           <CartesianGrid
             strokeDasharray="3 3"
             className="stroke-border-light dark:stroke-border-dark"
@@ -87,17 +80,17 @@ const ProgressChart = ({ historyData, yAxisTitle }: ProgressChartProps) => {
               color: "white",
               border: "none",
             }}
+            cursor={false}
           />
 
-          <Line
-            type="monotone"
+          <Bar
             dataKey="value"
-            stroke="#3b82f6"
-            strokeWidth={2}
-            dot={{ fill: "#3b82f6", r: 4 }}
+            fill="#3b82f6"
+            radius={[4, 4, 0, 0]}
             name={t("volume")}
+            maxBarSize={20}
           />
-        </LineChart>
+        </BarChart>
       </ResponsiveContainer>
     </div>
   );
