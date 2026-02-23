@@ -62,7 +62,7 @@ const ExerciseProgressChart = ({ historyData }: ExerciseProgressChartProps) => {
         height="100%"
         className="focus:outline-none"
       >
-        <LineChart data={processedData}>
+        <LineChart data={processedData} accessibilityLayer={false}>
           <CartesianGrid
             strokeDasharray="3 3"
             className="stroke-border-light dark:stroke-border-dark"
