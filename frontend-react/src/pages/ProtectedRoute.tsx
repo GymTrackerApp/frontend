@@ -1,12 +1,15 @@
-import { type JSX } from "react";
-import { Navigate } from "react-router";
+import { Navigate, Outlet } from "react-router";
 
-const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+const ProtectedRoute = () => {
   const tokensAvailable =
     localStorage.getItem("accessToken") !== null ||
     localStorage.getItem("refreshToken") !== null;
 
-  return tokensAvailable ? children : <Navigate to="/register-login" replace />;
+  return tokensAvailable ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/register-login" replace />
+  );
 };
 
 export default ProtectedRoute;

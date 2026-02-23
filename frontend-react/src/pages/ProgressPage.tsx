@@ -120,7 +120,7 @@ const Progress = () => {
   ): ExerciseProgressData[] => {
     const response: ExerciseProgressData[] = data.history.map((snapshot) => {
       const maxWeight = snapshot.sets.reduce(
-        (max, curr) => (max = max > curr.weight ? max : curr.weight),
+        (max, curr) => Math.max(max, curr.weight),
         0,
       );
 
