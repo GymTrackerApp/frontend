@@ -10,8 +10,8 @@ import {
   FaDumbbell,
   FaRegCalendar,
 } from "react-icons/fa";
-import AnalysisPlaceholder from "../components/AnalysisPlaceholder";
-import ProgressChart, { type DataContent } from "../components/ProgressChart";
+import AnalysisPlaceholder from "../components/progress-components/AnalysisPlaceholder";
+import ProgressChart, { type DataContent } from "../components/progress-components/ProgressChart";
 import ExerciseSelectionOption from "../components/selections/ExerciseSelectionOption";
 import TrainingPlanSelectionOption from "../components/selections/TrainingPlanSelectionOption";
 import PageWrapper from "../components/ui/PageWrapper";
@@ -31,6 +31,9 @@ import {
 import { getCurrentDate } from "../utils/dateUtils";
 import { exercisesFilter } from "../utils/exerciseUtils";
 import { findMaxLift, findMaxVolume } from "../utils/workoutUtils";
+import ExerciseProgressChart, {
+  type ExerciseProgressData,
+} from "../components/progress-components/ExerciseProgressChart";
 
 type MetricType = "training" | "exercise";
 
@@ -112,13 +115,38 @@ const Progress = () => {
     } else if ("exerciseId" in data) {
       return data.history.map((snapshot) => ({
         date: format(parseISO(snapshot.workoutDate), "yyyy-MM-dd"),
-        value:
-          snapshot.sets.reduce((prev, curr) => prev + curr.weight, 0) /
-          (snapshot.sets.length === 0 ? 1 : snapshot.sets.length),
+        value: snapshot.sets.reduce(
+          (prev, curr) => prev + curr.weight * curr.reps,
+          0,
+        ),
       }));
     }
 
     return [];
+  };
+
+  const prepareExerciseProgressChartData = (
+    data: WorkoutExerciseHistoryResponse,
+  ): ExerciseProgressData[] => {
+    const response: ExerciseProgressData[] = data.history.map((snapshot) => {
+      let maxWeight = 0;
+      for (let i = 0; i < snapshot.sets.length; i++) {
+        if (snapshot.sets[i].weight > maxWeight) {
+          maxWeight = snapshot.sets[i].weight;
+        }
+      }
+
+      return {
+        date: snapshot.workoutDate,
+        volume: snapshot.sets.reduce(
+          (prev, curr) => prev + curr.reps * curr.weight,
+          0,
+        ),
+        maxWeight: maxWeight,
+      };
+    });
+
+    return response;
   };
 
   const {
@@ -358,9 +386,10 @@ const Progress = () => {
                     </p>
                   </div>
                 ) : (
-                  <ProgressChart
-                    historyData={prepareChartData(exerciseHistoryData)}
-                    yAxisTitle={`${t("averageWeight")} (kg)`}
+                  <ExerciseProgressChart
+                    historyData={prepareExerciseProgressChartData(
+                      exerciseHistoryData,
+                    )}
                   />
                 )
               ) : selectedMetricType === "training" && selectedTraining ? (
