@@ -93,9 +93,11 @@ const WorkoutExerciseHistoryModal = ({
                           key={setIndex}
                           className="bg-input-light dark:bg-gray-800/80 px-3 py-1.5 rounded-md dark:text-gray-300 border border-border-light dark:border-gray-700 text-sm font-mono flex items-center gap-2"
                         >
-                          <span className="font-bold">{set.weight}</span>
-                          <span className="text-[10px] text-gray-500">KG</span>
+                          <span className="text-gray-600">{setIndex + 1}</span>
                           <span className="text-gray-600">|</span>{" "}
+                          <span className="font-bold">{set.weight}</span>
+                          <span className="text-gray-500">kg</span>
+                          <span className="text-gray-500">x</span>{" "}
                           <span className="font-bold">{set.reps}</span>
                         </div>
                       ))}

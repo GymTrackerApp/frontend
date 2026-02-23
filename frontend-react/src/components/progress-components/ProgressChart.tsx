@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Trans } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import {
   CartesianGrid,
   Line,
@@ -21,6 +21,8 @@ interface ProgressChartProps {
 }
 
 const ProgressChart = ({ historyData, yAxisTitle }: ProgressChartProps) => {
+  const { t } = useTranslation();
+
   const processedData = useMemo(() => {
     if (!historyData || historyData.length === 0) return [];
 
@@ -93,6 +95,7 @@ const ProgressChart = ({ historyData, yAxisTitle }: ProgressChartProps) => {
             stroke="#3b82f6"
             strokeWidth={2}
             dot={{ fill: "#3b82f6", r: 4 }}
+            name={t("volume")}
           />
         </LineChart>
       </ResponsiveContainer>
