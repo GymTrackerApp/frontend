@@ -11,6 +11,9 @@ import {
   FaRegCalendar,
 } from "react-icons/fa";
 import AnalysisPlaceholder from "../components/progress-components/AnalysisPlaceholder";
+import ExerciseProgressChart, {
+  type ExerciseProgressData,
+} from "../components/progress-components/ExerciseProgressChart";
 import ProgressChart, {
   type DataContent,
 } from "../components/progress-components/ProgressChart";
@@ -33,9 +36,6 @@ import {
 import { getCurrentDate } from "../utils/dateUtils";
 import { exercisesFilter } from "../utils/exerciseUtils";
 import { findMaxLift, findMaxVolume } from "../utils/workoutUtils";
-import ExerciseProgressChart, {
-  type ExerciseProgressData,
-} from "../components/progress-components/ExerciseProgressChart";
 
 type MetricType = "training" | "exercise";
 
