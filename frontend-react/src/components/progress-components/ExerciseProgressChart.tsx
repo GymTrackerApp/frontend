@@ -99,13 +99,13 @@ const ExerciseProgressChart = ({ historyData }: ExerciseProgressChartProps) => {
                     <div className="flex flex-col gap-1">
                       <p className="text-blue-400">
                         <span className="text-gray-400 dark:text-gray-300 font-semibold">
-                          Volume:
+                          {t("volume")}:
                         </span>{" "}
                         {data.volume} kg
                       </p>
                       <p className="text-green-400">
                         <span className="text-gray-400 dark:text-gray-300 font-semibold">
-                          Max Weight:
+                          {t("maxWeight")}:
                         </span>{" "}
                         {data.maxWeight} kg
                       </p>

@@ -11,7 +11,9 @@ import {
   FaRegCalendar,
 } from "react-icons/fa";
 import AnalysisPlaceholder from "../components/progress-components/AnalysisPlaceholder";
-import ProgressChart, { type DataContent } from "../components/progress-components/ProgressChart";
+import ProgressChart, {
+  type DataContent,
+} from "../components/progress-components/ProgressChart";
 import ExerciseSelectionOption from "../components/selections/ExerciseSelectionOption";
 import TrainingPlanSelectionOption from "../components/selections/TrainingPlanSelectionOption";
 import PageWrapper from "../components/ui/PageWrapper";
@@ -102,42 +104,28 @@ const Progress = () => {
   };
 
   const prepareChartData = (
-    data: WorkoutExerciseHistoryResponse | WorkoutTrainingHistoryResponse,
+    data: WorkoutTrainingHistoryResponse,
   ): Array<DataContent> => {
-    if ("trainingId" in data) {
-      return data.history.map((snapshot) => ({
-        date: format(parseISO(snapshot.workoutDate), "yyyy-MM-dd"),
-        value: snapshot.sets.reduce(
-          (prev, curr) => prev + curr.reps * curr.weight,
-          0,
-        ),
-      }));
-    } else if ("exerciseId" in data) {
-      return data.history.map((snapshot) => ({
-        date: format(parseISO(snapshot.workoutDate), "yyyy-MM-dd"),
-        value: snapshot.sets.reduce(
-          (prev, curr) => prev + curr.weight * curr.reps,
-          0,
-        ),
-      }));
-    }
-
-    return [];
+    return data.history.map((snapshot) => ({
+      date: format(parseISO(snapshot.workoutDate), "yyyy-MM-dd"),
+      value: snapshot.sets.reduce(
+        (prev, curr) => prev + curr.reps * curr.weight,
+        0,
+      ),
+    }));
   };
 
   const prepareExerciseProgressChartData = (
     data: WorkoutExerciseHistoryResponse,
   ): ExerciseProgressData[] => {
     const response: ExerciseProgressData[] = data.history.map((snapshot) => {
-      let maxWeight = 0;
-      for (let i = 0; i < snapshot.sets.length; i++) {
-        if (snapshot.sets[i].weight > maxWeight) {
-          maxWeight = snapshot.sets[i].weight;
-        }
-      }
+      const maxWeight = snapshot.sets.reduce(
+        (max, curr) => (max = max > curr.weight ? max : curr.weight),
+        0,
+      );
 
       return {
-        date: snapshot.workoutDate,
+        date: format(parseISO(snapshot.workoutDate), "yyyy-MM-dd"),
         volume: snapshot.sets.reduce(
           (prev, curr) => prev + curr.reps * curr.weight,
           0,
@@ -413,7 +401,7 @@ const Progress = () => {
                   </div>
                 ) : (
                   <ProgressChart
-                    historyData={prepareChartData(trainingHistoryData) || []}
+                    historyData={prepareChartData(trainingHistoryData)}
                     yAxisTitle={`${t("trainingVolume")} (kg)`}
                   />
                 )

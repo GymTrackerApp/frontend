@@ -8,6 +8,7 @@ import {
   FaDumbbell,
   FaEnvelope,
   FaEye,
+  FaEyeSlash,
   FaLock,
   FaUser,
 } from "react-icons/fa";
@@ -92,10 +93,10 @@ const RegisterLogin = () => {
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
 
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [fieldName]: fieldValue,
-    });
+    }));
   };
 
   const handleSignIn = (e: React.FormEvent) => {
@@ -225,11 +226,11 @@ const RegisterLogin = () => {
                     onChange={handleFormChange}
                     required
                   />
-                  <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
-                    <FaEye
-                      className="text-text-muted text-[20px] hover:text-white cursor-pointer"
-                      onClick={() => setShowPassword(!showPassword)}
-                    />
+                  <div
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-text-muted text-[20px] hover:text-gray-500 dark:hover:text-white cursor-pointer"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
                   </div>
                 </div>
               </div>

@@ -185,6 +185,7 @@
   "couldNotLoad": "Nie udało się załadować",
   "startingWorkoutConfirmation": "Czy chcesz rozpocząć trening \"{{trainingPlanName}}\"?",
   "start": "Rozpocznij",
+  "maxWeight": "Maksymalny ciężar",
   "toastMessages": {
     "exerciseRemovedFromWorkout": "Ćwiczenie zostało usunięte z treningu",
     "workoutDiscarded": "Trening został odrzucony",

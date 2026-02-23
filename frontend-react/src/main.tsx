@@ -3,7 +3,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Toaster } from "react-hot-toast";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import "./index.css";
 import ErrorPage from "./pages/ErrorPage.tsx";
 import MainPage from "./pages/MainPage.tsx";
@@ -25,18 +25,19 @@ createRoot(document.getElementById("root")!).render(
         <AxiosInterceptor>
           <Routes>
             <Route
-              path="/"
               element={
                 <ProtectedRoute>
-                  <MainPage />
+                  <Outlet />
                 </ProtectedRoute>
               }
-            />
+            >
+              <Route path="/" element={<MainPage />} />
+              <Route path="/plan-manager" element={<PlanManager />} />
+              <Route path="/workout" element={<Workout />} />
+              <Route path="/progress" element={<ProgressPage />} />
+              <Route path="/profile" element={<ProfileSettings />} />
+            </Route>
             <Route path="/register-login" element={<RegisterLogin />} />
-            <Route path="/plan-manager" element={<PlanManager />} />
-            <Route path="/workout" element={<Workout />} />
-            <Route path="/progress" element={<ProgressPage />} />
-            <Route path="/profile" element={<ProfileSettings />} />
             <Route path="*" element={<ErrorPage />} />
           </Routes>
         </AxiosInterceptor>

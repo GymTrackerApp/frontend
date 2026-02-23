@@ -96,9 +96,7 @@ const WorkoutExerciseHistoryModal = ({
                           <span className="text-gray-600">{setIndex + 1}</span>
                           <span className="text-gray-600">|</span>{" "}
                           <span className="font-bold">{set.weight}</span>
-                          <span className="h-full flex justify-center items-center text-gray-500">
-                            kg
-                          </span>
+                          <span className="text-gray-500">kg</span>
                           <span className="text-gray-500">x</span>{" "}
                           <span className="font-bold">{set.reps}</span>
                         </div>

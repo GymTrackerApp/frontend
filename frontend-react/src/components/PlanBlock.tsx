@@ -78,7 +78,10 @@ const PlanBlock = ({ plan }: PlanBlockProps) => {
       </div>
       {showStartWorkoutConfirmationWindow && (
         <ConfirmationWindow
-          onConfirm={() => handleWorkoutStart(plan)}
+          onConfirm={() => {
+            setShowStartWorkoutConfirmationWindow(false);
+            handleWorkoutStart(plan);
+          }}
           onClose={() => setShowStartWorkoutConfirmationWindow(false)}
           confirmButtonText={t("start")}
           cancelButtonText={t("cancel")}
