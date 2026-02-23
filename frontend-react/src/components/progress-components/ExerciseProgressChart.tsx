@@ -53,16 +53,9 @@ const ExerciseProgressChart = ({ historyData }: ExerciseProgressChartProps) => {
   }
 
   return (
-    <div className="h-64 min-h-48 outline-none focus:outline-none mt-3">
-      <ResponsiveContainer
-        width="100%"
-        minWidth={0}
-        minHeight={undefined}
-        aspect={undefined}
-        height="100%"
-        className="focus:outline-none"
-      >
-        <LineChart data={processedData} accessibilityLayer={false}>
+    <div className="h-64 min-h-48 outline-none mt-3 [&_.recharts-surface]:outline-none">
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart data={processedData}>
           <CartesianGrid
             strokeDasharray="3 3"
             className="stroke-border-light dark:stroke-border-dark"

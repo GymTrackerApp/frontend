@@ -53,9 +53,9 @@ const ProgressChart = ({ historyData, yAxisTitle }: ProgressChartProps) => {
   }
 
   return (
-    <div className="h-64 min-h-48 outline-none focus:outline-none mt-3">
+    <div className="h-64 min-h-48 outline-none focus:outline-none mt-3 [&_.recharts-surface]:outline-none">
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={processedData} accessibilityLayer={false}>
+        <BarChart data={processedData}>
           <CartesianGrid
             strokeDasharray="3 3"
             className="stroke-border-light dark:stroke-border-dark"
