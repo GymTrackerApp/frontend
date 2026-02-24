@@ -1,8 +1,23 @@
+import {
+  closestCenter,
+  DndContext,
+  KeyboardSensor,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+} from "@dnd-kit/sortable";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { FaDumbbell, FaTrashAlt } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import type { ExerciseResponse } from "../../services/exerciseService";
 import {
   updateTrainingPlan,
@@ -10,8 +25,8 @@ import {
   type UpdateTrainingPlanProps,
 } from "../../services/trainingService";
 import type { ErrorResponse, GeneralResponse } from "../../types/ApiResponse";
+import PlanItem from "../PlanItem";
 import PlanActionModal from "./PlanActionModal";
-import { useTranslation } from "react-i18next";
 
 interface UpdatePlanProps {
   exercises: Array<ExerciseResponse>;
@@ -116,6 +131,47 @@ const PlanUpdateModal = ({ exercises, plan, onClose }: UpdatePlanProps) => {
     toast.success(t("toastMessages.exerciseAddedToPlan"));
   };
 
+  const updateDefaultSets = (exerciseId: number, delta: number) => {
+    setPlanForm((prev) => ({
+      ...prev,
+      planItems: prev.planItems.map((planItem) =>
+        planItem.exerciseId === exerciseId
+          ? {
+              ...planItem,
+              defaultSets: Math.max(planItem.defaultSets + delta, 1),
+            }
+          : planItem,
+      ),
+    }));
+  };
+
+  const handleDragEnd = (e: DragEndEvent) => {
+    const { active, over } = e;
+
+    if (over && active.id !== over.id) {
+      const oldIndex = planForm.planItems.findIndex(
+        (planItem) => planItem.exerciseId === active.id,
+      );
+
+      const newIndex = planForm.planItems.findIndex(
+        (planItem) => planItem.exerciseId === over.id,
+      );
+
+      setPlanForm((prev) => ({
+        ...prev,
+        planItems: arrayMove(prev.planItems, oldIndex, newIndex),
+      }));
+    }
+  };
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(TouchSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
   return (
     <PlanActionModal
       exercises={exercises}
@@ -142,86 +198,36 @@ const PlanUpdateModal = ({ exercises, plan, onClose }: UpdatePlanProps) => {
       saveButtonText={t("update")}
       onClose={onClose}
     >
-      {planForm.planItems.map((planItem) => (
-        <div
-          key={planItem.exerciseId}
-          className="group grid grid-cols-12 gap-4 px-5 py-4 bg-surface-dark items-center transition-colors hover:bg-surface-dark/80"
+      <DndContext
+        onDragEnd={handleDragEnd}
+        sensors={sensors}
+        collisionDetection={closestCenter}
+      >
+        <SortableContext
+          items={planForm.planItems.map((planItem) => planItem.exerciseId)}
         >
-          <div className="col-span-8 md:col-span-9 flex items-center gap-4">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-input-light dark:bg-background-dark border border-border-light dark:border-border-dark text-primary">
-              <FaDumbbell className="text-xl rotate-45" />
-            </div>
-            <div className="min-w-0">
-              <p className="font-semibold truncate">{planItem.exerciseName}</p>
-              <p className="text-xs text-text-muted mt-0.5 capitalize">
-                {t(
-                  `exerciseCategories.${
-                    exercises
-                      .find(
-                        (exercise) =>
-                          exercise.exerciseId === planItem.exerciseId,
-                      )
-                      ?.category?.toLowerCase() ?? "uncategorized"
-                  }`,
-                ).toLowerCase()}
-              </p>
-            </div>
-          </div>
-          <div className="col-span-3 md:col-span-2 flex justify-center">
-            <div className="flex items-center bg-input-light dark:bg-background-dark rounded-lg border border-border-light dark:border-border-dark overflow-hidden">
-              <button
-                className="w-8 h-8 flex items-center justify-center hover:bg-gray-300 hover:dark:bg-surface-border transition-colors text-text-muted"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setPlanForm((prev) => {
-                    return {
-                      ...prev,
-                      planItems: prev.planItems.map((item) =>
-                        item.exerciseId === planItem.exerciseId
-                          ? {
-                              ...item,
-                              defaultSets:
-                                item.defaultSets - 1 <= 0
-                                  ? item.defaultSets
-                                  : item.defaultSets - 1,
-                            }
-                          : item,
-                      ),
-                    };
-                  });
-                }}
-              >
-                -
-              </button>
-              <span className="flex justify-center items-center w-10 h-8 text-center text-sm font-medium">
-                {planItem.defaultSets}
-              </span>
-
-              <button
-                className="w-8 h-8 flex items-center justify-center hover:bg-gray-300 hover:dark:bg-surface-border transition-colors text-text-muted"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setPlanForm((prev) => {
-                    return {
-                      ...prev,
-                      planItems: prev.planItems.map((item) =>
-                        item.exerciseId === planItem.exerciseId
-                          ? { ...item, defaultSets: item.defaultSets + 1 }
-                          : item,
-                      ),
-                    };
-                  });
-                }}
-              >
-                +
-              </button>
-            </div>
-          </div>
-          <div className="col-span-1 flex justify-center">
-            <button
-              className="opacity-0 group-hover:opacity-100 p-0 md:p-2 rounded-lg hover:bg-red-500/10 text-text-muted hover:text-red-400 transition-all cursor-pointer"
-              onClick={(e) => {
-                e.preventDefault();
+          {planForm.planItems.map((planItem) => (
+            <PlanItem
+              key={planItem.exerciseId}
+              id={planItem.exerciseId}
+              exerciseName={planItem.exerciseName}
+              exerciseCategory={t(
+                `exerciseCategories.${
+                  exercises
+                    .find(
+                      (exercise) => exercise.exerciseId === planItem.exerciseId,
+                    )
+                    ?.category?.toLowerCase() ?? "uncategorized"
+                }`,
+              ).toLowerCase()}
+              defaultSets={planItem.defaultSets}
+              decrementSetsFunction={() =>
+                updateDefaultSets(planItem.exerciseId, -1)
+              }
+              incrementSetsFunction={() =>
+                updateDefaultSets(planItem.exerciseId, 1)
+              }
+              removePlanItem={() => {
                 setPlanForm((prev) => ({
                   ...prev,
                   planItems: prev.planItems.filter(
@@ -229,12 +235,10 @@ const PlanUpdateModal = ({ exercises, plan, onClose }: UpdatePlanProps) => {
                   ),
                 }));
               }}
-            >
-              <FaTrashAlt className="text-sm md:text-lg" />
-            </button>
-          </div>
-        </div>
-      ))}
+            />
+          ))}
+        </SortableContext>
+      </DndContext>
     </PlanActionModal>
   );
 };
