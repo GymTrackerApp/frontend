@@ -66,10 +66,10 @@ const PlanActionModal = ({
               </div>
               <div className="flex flex-col dark:bg-surface-border/30 rounded-xl overflow-hidden border border-border-light dark:border-border-dark">
                 <div className="grid grid-cols-12 gap-4 px-5 py-3 bg-surface-dark/50 text-[10px] font-bold text-text-muted uppercase tracking-widest border-b border-border-light dark:border-border-dark">
-                  <div className="col-span-8 md:col-span-9 my-auto">
+                  <div className="col-span-6 md:col-span-8 my-auto">
                     {t("exercise")}
                   </div>
-                  <div className="col-span-3 md:col-span-2 text-center my-auto">
+                  <div className="col-span-5 md:col-span-3 text-center my-auto">
                     {t("defaultSets")}
                   </div>
                   <div className="col-span-1"></div>
