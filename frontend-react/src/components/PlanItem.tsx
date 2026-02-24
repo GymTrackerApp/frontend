@@ -43,12 +43,7 @@ const PlanItem = ({
             className="hidden justify-center items-center group-hover:flex rounded-lg hover:bg-red-500/10 text-text-muted hover:text-red-400 transition-all cursor-pointer w-full h-full"
             onClick={removePlanItem}
           >
-            <FaTrashAlt
-              className="text-sm md:text-lg"
-              onClick={(e) => {
-                e.preventDefault();
-              }}
-            />
+            <FaTrashAlt className="text-sm md:text-lg" />
           </button>
         </div>
         <button
@@ -56,13 +51,7 @@ const PlanItem = ({
           className="block md:hidden justify-center items-center rounded-lg hover:bg-red-500/10 text-text-muted hover:text-red-400 transition-all cursor-pointer"
           onClick={removePlanItem}
         >
-          <FaTrashAlt
-            className="-ml-2"
-            onClick={(e) => {
-              e.preventDefault();
-            }}
-            size={18}
-          />
+          <FaTrashAlt className="-ml-2" size={18} />
         </button>
         <div className="min-w-0">
           <p className="text-xs md:text-md font-semibold truncate">

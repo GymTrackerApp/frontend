@@ -12,6 +12,7 @@ import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
@@ -149,18 +150,19 @@ const PlanUpdateModal = ({ exercises, plan, onClose }: UpdatePlanProps) => {
     const { active, over } = e;
 
     if (over && active.id !== over.id) {
-      const oldIndex = planForm.planItems.findIndex(
-        (planItem) => planItem.exerciseId === active.id,
-      );
+      setPlanForm((prev) => {
+        const oldIndex = prev.planItems.findIndex(
+          (planItem) => planItem.exerciseId === active.id,
+        );
+        const newIndex = prev.planItems.findIndex(
+          (planItem) => planItem.exerciseId === over.id,
+        );
 
-      const newIndex = planForm.planItems.findIndex(
-        (planItem) => planItem.exerciseId === over.id,
-      );
-
-      setPlanForm((prev) => ({
-        ...prev,
-        planItems: arrayMove(prev.planItems, oldIndex, newIndex),
-      }));
+        return {
+          ...prev,
+          planItems: arrayMove(prev.planItems, oldIndex, newIndex),
+        };
+      });
     }
   };
 
@@ -205,6 +207,7 @@ const PlanUpdateModal = ({ exercises, plan, onClose }: UpdatePlanProps) => {
       >
         <SortableContext
           items={planForm.planItems.map((planItem) => planItem.exerciseId)}
+          strategy={verticalListSortingStrategy}
         >
           {planForm.planItems.map((planItem) => (
             <PlanItem

@@ -132,17 +132,19 @@ const PlanCreationModal = ({ exercises, onClose }: NewPlanProps) => {
     const { active, over } = e;
 
     if (over && active.id !== over.id) {
-      const oldIndex = newPlanForm.planItems.findIndex(
-        (planItem) => planItem.exerciseId === active.id,
-      );
-      const newIndex = newPlanForm.planItems.findIndex(
-        (planItem) => planItem.exerciseId === over.id,
-      );
+      setNewPlanForm((prev) => {
+        const oldIndex = prev.planItems.findIndex(
+          (planItem) => planItem.exerciseId === active.id,
+        );
+        const newIndex = prev.planItems.findIndex(
+          (planItem) => planItem.exerciseId === over.id,
+        );
 
-      setNewPlanForm((prev) => ({
-        ...prev,
-        planItems: arrayMove(prev.planItems, oldIndex, newIndex),
-      }));
+        return {
+          ...prev,
+          planItems: arrayMove(prev.planItems, oldIndex, newIndex),
+        };
+      });
     }
   };
 
@@ -213,14 +215,12 @@ const PlanCreationModal = ({ exercises, onClose }: NewPlanProps) => {
                 updateDefaultSets(planItem.exerciseId, 1)
               }
               removePlanItem={() =>
-                setNewPlanForm({
-                  planName: newPlanForm.planName,
-                  planItems: [
-                    ...newPlanForm.planItems.filter(
-                      (item) => item.exerciseId !== planItem.exerciseId,
-                    ),
-                  ],
-                })
+                setNewPlanForm((prev) => ({
+                  ...prev,
+                  planItems: prev.planItems.filter(
+                    (item) => item.exerciseId !== planItem.exerciseId,
+                  ),
+                }))
               }
               exerciseName={planItem.exerciseName}
               exerciseCategory={t(
