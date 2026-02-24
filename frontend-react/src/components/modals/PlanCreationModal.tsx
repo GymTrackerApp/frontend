@@ -187,7 +187,7 @@ const PlanCreationModal = ({ exercises, onClose }: NewPlanProps) => {
             type="text"
             required
             onChange={(e) =>
-              setNewPlanForm({ ...newPlanForm, planName: e.target.value })
+              setNewPlanForm((prev) => ({ ...prev, planName: e.target.value }))
             }
           />
         </div>
